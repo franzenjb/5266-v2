@@ -678,6 +678,7 @@
             <div class="alert alert-info">
                 <span>📋</span>
                 <span>Complete this form to initialize your Disaster Relief Operation. Select a region to see available counties and associated chapters.</span>
+                <button onclick="loadSampleData()" style="float: right; background: var(--info-blue); color: white; border: none; padding: 0.25rem 0.75rem; border-radius: 4px; cursor: pointer; font-size: 0.875rem;">Load Sample Data</button>
             </div>
 
             <div class="dashboard-grid">
@@ -985,12 +986,26 @@
             
             // Add all regions from the data
             if (typeof allRegions !== 'undefined') {
+                console.log('Loading ' + allRegions.length + ' regions...');
                 allRegions.forEach(region => {
                     const option = document.createElement('option');
                     option.value = region;
                     option.textContent = region;
                     regionSelect.appendChild(option);
                 });
+            } else {
+                console.error('allRegions is not defined! Check if redcross_data.js is loaded.');
+                // Fallback - try to get regions from redCrossRegionsData
+                if (typeof redCrossRegionsData !== 'undefined') {
+                    const regions = Object.keys(redCrossRegionsData);
+                    console.log('Using fallback - found ' + regions.length + ' regions from redCrossRegionsData');
+                    regions.forEach(region => {
+                        const option = document.createElement('option');
+                        option.value = region;
+                        option.textContent = region;
+                        regionSelect.appendChild(option);
+                    });
+                }
             }
         }
 
@@ -1589,6 +1604,61 @@
             exportIAPToPDF();
         }
 
+        // Load sample data function
+        function loadSampleData() {
+            if (confirm('This will load sample Florida hurricane response data. Continue?')) {
+                // Set Florida operation data
+                document.getElementById('drNumber').value = 'DR-2024-FL-001';
+                document.getElementById('operationName').value = 'Hurricane Response - Florida';
+                document.getElementById('startDate').value = '2024-01-15';
+                document.getElementById('region').value = 'Central Florida & USVI Region';
+                
+                // Trigger region change to load counties
+                document.getElementById('region').dispatchEvent(new Event('change'));
+                
+                // After counties load, select some
+                setTimeout(() => {
+                    const countiesToSelect = ['Orange', 'Osceola', 'Seminole'];
+                    countiesToSelect.forEach(county => {
+                        const checkbox = document.querySelector(`#countyGrid input[value="${county}"]`);
+                        if (checkbox) {
+                            checkbox.checked = true;
+                        }
+                    });
+                    updateSelectedCounties();
+                    
+                    // Add sample contacts
+                    contacts = [
+                        {
+                            role: 'DRO Director',
+                            name: 'John Smith',
+                            phone: '(407) 555-0100',
+                            email: 'john.smith@redcross.org',
+                            id: Date.now()
+                        }
+                    ];
+                    localStorage.setItem('form5266_contacts', JSON.stringify(contacts));
+                    displayContacts();
+                    
+                    // Add sample feeding data
+                    feedingData = [
+                        {
+                            date: '2024-01-15',
+                            location: 'Orlando Convention Center',
+                            meals: 1500,
+                            snacks: 2000,
+                            notes: 'Initial setup',
+                            timestamp: new Date().toISOString()
+                        }
+                    ];
+                    localStorage.setItem('form5266_feeding', JSON.stringify(feedingData));
+                    updateFeedingStats();
+                    
+                    showAlert('Sample data loaded successfully! You can now save the operation or go to IAP Builder.', 'success');
+                }, 500);
+            }
+        }
+        
         // Load existing data on page load
         window.addEventListener('load', function() {
             // Populate regions dropdown
