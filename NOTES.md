@@ -69,6 +69,43 @@
 - May need to simplify geometries for web performance
 - Current fallback: Shows markers instead of boundaries
 
+## Weather Integration (Future Enhancement)
+
+### National Weather Service Integration
+**Priority: HIGH**  
+**Target Section:** IAP Builder - Safety & Security (Section 10)
+
+**Planned Features:**
+- **Automatic NWS Station Selection**
+  - Based on selected region/counties from Start Here Statistics
+  - Identify closest NWS forecast offices
+  - Pull data from multiple stations for comprehensive coverage
+
+- **AI-Amalgamated Forecast**
+  - Combine forecasts from multiple NWS stations
+  - AI synthesis for coherent, unified forecast
+  - Automatic period selection (match IAP operational period)
+  - Plain language summary generation
+
+- **Watches & Warnings**
+  - Featured display of active watches/warnings
+  - Color-coded severity indicators
+  - Auto-refresh for real-time updates
+  - Historical tracking for after-action reports
+
+**Technical Implementation:**
+- NWS API integration (api.weather.gov)
+- County-to-forecast zone mapping
+- AI model for forecast amalgamation (GPT/Claude API)
+- Caching for performance
+- Fallback to manual entry if API unavailable
+
+**Data Sources:**
+- NWS Forecast API
+- NWS Alerts API  
+- NOAA Weather Radio stations
+- Emergency Alert System (EAS) feeds
+
 ## Other Enhancement Ideas
 
 ### Future Considerations

@@ -106,6 +106,9 @@ document.addEventListener('DOMContentLoaded', function() {
         link.addEventListener('click', function(e) {
             const targetTab = this.getAttribute('data-tab');
             
+            // Skip if no data-tab (external link)
+            if (!targetTab) return;
+            
             // Initialize Live IAP map when tab is activated
             if (targetTab === 'live-iap') {
                 setTimeout(() => {

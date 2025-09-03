@@ -989,8 +989,14 @@
         // Tab switching
         document.querySelectorAll('.tab-link').forEach(link => {
             link.addEventListener('click', (e) => {
-                e.preventDefault();
+                // Check if this is an external link (no data-tab attribute)
                 const tabName = link.dataset.tab;
+                if (!tabName) {
+                    // This is an external link (IAP Builder pages), let it navigate normally
+                    return;
+                }
+                
+                e.preventDefault();
                 
                 // Update active link
                 document.querySelectorAll('.tab-link').forEach(l => l.classList.remove('active'));
@@ -1000,7 +1006,11 @@
                 document.querySelectorAll('.tab-content').forEach(content => {
                     content.classList.remove('active');
                 });
-                document.getElementById(tabName).classList.add('active');
+                
+                const targetTab = document.getElementById(tabName);
+                if (targetTab) {
+                    targetTab.classList.add('active');
+                }
                 
                 // Update Live IAP when switching to it
                 if (tabName === 'live-iap') {
