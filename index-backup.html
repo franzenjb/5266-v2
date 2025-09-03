@@ -15,7 +15,6 @@
             --gray-light: #ECF0F1;
             --success-green: #27AE60;
             --warning-yellow: #F39C12;
-            --info-blue: #3498DB;
         }
 
         * {
@@ -243,57 +242,14 @@
             gap: 1rem;
         }
 
-        /* Region Info Badge */
-        .region-info {
-            background-color: var(--info-blue);
-            color: white;
-            padding: 0.75rem;
-            border-radius: 6px;
-            margin-bottom: 1rem;
-            display: none;
-            animation: slideDown 0.3s ease;
-        }
-
-        .region-info.active {
-            display: block;
-        }
-
-        .region-info-content {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-        }
-
-        .region-stat {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            padding: 0 1rem;
-            border-right: 1px solid rgba(255,255,255,0.3);
-        }
-
-        .region-stat:last-child {
-            border-right: none;
-        }
-
-        .region-stat-value {
-            font-size: 1.5rem;
-            font-weight: 700;
-        }
-
-        .region-stat-label {
-            font-size: 0.75rem;
-            opacity: 0.9;
-        }
-
         /* Multi-select counties */
         .county-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
             gap: 0.5rem;
-            max-height: 300px;
+            max-height: 200px;
             overflow-y: auto;
-            padding: 1rem;
+            padding: 0.5rem;
             border: 2px solid var(--gray-light);
             border-radius: 6px;
             background-color: #FAFAFA;
@@ -302,13 +258,7 @@
         .county-checkbox {
             display: flex;
             align-items: center;
-            padding: 0.5rem;
-            border-radius: 4px;
-            transition: background-color 0.2s ease;
-        }
-
-        .county-checkbox:hover {
-            background-color: var(--gray-light);
+            padding: 0.25rem;
         }
 
         .county-checkbox input[type="checkbox"] {
@@ -323,38 +273,6 @@
             font-weight: normal;
             text-transform: none;
             letter-spacing: normal;
-        }
-
-        /* Chapters Display */
-        .chapters-display {
-            margin-top: 1rem;
-            padding: 1rem;
-            background-color: var(--red-cross-light);
-            border-radius: 6px;
-            display: none;
-        }
-
-        .chapters-display.active {
-            display: block;
-        }
-
-        .chapters-title {
-            font-weight: 600;
-            color: var(--red-cross-red);
-            margin-bottom: 0.5rem;
-            font-size: 0.875rem;
-            text-transform: uppercase;
-        }
-
-        .chapter-tag {
-            display: inline-block;
-            background-color: white;
-            color: var(--gray-dark);
-            padding: 0.25rem 0.75rem;
-            margin: 0.25rem;
-            border-radius: 20px;
-            font-size: 0.875rem;
-            border: 1px solid var(--red-cross-red);
         }
 
         /* Contact List */
@@ -381,17 +299,6 @@
             to {
                 opacity: 1;
                 transform: translateX(0);
-            }
-        }
-
-        @keyframes slideDown {
-            from {
-                opacity: 0;
-                transform: translateY(-10px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
             }
         }
 
@@ -460,6 +367,12 @@
             background-color: var(--red-cross-light);
         }
 
+        .btn-group {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+
         /* Statistics Dashboard */
         .stats-grid {
             display: grid;
@@ -500,6 +413,17 @@
             animation: slideDown 0.3s ease;
         }
 
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
         .alert-success {
             background-color: #D4EDDA;
             color: #155724;
@@ -512,26 +436,19 @@
             border: 1px solid #BEE5EB;
         }
 
-        /* Tab Content */
-        .tab-content {
-            display: none;
+        /* Loading Spinner */
+        .spinner {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(237, 27, 46, 0.3);
+            border-top-color: var(--red-cross-red);
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
         }
 
-        .tab-content.active {
-            display: block;
-        }
-
-        /* Empty State */
-        .empty-state {
-            text-align: center;
-            padding: 3rem;
-            color: var(--gray-medium);
-        }
-
-        .empty-state-icon {
-            font-size: 4rem;
-            margin-bottom: 1rem;
-            opacity: 0.3;
+        @keyframes spin {
+            to { transform: rotate(360deg); }
         }
 
         /* Responsive Design */
@@ -556,31 +473,28 @@
                 overflow-x: auto;
                 padding-bottom: 0.5rem;
             }
-
-            .region-info-content {
-                flex-direction: column;
-            }
-
-            .region-stat {
-                border-right: none;
-                border-bottom: 1px solid rgba(255,255,255,0.3);
-                padding: 0.5rem 0;
-            }
         }
 
-        /* Loading spinner */
-        .spinner {
-            display: inline-block;
-            width: 20px;
-            height: 20px;
-            border: 3px solid rgba(237, 27, 46, 0.3);
-            border-top-color: var(--red-cross-red);
-            border-radius: 50%;
-            animation: spin 0.8s linear infinite;
+        /* Tab Content */
+        .tab-content {
+            display: none;
         }
 
-        @keyframes spin {
-            to { transform: rotate(360deg); }
+        .tab-content.active {
+            display: block;
+        }
+
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 3rem;
+            color: var(--gray-medium);
+        }
+
+        .empty-state-icon {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+            opacity: 0.3;
         }
     </style>
 </head>
@@ -616,7 +530,7 @@
         <div id="start-here" class="tab-content active">
             <div class="alert alert-info">
                 <span>📋</span>
-                <span>Complete this form to initialize your Disaster Relief Operation. Select a region to see available counties and associated chapters.</span>
+                <span>Complete this form to initialize your Disaster Relief Operation. All fields with asterisk (*) are required.</span>
             </div>
 
             <div class="dashboard-grid">
@@ -630,7 +544,8 @@
                         <div class="form-group">
                             <label for="drNumber">DR Number *</label>
                             <input type="text" class="form-control" id="drNumber" 
-                                   placeholder="e.g., DR-2024-FL-001" required>
+                                   placeholder="e.g., DR-2024-FL-001" required
+                                   pattern="DR-\d{4}-[A-Z]{2}-\d{3}">
                             <small style="color: var(--gray-medium); font-size: 0.75rem;">
                                 Format: DR-YYYY-ST-###
                             </small>
@@ -651,47 +566,23 @@
                                 <label for="region">Region *</label>
                                 <select class="form-control" id="region" required>
                                     <option value="">Select Region</option>
+                                    <option value="Northeast">Northeast</option>
+                                    <option value="Southeast">Southeast</option>
+                                    <option value="Central">Central</option>
+                                    <option value="West">West</option>
+                                    <option value="Florida">Florida</option>
                                 </select>
-                            </div>
-                        </div>
-
-                        <!-- Region Info Display -->
-                        <div class="region-info" id="regionInfo">
-                            <div class="region-info-content">
-                                <div class="region-stat">
-                                    <span class="region-stat-value" id="countyCount">0</span>
-                                    <span class="region-stat-label">Total Counties</span>
-                                </div>
-                                <div class="region-stat">
-                                    <span class="region-stat-value" id="selectedCountyCount">0</span>
-                                    <span class="region-stat-label">Selected</span>
-                                </div>
-                                <div class="region-stat">
-                                    <span class="region-stat-value" id="chapterCount">0</span>
-                                    <span class="region-stat-label">Chapters</span>
-                                </div>
                             </div>
                         </div>
 
                         <div class="form-group">
                             <label>Active Counties *</label>
-                            <small style="color: var(--gray-medium); font-size: 0.75rem;">
-                                Select counties affected by this disaster
-                            </small>
                             <div class="county-grid" id="countyGrid">
-                                <div class="empty-state" style="padding: 2rem;">
-                                    <p>Select a region to view available counties</p>
-                                </div>
+                                <!-- Counties will be populated dynamically -->
                             </div>
                         </div>
 
-                        <!-- Chapters Display -->
-                        <div class="chapters-display" id="chaptersDisplay">
-                            <div class="chapters-title">Associated Chapters</div>
-                            <div id="chaptersList"></div>
-                        </div>
-
-                        <button type="submit" class="btn btn-primary" style="margin-top: 1rem;">
+                        <button type="submit" class="btn btn-primary">
                             <span>💾</span> Save Operation Info
                         </button>
                     </form>
@@ -862,16 +753,25 @@
         </div>
     </main>
 
-    <!-- Include the Red Cross regions data -->
-    <script src="redcross_data.js"></script>
-    
     <script>
+        // Florida counties for demo
+        const floridaCounties = [
+            'Alachua', 'Baker', 'Bay', 'Bradford', 'Brevard', 'Broward', 'Calhoun', 'Charlotte',
+            'Citrus', 'Clay', 'Collier', 'Columbia', 'DeSoto', 'Dixie', 'Duval', 'Escambia',
+            'Flagler', 'Franklin', 'Gadsden', 'Gilchrist', 'Glades', 'Gulf', 'Hamilton', 'Hardee',
+            'Hendry', 'Hernando', 'Highlands', 'Hillsborough', 'Holmes', 'Indian River', 'Jackson',
+            'Jefferson', 'Lafayette', 'Lake', 'Lee', 'Leon', 'Levy', 'Liberty', 'Madison', 'Manatee',
+            'Marion', 'Martin', 'Miami-Dade', 'Monroe', 'Nassau', 'Okaloosa', 'Okeechobee', 'Orange',
+            'Osceola', 'Palm Beach', 'Pasco', 'Pinellas', 'Polk', 'Putnam', 'St. Johns', 'St. Lucie',
+            'Santa Rosa', 'Sarasota', 'Seminole', 'Sumter', 'Suwannee', 'Taylor', 'Union', 'Volusia',
+            'Wakulla', 'Walton', 'Washington'
+        ];
+
         // Initialize data storage
         let operationData = JSON.parse(localStorage.getItem('form5266_operation')) || {};
         let contacts = JSON.parse(localStorage.getItem('form5266_contacts')) || [];
         let feedingData = JSON.parse(localStorage.getItem('form5266_feeding')) || [];
         let activityLog = JSON.parse(localStorage.getItem('form5266_activity')) || [];
-        let currentRegionData = null;
 
         // Tab switching
         document.querySelectorAll('.tab-link').forEach(link => {
@@ -896,128 +796,27 @@
             });
         });
 
-        // Populate regions dropdown
-        function populateRegions() {
-            const regionSelect = document.getElementById('region');
-            
-            // Clear existing options except the first
-            regionSelect.innerHTML = '<option value="">Select Region</option>';
-            
-            // Add all regions from the data
-            if (typeof allRegions !== 'undefined') {
-                allRegions.forEach(region => {
-                    const option = document.createElement('option');
-                    option.value = region;
-                    option.textContent = region;
-                    regionSelect.appendChild(option);
-                });
-            }
-        }
-
-        // Handle region selection
-        document.getElementById('region').addEventListener('change', function() {
-            const selectedRegion = this.value;
-            
-            if (!selectedRegion) {
-                document.getElementById('regionInfo').classList.remove('active');
-                document.getElementById('countyGrid').innerHTML = '<div class="empty-state" style="padding: 2rem;"><p>Select a region to view available counties</p></div>';
-                document.getElementById('chaptersDisplay').classList.remove('active');
-                return;
-            }
-            
-            // Get region data
-            if (typeof redCrossRegionsData !== 'undefined' && redCrossRegionsData[selectedRegion]) {
-                currentRegionData = redCrossRegionsData[selectedRegion];
-                
-                // Show region info
-                document.getElementById('regionInfo').classList.add('active');
-                document.getElementById('countyCount').textContent = currentRegionData.countyCount;
-                document.getElementById('selectedCountyCount').textContent = '0';
-                document.getElementById('chapterCount').textContent = currentRegionData.chapters.length;
-                
-                // Populate counties
-                populateCounties(currentRegionData.counties);
-                
-                // Reset chapters display
-                document.getElementById('chaptersDisplay').classList.remove('active');
-            }
-        });
-
-        // Populate counties based on selected region
-        function populateCounties(counties) {
+        // Populate counties
+        function populateCounties() {
             const countyGrid = document.getElementById('countyGrid');
-            countyGrid.innerHTML = '';
-            
-            Object.keys(counties).forEach(countyName => {
-                const countyDiv = document.createElement('div');
-                countyDiv.className = 'county-checkbox';
-                
-                const checkbox = document.createElement('input');
-                checkbox.type = 'checkbox';
-                checkbox.id = `county_${countyName.replace(/[^a-zA-Z0-9]/g, '_')}`;
-                checkbox.value = countyName;
-                checkbox.addEventListener('change', updateSelectedCounties);
-                
-                const label = document.createElement('label');
-                label.htmlFor = checkbox.id;
-                label.textContent = countyName;
-                
-                countyDiv.appendChild(checkbox);
-                countyDiv.appendChild(label);
-                countyGrid.appendChild(countyDiv);
-            });
+            countyGrid.innerHTML = floridaCounties.map(county => `
+                <div class="county-checkbox">
+                    <input type="checkbox" id="county_${county}" value="${county}">
+                    <label for="county_${county}">${county}</label>
+                </div>
+            `).join('');
         }
 
-        // Update selected counties and chapters
-        function updateSelectedCounties() {
-            const selectedCheckboxes = document.querySelectorAll('#countyGrid input:checked');
-            document.getElementById('selectedCountyCount').textContent = selectedCheckboxes.length;
-            
-            if (selectedCheckboxes.length > 0 && currentRegionData) {
-                // Get unique chapters for selected counties
-                const selectedChapters = new Set();
-                selectedCheckboxes.forEach(checkbox => {
-                    const chapter = currentRegionData.counties[checkbox.value];
-                    if (chapter) {
-                        selectedChapters.add(chapter);
-                    }
-                });
-                
-                // Display chapters
-                if (selectedChapters.size > 0) {
-                    displayChapters(Array.from(selectedChapters));
-                } else {
-                    document.getElementById('chaptersDisplay').classList.remove('active');
-                }
-            } else {
-                document.getElementById('chaptersDisplay').classList.remove('active');
-            }
-        }
-
-        // Display associated chapters
-        function displayChapters(chapters) {
-            const chaptersDisplay = document.getElementById('chaptersDisplay');
-            const chaptersList = document.getElementById('chaptersList');
-            
-            chaptersList.innerHTML = chapters.map(chapter => 
-                `<span class="chapter-tag">${chapter}</span>`
-            ).join('');
-            
-            chaptersDisplay.classList.add('active');
-        }
+        // Initialize counties on load
+        populateCounties();
 
         // DR Info Form Handler
         document.getElementById('drInfoForm').addEventListener('submit', function(e) {
             e.preventDefault();
             
             const selectedCounties = [];
-            const selectedChapters = new Set();
-            
             document.querySelectorAll('#countyGrid input:checked').forEach(cb => {
                 selectedCounties.push(cb.value);
-                if (currentRegionData && currentRegionData.counties[cb.value]) {
-                    selectedChapters.add(currentRegionData.counties[cb.value]);
-                }
             });
             
             operationData = {
@@ -1026,14 +825,12 @@
                 startDate: document.getElementById('startDate').value,
                 region: document.getElementById('region').value,
                 counties: selectedCounties,
-                chapters: Array.from(selectedChapters),
                 timestamp: new Date().toISOString()
             };
             
             localStorage.setItem('form5266_operation', JSON.stringify(operationData));
             
-            logActivity('Operation Information Updated', 
-                `DR ${operationData.drNumber} - ${selectedCounties.length} counties, ${selectedChapters.size} chapters`);
+            logActivity('Operation Information Updated', `DR ${operationData.drNumber} initialized`);
             
             showAlert('Operation information saved successfully!', 'success');
             updateDashboard();
@@ -1147,8 +944,8 @@
                     <div class="stat-label">Active Counties</div>
                 </div>
                 <div class="stat-card">
-                    <div class="stat-value">${operationData.chapters ? operationData.chapters.length : 0}</div>
-                    <div class="stat-label">Active Chapters</div>
+                    <div class="stat-value">${contacts.length}</div>
+                    <div class="stat-label">Key Contacts</div>
                 </div>
                 <div class="stat-card">
                     <div class="stat-value">${feedingData.reduce((sum, f) => sum + f.meals, 0).toLocaleString()}</div>
@@ -1168,20 +965,7 @@
                             <div><strong>DR Number:</strong> ${operationData.drNumber}</div>
                             <div><strong>Region:</strong> ${operationData.region || 'Not specified'}</div>
                             <div><strong>Start Date:</strong> ${operationData.startDate || 'Not specified'}</div>
-                            <div><strong>Active Counties (${operationData.counties ? operationData.counties.length : 0}):</strong> 
-                                ${operationData.counties && operationData.counties.length > 0 ? 
-                                    (operationData.counties.length > 5 ? 
-                                        operationData.counties.slice(0, 5).join(', ') + '...' : 
-                                        operationData.counties.join(', ')) : 
-                                    'None selected'}
-                            </div>
-                            <div><strong>Active Chapters (${operationData.chapters ? operationData.chapters.length : 0}):</strong> 
-                                ${operationData.chapters && operationData.chapters.length > 0 ? 
-                                    (operationData.chapters.length > 3 ? 
-                                        operationData.chapters.slice(0, 3).join(', ') + '...' : 
-                                        operationData.chapters.join(', ')) : 
-                                    'None assigned'}
-                            </div>
+                            <div><strong>Active Counties:</strong> ${operationData.counties ? operationData.counties.join(', ') : 'None selected'}</div>
                         </div>
                     </div>
                 `;
@@ -1239,13 +1023,7 @@
 
         // Load existing data on page load
         window.addEventListener('load', function() {
-            // Populate regions dropdown
-            populateRegions();
-            
-            // Display existing contacts
             displayContacts();
-            
-            // Update feeding stats
             updateFeedingStats();
             
             // Restore form values if operation data exists
@@ -1255,22 +1033,11 @@
                 document.getElementById('startDate').value = operationData.startDate || '';
                 document.getElementById('region').value = operationData.region || '';
                 
-                // Trigger region change to load counties
-                if (operationData.region) {
-                    document.getElementById('region').dispatchEvent(new Event('change'));
-                    
-                    // After counties load, check the selected ones
-                    setTimeout(() => {
-                        if (operationData.counties) {
-                            operationData.counties.forEach(county => {
-                                const checkbox = document.querySelector(`#countyGrid input[value="${county}"]`);
-                                if (checkbox) {
-                                    checkbox.checked = true;
-                                }
-                            });
-                            updateSelectedCounties();
-                        }
-                    }, 100);
+                if (operationData.counties) {
+                    operationData.counties.forEach(county => {
+                        const checkbox = document.getElementById(`county_${county}`);
+                        if (checkbox) checkbox.checked = true;
+                    });
                 }
             }
             
