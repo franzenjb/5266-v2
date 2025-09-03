@@ -663,18 +663,168 @@
     <nav class="nav-tabs">
         <div class="nav-tabs-inner">
             <ul>
-                <li><a href="#start-here" class="tab-link active" data-tab="start-here">Start Here Statistics</a></li>
-                <li><a href="#feeding" class="tab-link" data-tab="feeding">Feeding</a></li>
+                <li><a href="#live-iap" class="tab-link active" data-tab="live-iap">Live IAP</a></li>
+                <li><a href="#service-lines" class="tab-link" data-tab="service-lines">Service Lines</a></li>
                 <li><a href="iap.html" class="tab-link">IAP Builder</a></li>
-                <li><a href="#dashboard" class="tab-link" data-tab="dashboard">Live Dashboard</a></li>
+                <li><a href="#start-here" class="tab-link" data-tab="start-here">Start Here Statistics</a></li>
             </ul>
         </div>
     </nav>
 
     <!-- Main Container -->
     <main class="main-container">
+        <!-- Live IAP Tab -->
+        <div id="live-iap" class="tab-content active">
+            <div class="alert alert-success">
+                <span>📊</span>
+                <span>Current Incident Action Plan - Real-time operational status and objectives</span>
+            </div>
+            
+            <div class="dashboard-grid">
+                <!-- Current IAP Overview -->
+                <div class="card">
+                    <div class="card-header">
+                        <h2 class="card-title">Active IAP</h2>
+                        <div class="card-icon">📋</div>
+                    </div>
+                    <div id="currentIAPContent">
+                        <div class="empty-state">
+                            <div class="empty-state-icon">📄</div>
+                            <p>No active IAP. Create one using the IAP Builder.</p>
+                            <a href="iap.html" class="btn btn-primary" style="margin-top: 1rem;">
+                                <span>📝</span> Go to IAP Builder
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Operational Period -->
+                <div class="card">
+                    <div class="card-header">
+                        <h2 class="card-title">Operational Period</h2>
+                        <div class="card-icon">🕐</div>
+                    </div>
+                    <div id="operationalPeriodContent">
+                        <div class="empty-state">
+                            <p>No operational period set</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Key Metrics -->
+            <div class="stats-grid" id="liveIAPStats">
+                <div class="stat-card">
+                    <div class="stat-value" id="liveIAPMeals">0</div>
+                    <div class="stat-label">Total Meals (Line 9)</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="liveIAPSnacks">0</div>
+                    <div class="stat-label">Total Snacks (Line 10)</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="liveIAPCounties">0</div>
+                    <div class="stat-label">Active Counties</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="liveIAPChapters">0</div>
+                    <div class="stat-label">Active Chapters</div>
+                </div>
+            </div>
+            
+            <!-- Map Card -->
+            <div class="card" style="margin-top: 2rem;">
+                <div class="card-header">
+                    <h2 class="card-title">Operation Area Map</h2>
+                    <div class="card-icon">🗺️</div>
+                </div>
+                <div id="liveIAPMap" class="map-container"></div>
+            </div>
+        </div>
+        
+        <!-- Service Lines Tab -->
+        <div id="service-lines" class="tab-content">
+            <div class="alert alert-info">
+                <span>🛠️</span>
+                <span>Manage all Red Cross service lines and operational functions</span>
+            </div>
+            
+            <div class="dashboard-grid">
+                <!-- Feeding Service -->
+                <div class="card">
+                    <div class="card-header">
+                        <h2 class="card-title">Feeding (Lines 9-10)</h2>
+                        <div class="card-icon">🍽️</div>
+                    </div>
+                    <form id="feedingForm">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="feedingDate">Date *</label>
+                                <input type="date" class="form-control" id="feedingDate" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="feedingLocation">Location/Facility *</label>
+                                <input type="text" class="form-control" id="feedingLocation" 
+                                       placeholder="e.g., Shelter #1 - Community Center" required>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="mealsServed">Meals Served (Line 9) *</label>
+                                <input type="number" class="form-control" id="mealsServed" 
+                                       min="0" placeholder="0" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="snacksServed">Snacks Served (Line 10) *</label>
+                                <input type="number" class="form-control" id="snacksServed" 
+                                       min="0" placeholder="0" required>
+                            </div>
+                        </div>
+                        <button type="submit" class="btn btn-primary">
+                            <span>📊</span> Submit Feeding Data
+                        </button>
+                    </form>
+                </div>
+                
+                <!-- Sheltering Service -->
+                <div class="card">
+                    <div class="card-header">
+                        <h2 class="card-title">Sheltering</h2>
+                        <div class="card-icon">🏠</div>
+                    </div>
+                    <div style="padding: 1rem;">
+                        <p style="color: var(--gray-medium);">Sheltering data entry coming soon...</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="dashboard-grid" style="margin-top: 1.5rem;">
+                <!-- Mass Care Service -->
+                <div class="card">
+                    <div class="card-header">
+                        <h2 class="card-title">Distribution of Emergency Supplies</h2>
+                        <div class="card-icon">📦</div>
+                    </div>
+                    <div style="padding: 1rem;">
+                        <p style="color: var(--gray-medium);">DES data entry coming soon...</p>
+                    </div>
+                </div>
+                
+                <!-- Government Operations -->
+                <div class="card">
+                    <div class="card-header">
+                        <h2 class="card-title">Government Operations</h2>
+                        <div class="card-icon">🏛️</div>
+                    </div>
+                    <div style="padding: 1rem;">
+                        <p style="color: var(--gray-medium);">Government operations data entry coming soon...</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <!-- Start Here Statistics Tab -->
-        <div id="start-here" class="tab-content active">
+        <div id="start-here" class="tab-content">
             <div class="alert alert-info">
                 <span>📋</span>
                 <span>Complete this form to initialize your Disaster Relief Operation. Select a region to see available counties and associated chapters.</span>
@@ -821,125 +971,6 @@
             </div>
         </div>
 
-        <!-- Feeding Tab -->
-        <div id="feeding" class="tab-content">
-            <div class="stats-grid">
-                <div class="stat-card">
-                    <div class="stat-value" id="totalMeals">0</div>
-                    <div class="stat-label">Total Meals Served</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-value" id="totalSnacks">0</div>
-                    <div class="stat-label">Total Snacks Served</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-value" id="todayMeals">0</div>
-                    <div class="stat-label">Today's Meals</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-value" id="todaySnacks">0</div>
-                    <div class="stat-label">Today's Snacks</div>
-                </div>
-            </div>
-
-            <div class="card">
-                <div class="card-header">
-                    <h2 class="card-title">Record Feeding Data</h2>
-                    <div class="card-icon">🍽️</div>
-                </div>
-                <form id="feedingForm">
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label for="feedingDate">Date *</label>
-                            <input type="date" class="form-control" id="feedingDate" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="feedingLocation">Location/Facility *</label>
-                            <input type="text" class="form-control" id="feedingLocation" 
-                                   placeholder="e.g., Shelter #1 - Community Center" required>
-                        </div>
-                    </div>
-
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label for="mealsServed">Meals Served (Line 9) *</label>
-                            <input type="number" class="form-control" id="mealsServed" 
-                                   min="0" placeholder="0" required>
-                            <small style="color: var(--gray-medium); font-size: 0.75rem;">
-                                Count of meals provided to clients, responders, and workers
-                            </small>
-                        </div>
-                        <div class="form-group">
-                            <label for="snacksServed">Snacks Served (Line 10) *</label>
-                            <input type="number" class="form-control" id="snacksServed" 
-                                   min="0" placeholder="0" required>
-                            <small style="color: var(--gray-medium); font-size: 0.75rem;">
-                                Individual snacks not served with meals
-                            </small>
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="feedingNotes">Notes (Optional)</label>
-                        <textarea class="form-control" id="feedingNotes" rows="3" 
-                                  placeholder="Any additional information about this feeding operation"></textarea>
-                    </div>
-
-                    <button type="submit" class="btn btn-primary">
-                        <span>📊</span> Submit Feeding Data
-                    </button>
-                </form>
-            </div>
-        </div>
-
-        <!-- Dashboard Tab -->
-        <div id="dashboard" class="tab-content">
-            <div class="alert alert-success">
-                <span>✅</span>
-                <span>Real-time dashboard showing current operation status. Data updates automatically as entered.</span>
-            </div>
-
-            <div class="stats-grid" id="dashboardStats">
-                <!-- Dashboard stats will be populated here -->
-            </div>
-
-            <div class="dashboard-grid">
-                <div class="card">
-                    <div class="card-header">
-                        <h2 class="card-title">Operation Overview</h2>
-                        <div class="card-icon">📊</div>
-                    </div>
-                    <div id="operationOverview">
-                        <div class="empty-state">
-                            <div class="empty-state-icon">📋</div>
-                            <p>No operation data yet. Complete the Start Here Statistics to begin.</p>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="card">
-                    <div class="card-header">
-                        <h2 class="card-title">Recent Activity</h2>
-                        <div class="card-icon">🕐</div>
-                    </div>
-                    <div id="activityLog">
-                        <div class="empty-state">
-                            <div class="empty-state-icon">📝</div>
-                            <p>Activity will appear here as data is entered.</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            
-            <!-- Dashboard Map Card -->
-            <div class="card" style="margin-top: 2rem;">
-                <div class="card-header">
-                    <h2 class="card-title">Operation Area Map</h2>
-                    <div class="card-icon">🗺️</div>
-                </div>
-                <div id="dashboardMap" class="map-container"></div>
-            </div>
-        </div>
     </main>
 
     <!-- Include the Red Cross regions data -->
@@ -970,9 +1001,13 @@
                 });
                 document.getElementById(tabName).classList.add('active');
                 
-                // Update dashboard when switching to it
-                if (tabName === 'dashboard') {
-                    updateDashboard();
+                // Update Live IAP when switching to it
+                if (tabName === 'live-iap') {
+                    updateLiveIAP();
+                }
+                // Update feeding stats when switching to service lines
+                if (tabName === 'service-lines') {
+                    updateFeedingStats();
                 }
             });
         });
@@ -1218,84 +1253,79 @@
             const totalMeals = feedingData.reduce((sum, f) => sum + f.meals, 0);
             const totalSnacks = feedingData.reduce((sum, f) => sum + f.snacks, 0);
             
-            const today = new Date().toISOString().split('T')[0];
-            const todayData = feedingData.filter(f => f.date === today);
-            const todayMeals = todayData.reduce((sum, f) => sum + f.meals, 0);
-            const todaySnacks = todayData.reduce((sum, f) => sum + f.snacks, 0);
-            
-            document.getElementById('totalMeals').textContent = totalMeals.toLocaleString();
-            document.getElementById('totalSnacks').textContent = totalSnacks.toLocaleString();
-            document.getElementById('todayMeals').textContent = todayMeals.toLocaleString();
-            document.getElementById('todaySnacks').textContent = todaySnacks.toLocaleString();
+            // Update Live IAP stats if elements exist
+            if (document.getElementById('liveIAPMeals')) {
+                document.getElementById('liveIAPMeals').textContent = totalMeals.toLocaleString();
+            }
+            if (document.getElementById('liveIAPSnacks')) {
+                document.getElementById('liveIAPSnacks').textContent = totalSnacks.toLocaleString();
+            }
         }
 
-        // Update dashboard
-        function updateDashboard() {
-            // Update stats
-            const statsHtml = `
-                <div class="stat-card">
-                    <div class="stat-value">${operationData.drNumber || 'Not Set'}</div>
-                    <div class="stat-label">DR Number</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-value">${operationData.counties ? operationData.counties.length : 0}</div>
-                    <div class="stat-label">Active Counties</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-value">${operationData.chapters ? operationData.chapters.length : 0}</div>
-                    <div class="stat-label">Active Chapters</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-value">${feedingData.reduce((sum, f) => sum + f.meals, 0).toLocaleString()}</div>
-                    <div class="stat-label">Total Meals</div>
-                </div>
-            `;
-            document.getElementById('dashboardStats').innerHTML = statsHtml;
+        // Update Live IAP
+        function updateLiveIAP() {
+            // Get the current IAP from localStorage
+            const currentIAP = JSON.parse(localStorage.getItem('form5266_iap_current')) || null;
+            const allIAPs = JSON.parse(localStorage.getItem('form5266_iap')) || [];
             
-            // Update operation overview
-            if (operationData.drNumber) {
-                const overviewHtml = `
+            // Update statistics
+            const totalMeals = feedingData.reduce((sum, f) => sum + f.meals, 0);
+            const totalSnacks = feedingData.reduce((sum, f) => sum + f.snacks, 0);
+            const activeCounties = operationData.counties ? operationData.counties.length : 0;
+            const activeChapters = operationData.chapters ? operationData.chapters.length : 0;
+            
+            document.getElementById('liveIAPMeals').textContent = totalMeals.toLocaleString();
+            document.getElementById('liveIAPSnacks').textContent = totalSnacks.toLocaleString();
+            document.getElementById('liveIAPCounties').textContent = activeCounties;
+            document.getElementById('liveIAPChapters').textContent = activeChapters;
+            
+            // Display current IAP if available
+            if (currentIAP && currentIAP.iapNumber) {
+                const iapContent = `
                     <div style="padding: 1rem;">
-                        <h3 style="color: var(--red-cross-red); margin-bottom: 1rem;">
-                            ${operationData.operationName || 'Unnamed Operation'}
-                        </h3>
-                        <div style="display: grid; gap: 0.75rem;">
-                            <div><strong>DR Number:</strong> ${operationData.drNumber}</div>
-                            <div><strong>Region:</strong> ${operationData.region || 'Not specified'}</div>
-                            <div><strong>Start Date:</strong> ${operationData.startDate || 'Not specified'}</div>
-                            <div><strong>Active Counties (${operationData.counties ? operationData.counties.length : 0}):</strong> 
-                                ${operationData.counties && operationData.counties.length > 0 ? 
-                                    (operationData.counties.length > 5 ? 
-                                        operationData.counties.slice(0, 5).join(', ') + '...' : 
-                                        operationData.counties.join(', ')) : 
-                                    'None selected'}
+                        <div style="display: flex; justify-content: space-between; align-items: start;">
+                            <div>
+                                <h3 style="color: var(--red-cross-red); margin: 0;">IAP ${currentIAP.iapNumber}</h3>
+                                <p style="color: var(--gray-medium); margin: 0.5rem 0;">
+                                    ${currentIAP.incidentName || operationData.operationName || 'Disaster Response Operation'}
+                                </p>
                             </div>
-                            <div><strong>Active Chapters (${operationData.chapters ? operationData.chapters.length : 0}):</strong> 
-                                ${operationData.chapters && operationData.chapters.length > 0 ? 
-                                    (operationData.chapters.length > 3 ? 
-                                        operationData.chapters.slice(0, 3).join(', ') + '...' : 
-                                        operationData.chapters.join(', ')) : 
-                                    'None assigned'}
+                            <a href="iap.html" class="btn btn-secondary">
+                                <span>✏️</span> Edit IAP
+                            </a>
+                        </div>
+                        <div style="margin-top: 1rem; padding-top: 1rem; border-top: 1px solid var(--gray-light);">
+                            <div style="display: grid; gap: 0.5rem; font-size: 0.9rem;">
+                                <div><strong>DR Number:</strong> ${currentIAP.drNumber || operationData.drNumber || 'Not set'}</div>
+                                <div><strong>Prepared By:</strong> ${currentIAP.preparedBy || 'TBD'}</div>
+                                <div><strong>DRO Director:</strong> ${currentIAP.droDirector || 'TBD'}</div>
+                                <div><strong>Planning Chief:</strong> ${currentIAP.planningChief || 'TBD'}</div>
                             </div>
                         </div>
                     </div>
                 `;
-                document.getElementById('operationOverview').innerHTML = overviewHtml;
-            }
-            
-            // Update activity log
-            if (activityLog.length > 0) {
-                const recentActivities = activityLog.slice(-5).reverse();
-                const activityHtml = recentActivities.map(activity => `
-                    <div style="padding: 0.75rem; border-left: 3px solid var(--red-cross-red); margin-bottom: 0.5rem; background-color: var(--gray-light);">
-                        <div style="font-weight: 600; color: var(--gray-dark);">${activity.action}</div>
-                        <div style="font-size: 0.875rem; color: var(--gray-medium);">${activity.details}</div>
-                        <div style="font-size: 0.75rem; color: var(--gray-medium); margin-top: 0.25rem;">
-                            ${new Date(activity.timestamp).toLocaleString()}
+                document.getElementById('currentIAPContent').innerHTML = iapContent;
+                
+                // Update operational period
+                if (currentIAP.periodStart && currentIAP.periodEnd) {
+                    const periodContent = `
+                        <div style="padding: 1rem;">
+                            <div style="text-align: center; font-size: 1.2rem; color: var(--gray-dark);">
+                                <strong>Current Period</strong>
+                            </div>
+                            <div style="text-align: center; margin-top: 0.5rem;">
+                                <div style="color: var(--red-cross-red); font-weight: 600;">
+                                    ${new Date(currentIAP.periodStart).toLocaleString()}
+                                </div>
+                                <div style="color: var(--gray-medium); margin: 0.25rem 0;">to</div>
+                                <div style="color: var(--red-cross-red); font-weight: 600;">
+                                    ${new Date(currentIAP.periodEnd).toLocaleString()}
+                                </div>
+                            </div>
                         </div>
-                    </div>
-                `).join('');
-                document.getElementById('activityLog').innerHTML = activityHtml;
+                    `;
+                    document.getElementById('operationalPeriodContent').innerHTML = periodContent;
+                }
             }
         }
 
@@ -1401,6 +1431,9 @@
             
             // Update feeding stats
             updateFeedingStats();
+            
+            // Initialize Live IAP view
+            updateLiveIAP();
             
             // Restore form values if operation data exists
             if (operationData.drNumber) {
