@@ -1,0 +1,1223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IAP Builder Enhanced - Form 5266 v2</title>
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Leaflet CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+          integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
+          crossorigin=""/>
+    
+    <!-- Quill Rich Text Editor CSS -->
+    <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
+    
+    <!-- Cropper.js for image cropping -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.1/cropper.min.css">
+    
+    <!-- Leaflet JavaScript -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+            integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
+            crossorigin=""></script>
+    
+    <!-- Quill Rich Text Editor -->
+    <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
+    
+    <!-- Cropper.js -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.1/cropper.min.js"></script>
+    
+    <style>
+        :root {
+            --red-cross-red: #ED1B2E;
+            --red-cross-dark: #B51E2B;
+            --red-cross-light: #FFF5F5;
+            --gray-dark: #2C3E50;
+            --gray-medium: #7F8C8D;
+            --gray-light: #ECF0F1;
+            --success-green: #27AE60;
+            --warning-yellow: #F39C12;
+            --info-blue: #3498DB;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Open Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background-color: #F8F9FA;
+            color: var(--gray-dark);
+            line-height: 1.6;
+        }
+
+        /* Header */
+        .header {
+            background-color: white;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+        }
+
+        .header-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 1rem 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .logo-section {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .red-cross-logo {
+            width: 40px;
+            height: 40px;
+            background-color: var(--red-cross-red);
+            position: relative;
+            border-radius: 4px;
+        }
+
+        .red-cross-logo::before,
+        .red-cross-logo::after {
+            content: '';
+            position: absolute;
+            background-color: white;
+        }
+
+        .red-cross-logo::before {
+            width: 24px;
+            height: 8px;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        .red-cross-logo::after {
+            width: 8px;
+            height: 24px;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        /* Main Content */
+        .main-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 100px 2rem 2rem 2rem;
+        }
+
+        /* Cover Photo Section */
+        .cover-photo-section {
+            background-color: white;
+            border-radius: 8px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.08);
+        }
+
+        .cover-photo-upload {
+            border: 3px dashed var(--gray-light);
+            border-radius: 8px;
+            padding: 3rem;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            min-height: 300px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            background-size: cover;
+            background-position: center;
+        }
+
+        .cover-photo-upload:hover {
+            border-color: var(--red-cross-red);
+            background-color: var(--red-cross-light);
+        }
+
+        .cover-photo-upload.has-image {
+            border: none;
+        }
+
+        .upload-placeholder {
+            color: var(--gray-medium);
+        }
+
+        .upload-placeholder h3 {
+            margin-bottom: 1rem;
+            color: var(--gray-dark);
+        }
+
+        .upload-placeholder p {
+            margin-bottom: 1.5rem;
+        }
+
+        /* Accordion Styles */
+        .accordion {
+            background-color: white;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.08);
+        }
+        
+        .accordion-header {
+            background-color: white;
+            border: none;
+            padding: 1.25rem 1.5rem;
+            width: 100%;
+            text-align: left;
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--gray-dark);
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.3s ease;
+            border-radius: 8px;
+        }
+        
+        .accordion-header:hover {
+            background-color: var(--red-cross-light);
+        }
+        
+        .accordion-header.active {
+            background-color: var(--red-cross-red);
+            color: white;
+            border-radius: 8px 8px 0 0;
+        }
+        
+        .accordion-icon {
+            transition: transform 0.3s ease;
+            font-size: 1.2rem;
+        }
+        
+        .accordion-header.active .accordion-icon {
+            transform: rotate(180deg);
+        }
+        
+        .accordion-content {
+            display: none;
+            padding: 1.5rem;
+            background-color: white;
+            border-top: 2px solid var(--gray-light);
+            border-radius: 0 0 8px 8px;
+        }
+        
+        .accordion-content.active {
+            display: block;
+        }
+
+        /* Rich Text Editor Styles */
+        .editor-container {
+            margin: 1rem 0;
+        }
+
+        .editor-label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: var(--gray-dark);
+            font-size: 0.875rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        #directorMessageEditor,
+        #objectivesEditor,
+        #prioritiesEditor {
+            background-color: white;
+            min-height: 200px;
+            border-radius: 6px;
+        }
+
+        .ql-toolbar.ql-snow {
+            border-radius: 6px 6px 0 0;
+            border: 2px solid var(--gray-light);
+            border-bottom: 1px solid var(--gray-light);
+        }
+
+        .ql-container.ql-snow {
+            border-radius: 0 0 6px 6px;
+            border: 2px solid var(--gray-light);
+            border-top: none;
+            min-height: 150px;
+        }
+
+        .ql-editor {
+            min-height: 150px;
+            font-family: 'Open Sans', sans-serif;
+            font-size: 1rem;
+            line-height: 1.6;
+        }
+
+        /* Form Elements */
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: var(--gray-dark);
+            font-size: 0.875rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 0.75rem;
+            border: 2px solid var(--gray-light);
+            border-radius: 6px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            font-family: inherit;
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--red-cross-red);
+            box-shadow: 0 0 0 3px rgba(237, 27, 46, 0.1);
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+        }
+
+        /* Buttons */
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 6px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 1rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn-primary {
+            background-color: var(--red-cross-red);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background-color: var(--red-cross-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(237, 27, 46, 0.3);
+        }
+
+        .btn-secondary {
+            background-color: white;
+            color: var(--gray-dark);
+            border: 2px solid var(--gray-light);
+        }
+
+        .btn-secondary:hover {
+            background-color: var(--gray-light);
+        }
+
+        /* Image Cropper Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 2000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+        }
+
+        .modal.active {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-content {
+            background-color: white;
+            padding: 2rem;
+            border-radius: 8px;
+            max-width: 90%;
+            max-height: 90%;
+            overflow: auto;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .modal-body {
+            margin: 1rem 0;
+        }
+
+        .modal-footer {
+            display: flex;
+            gap: 1rem;
+            justify-content: flex-end;
+            margin-top: 1rem;
+        }
+
+        #cropperImage {
+            max-width: 100%;
+            display: block;
+        }
+
+        /* Action Buttons */
+        .action-buttons {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            display: flex;
+            gap: 1rem;
+            z-index: 100;
+            background: white;
+            padding: 1rem;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+
+        /* Status Badge */
+        .status-badge {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            margin-left: 1rem;
+        }
+        
+        .status-complete {
+            background-color: var(--success-green);
+            color: white;
+        }
+        
+        .status-partial {
+            background-color: var(--warning-yellow);
+            color: white;
+        }
+        
+        .status-empty {
+            background-color: var(--gray-medium);
+            color: white;
+        }
+
+        /* Cover photo controls */
+        .cover-photo-controls {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            display: none;
+            gap: 0.5rem;
+        }
+
+        .cover-photo-upload.has-image .cover-photo-controls {
+            display: flex;
+        }
+
+        .photo-control-btn {
+            background: white;
+            border: none;
+            padding: 0.5rem;
+            border-radius: 4px;
+            cursor: pointer;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+            transition: all 0.3s ease;
+        }
+
+        .photo-control-btn:hover {
+            background-color: var(--red-cross-red);
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="header-content">
+            <div class="logo-section">
+                <div class="red-cross-logo"></div>
+                <div>
+                    <h1>Enhanced IAP Builder</h1>
+                    <p style="font-size: 0.875rem; color: var(--gray-medium);">Form 5266 v2 - Professional IAP Creation</p>
+                </div>
+            </div>
+            <a href="index.html" class="btn btn-secondary">← Back to Main</a>
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <main class="main-container">
+        <!-- Cover Photo Section -->
+        <div class="cover-photo-section">
+            <h2 style="margin-bottom: 1rem; color: var(--red-cross-red);">IAP Cover Photo</h2>
+            <div class="cover-photo-upload" id="coverPhotoUpload">
+                <input type="file" id="coverPhotoInput" accept="image/*" style="display: none;">
+                <div class="upload-placeholder" id="uploadPlaceholder">
+                    <h3>📷 Upload Cover Photo</h3>
+                    <p>Drag and drop an image here, or click to browse</p>
+                    <button class="btn btn-primary">Choose Image</button>
+                </div>
+                <div class="cover-photo-controls">
+                    <button class="photo-control-btn" onclick="editCoverPhoto()" title="Edit">✏️</button>
+                    <button class="photo-control-btn" onclick="removeCoverPhoto()" title="Remove">🗑️</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- 1. Basic Information -->
+        <div class="accordion">
+            <button class="accordion-header active" onclick="toggleAccordion(this)">
+                <div>
+                    <span>1. Basic Information & Operational Period *</span>
+                    <span class="status-badge status-empty" id="status-basic">Empty</span>
+                </div>
+                <span class="accordion-icon">▼</span>
+            </button>
+            <div class="accordion-content active">
+                <form id="basicInfoForm">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="iapNumber">IAP Number *</label>
+                            <input type="text" class="form-control" id="iapNumber" placeholder="e.g., IAP-001" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="drNumber">DR Number *</label>
+                            <input type="text" class="form-control" id="drNumber" placeholder="Auto-filled from Start Here" readonly>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="incidentName">Incident Name/Type *</label>
+                        <input type="text" class="form-control" id="incidentName" placeholder="e.g., Hurricane Ian Response" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Operational Period *</label>
+                        <div class="form-row">
+                            <input type="datetime-local" class="form-control" id="periodStart" required>
+                            <input type="datetime-local" class="form-control" id="periodEnd" required>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- 2. Director's Message with Rich Text Editor -->
+        <div class="accordion">
+            <button class="accordion-header" onclick="toggleAccordion(this)">
+                <div>
+                    <span>2. Director's Message & Objectives</span>
+                    <span class="status-badge status-empty" id="status-director">Empty</span>
+                </div>
+                <span class="accordion-icon">▼</span>
+            </button>
+            <div class="accordion-content">
+                <div class="editor-container">
+                    <label class="editor-label">Director's Message</label>
+                    <div id="directorMessageEditor"></div>
+                </div>
+                
+                <div class="editor-container">
+                    <label class="editor-label">Primary Objectives for This Period</label>
+                    <div id="objectivesEditor"></div>
+                </div>
+                
+                <div class="editor-container">
+                    <label class="editor-label">Operational Priorities</label>
+                    <div id="prioritiesEditor"></div>
+                </div>
+
+                <div style="margin-top: 1rem;">
+                    <button class="btn btn-primary" onclick="saveDirectorSection()">
+                        <span>💾</span> Save Director's Section
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- 3-9. Other sections (simplified for now) -->
+        <div class="accordion">
+            <button class="accordion-header" onclick="toggleAccordion(this)">
+                <div>
+                    <span>3-9. Command Staff, Geography, Service Lines, etc.</span>
+                    <span class="status-badge status-empty">Pending</span>
+                </div>
+                <span class="accordion-icon">▼</span>
+            </button>
+            <div class="accordion-content">
+                <p style="color: var(--gray-medium); text-align: center; padding: 2rem;">
+                    These sections will be fully implemented with forms and data integration
+                </p>
+            </div>
+        </div>
+
+        <!-- 10. Safety & Security with Rich Text -->
+        <div class="accordion">
+            <button class="accordion-header" onclick="toggleAccordion(this)">
+                <div>
+                    <span>10. Safety & Security Information</span>
+                    <span class="status-badge status-empty" id="status-safety">Empty</span>
+                </div>
+                <span class="accordion-icon">▼</span>
+            </button>
+            <div class="accordion-content">
+                <div class="editor-container">
+                    <label class="editor-label">Safety Concerns & Hazards</label>
+                    <div id="safetyConcernsEditor"></div>
+                </div>
+                
+                <div class="editor-container">
+                    <label class="editor-label">Weather Forecast</label>
+                    <div id="weatherForecastEditor"></div>
+                </div>
+                
+                <div class="editor-container">
+                    <label class="editor-label">Security Information</label>
+                    <div id="securityInfoEditor"></div>
+                </div>
+                
+                <div class="editor-container">
+                    <label class="editor-label">Medical Plan</label>
+                    <div id="medicalPlanEditor"></div>
+                </div>
+
+                <div style="margin-top: 1rem;">
+                    <button class="btn btn-primary" onclick="saveSafetySection()">
+                        <span>💾</span> Save Safety Section
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- 11. External Coordination with Rich Text -->
+        <div class="accordion">
+            <button class="accordion-header" onclick="toggleAccordion(this)">
+                <div>
+                    <span>11. External Coordination & Partners</span>
+                    <span class="status-badge status-empty" id="status-external">Empty</span>
+                </div>
+                <span class="accordion-icon">▼</span>
+            </button>
+            <div class="accordion-content">
+                <div class="editor-container">
+                    <label class="editor-label">EOC Status & Coordination</label>
+                    <div id="eocStatusEditor"></div>
+                </div>
+                
+                <div class="editor-container">
+                    <label class="editor-label">Partner Organizations</label>
+                    <div id="partnerOrgsEditor"></div>
+                </div>
+                
+                <div class="editor-container">
+                    <label class="editor-label">Meeting Schedule</label>
+                    <div id="externalMeetingsEditor"></div>
+                </div>
+                
+                <div class="editor-container">
+                    <label class="editor-label">Coordination Notes</label>
+                    <div id="coordinationNotesEditor"></div>
+                </div>
+
+                <div style="margin-top: 1rem;">
+                    <button class="btn btn-primary" onclick="saveExternalSection()">
+                        <span>💾</span> Save External Coordination
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- 12. Ancillary Notes with Rich Text -->
+        <div class="accordion">
+            <button class="accordion-header" onclick="toggleAccordion(this)">
+                <div>
+                    <span>12. Ancillary Notes & Additional Information</span>
+                    <span class="status-badge status-empty" id="status-notes">Optional</span>
+                </div>
+                <span class="accordion-icon">▼</span>
+            </button>
+            <div class="accordion-content">
+                <div class="editor-container">
+                    <label class="editor-label">Special Instructions</label>
+                    <div id="specialInstructionsEditor"></div>
+                </div>
+                
+                <div class="editor-container">
+                    <label class="editor-label">Additional Notes</label>
+                    <div id="additionalNotesEditor"></div>
+                </div>
+                
+                <div class="editor-container">
+                    <label class="editor-label">Attachments Referenced</label>
+                    <div id="attachmentsEditor"></div>
+                </div>
+                
+                <div class="editor-container">
+                    <label class="editor-label">Lessons Learned</label>
+                    <div id="lessonsLearnedEditor"></div>
+                </div>
+
+                <div style="margin-top: 1rem;">
+                    <button class="btn btn-primary" onclick="saveNotesSection()">
+                        <span>💾</span> Save Ancillary Notes
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- 13. Preview & Export -->
+        <div class="accordion">
+            <button class="accordion-header" onclick="toggleAccordion(this)">
+                <div>
+                    <span>13. Preview & Export IAP</span>
+                </div>
+                <span class="accordion-icon">▼</span>
+            </button>
+            <div class="accordion-content">
+                <div style="text-align: center; padding: 2rem;">
+                    <h3 style="margin-bottom: 1rem;">Your IAP is Ready for Review</h3>
+                    <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
+                        <button class="btn btn-primary" onclick="generateFullPreview()">
+                            <span>👁️</span> Full Preview
+                        </button>
+                        <button class="btn btn-primary" onclick="exportToPDF()">
+                            <span>📥</span> Export to PDF
+                        </button>
+                        <button class="btn btn-primary" onclick="exportToWord()">
+                            <span>📄</span> Export to Word
+                        </button>
+                        <button class="btn btn-secondary" onclick="printIAP()">
+                            <span>🖨️</span> Print
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- Image Cropper Modal -->
+    <div id="cropperModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Crop Cover Photo</h2>
+                <button onclick="closeCropperModal()" style="background: none; border: none; font-size: 1.5rem; cursor: pointer;">×</button>
+            </div>
+            <div class="modal-body">
+                <img id="cropperImage" style="max-width: 100%;">
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeCropperModal()">Cancel</button>
+                <button class="btn btn-primary" onclick="cropAndSave()">
+                    <span>✂️</span> Crop & Save
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Action Buttons -->
+    <div class="action-buttons">
+        <button type="button" class="btn btn-secondary" onclick="saveIAPDraft()">
+            <span>💾</span> Save Draft
+        </button>
+        <button type="button" class="btn btn-primary" onclick="previewIAP()">
+            <span>👁️</span> Preview IAP
+        </button>
+    </div>
+
+    <!-- Include data files -->
+    <script src="redcross_data.js"></script>
+    <script src="florida_counties.js"></script>
+    <script src="az_nm_counties.js"></script>
+    <script src="enhanced_maps.js"></script>
+    
+    <script>
+        // Initialize Quill editors
+        let directorMessageQuill, objectivesQuill, prioritiesQuill;
+        let safetyConcernsQuill, weatherForecastQuill, securityInfoQuill, medicalPlanQuill;
+        let eocStatusQuill, partnerOrgsQuill, externalMeetingsQuill, coordinationNotesQuill;
+        let specialInstructionsQuill, additionalNotesQuill, attachmentsQuill, lessonsLearnedQuill;
+        let cropper = null;
+        let currentCoverPhoto = null;
+
+        // Quill toolbar options
+        const toolbarOptions = [
+            [{ 'header': [1, 2, 3, false] }],
+            ['bold', 'italic', 'underline', 'strike'],
+            [{ 'color': [] }, { 'background': [] }],
+            [{ 'font': [] }],
+            [{ 'align': [] }],
+            [{ 'list': 'ordered'}, { 'list': 'bullet' }],
+            ['blockquote', 'code-block'],
+            ['link', 'image'],
+            ['clean']
+        ];
+
+        // Initialize rich text editors
+        function initializeEditors() {
+            directorMessageQuill = new Quill('#directorMessageEditor', {
+                theme: 'snow',
+                placeholder: 'Enter the Director\'s message to all staff...',
+                modules: {
+                    toolbar: toolbarOptions
+                }
+            });
+
+            objectivesQuill = new Quill('#objectivesEditor', {
+                theme: 'snow',
+                placeholder: 'List 3-5 primary objectives for this operational period...',
+                modules: {
+                    toolbar: toolbarOptions
+                }
+            });
+
+            prioritiesQuill = new Quill('#prioritiesEditor', {
+                theme: 'snow',
+                placeholder: 'Life safety, incident stabilization, property conservation...',
+                modules: {
+                    toolbar: toolbarOptions
+                }
+            });
+
+            // Initialize Safety section editors
+            safetyConcernsQuill = new Quill('#safetyConcernsEditor', {
+                theme: 'snow',
+                placeholder: 'Known hazards, PPE requirements, restricted areas...',
+                modules: { toolbar: toolbarOptions }
+            });
+
+            weatherForecastQuill = new Quill('#weatherForecastEditor', {
+                theme: 'snow',
+                placeholder: 'Weather conditions for operational period...',
+                modules: { toolbar: toolbarOptions }
+            });
+
+            securityInfoQuill = new Quill('#securityInfoEditor', {
+                theme: 'snow',
+                placeholder: 'Security procedures, curfews, restricted areas...',
+                modules: { toolbar: toolbarOptions }
+            });
+
+            medicalPlanQuill = new Quill('#medicalPlanEditor', {
+                theme: 'snow',
+                placeholder: 'Nearest hospitals, EMS procedures, medical support...',
+                modules: { toolbar: toolbarOptions }
+            });
+
+            // Initialize External Coordination editors
+            eocStatusQuill = new Quill('#eocStatusEditor', {
+                theme: 'snow',
+                placeholder: 'State/County EOCs, liaison assignments...',
+                modules: { toolbar: toolbarOptions }
+            });
+
+            partnerOrgsQuill = new Quill('#partnerOrgsEditor', {
+                theme: 'snow',
+                placeholder: 'VOAD partners, government agencies, NGOs...',
+                modules: { toolbar: toolbarOptions }
+            });
+
+            externalMeetingsQuill = new Quill('#externalMeetingsEditor', {
+                theme: 'snow',
+                placeholder: 'EOC briefings, partner coordination meetings...',
+                modules: { toolbar: toolbarOptions }
+            });
+
+            coordinationNotesQuill = new Quill('#coordinationNotesEditor', {
+                theme: 'snow',
+                placeholder: 'Special coordination requirements or notes...',
+                modules: { toolbar: toolbarOptions }
+            });
+
+            // Initialize Ancillary Notes editors
+            specialInstructionsQuill = new Quill('#specialInstructionsEditor', {
+                theme: 'snow',
+                placeholder: 'Any special instructions for this operational period...',
+                modules: { toolbar: toolbarOptions }
+            });
+
+            additionalNotesQuill = new Quill('#additionalNotesEditor', {
+                theme: 'snow',
+                placeholder: 'Any other information relevant to this IAP...',
+                modules: { toolbar: toolbarOptions }
+            });
+
+            attachmentsQuill = new Quill('#attachmentsEditor', {
+                theme: 'snow',
+                placeholder: 'List any attached maps, org charts, resource lists...',
+                modules: { toolbar: toolbarOptions }
+            });
+
+            lessonsLearnedQuill = new Quill('#lessonsLearnedEditor', {
+                theme: 'snow',
+                placeholder: 'Key lessons learned from this operational period...',
+                modules: { toolbar: toolbarOptions }
+            });
+
+            // Load saved content if exists
+            loadSavedContent();
+
+            // Auto-save every 30 seconds
+            setInterval(autoSave, 30000);
+        }
+
+        // Toggle accordion
+        function toggleAccordion(header) {
+            // Close other accordions
+            document.querySelectorAll('.accordion-header').forEach(h => {
+                if (h !== header && h.classList.contains('active')) {
+                    h.classList.remove('active');
+                    h.nextElementSibling.classList.remove('active');
+                }
+            });
+            
+            header.classList.toggle('active');
+            const content = header.nextElementSibling;
+            content.classList.toggle('active');
+        }
+
+        // Cover photo upload handling
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeEditors();
+
+            const coverPhotoUpload = document.getElementById('coverPhotoUpload');
+            const coverPhotoInput = document.getElementById('coverPhotoInput');
+
+            // Click to upload
+            coverPhotoUpload.addEventListener('click', function(e) {
+                if (!e.target.closest('.photo-control-btn') && !currentCoverPhoto) {
+                    coverPhotoInput.click();
+                }
+            });
+
+            // Drag and drop
+            coverPhotoUpload.addEventListener('dragover', function(e) {
+                e.preventDefault();
+                this.style.backgroundColor = 'var(--red-cross-light)';
+            });
+
+            coverPhotoUpload.addEventListener('dragleave', function(e) {
+                e.preventDefault();
+                this.style.backgroundColor = '';
+            });
+
+            coverPhotoUpload.addEventListener('drop', function(e) {
+                e.preventDefault();
+                this.style.backgroundColor = '';
+                
+                const files = e.dataTransfer.files;
+                if (files.length > 0 && files[0].type.startsWith('image/')) {
+                    handleImageUpload(files[0]);
+                }
+            });
+
+            // File input change
+            coverPhotoInput.addEventListener('change', function(e) {
+                if (e.target.files.length > 0) {
+                    handleImageUpload(e.target.files[0]);
+                }
+            });
+        });
+
+        // Handle image upload
+        function handleImageUpload(file) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                openCropperModal(e.target.result);
+            };
+            reader.readAsDataURL(file);
+        }
+
+        // Open cropper modal
+        function openCropperModal(imageSrc) {
+            const modal = document.getElementById('cropperModal');
+            const image = document.getElementById('cropperImage');
+            
+            image.src = imageSrc;
+            modal.classList.add('active');
+            
+            // Initialize cropper
+            if (cropper) {
+                cropper.destroy();
+            }
+            
+            cropper = new Cropper(image, {
+                aspectRatio: 16 / 9,
+                viewMode: 2,
+                guides: true,
+                center: true,
+                highlight: true,
+                background: true,
+                autoCrop: true,
+                autoCropArea: 0.8,
+                movable: true,
+                rotatable: true,
+                scalable: true,
+                zoomable: true,
+            });
+        }
+
+        // Close cropper modal
+        function closeCropperModal() {
+            const modal = document.getElementById('cropperModal');
+            modal.classList.remove('active');
+            
+            if (cropper) {
+                cropper.destroy();
+                cropper = null;
+            }
+        }
+
+        // Crop and save image
+        function cropAndSave() {
+            if (!cropper) return;
+            
+            const canvas = cropper.getCroppedCanvas({
+                maxWidth: 1920,
+                maxHeight: 1080,
+                fillColor: '#fff',
+                imageSmoothingEnabled: true,
+                imageSmoothingQuality: 'high',
+            });
+            
+            canvas.toBlob(function(blob) {
+                const url = URL.createObjectURL(blob);
+                setCoverPhoto(url);
+                closeCropperModal();
+            }, 'image/jpeg', 0.9);
+        }
+
+        // Set cover photo
+        function setCoverPhoto(url) {
+            const coverPhotoUpload = document.getElementById('coverPhotoUpload');
+            const uploadPlaceholder = document.getElementById('uploadPlaceholder');
+            
+            currentCoverPhoto = url;
+            coverPhotoUpload.style.backgroundImage = `url(${url})`;
+            coverPhotoUpload.classList.add('has-image');
+            uploadPlaceholder.style.display = 'none';
+            
+            // Save to localStorage
+            localStorage.setItem('iap_cover_photo', url);
+        }
+
+        // Edit cover photo
+        function editCoverPhoto() {
+            if (currentCoverPhoto) {
+                openCropperModal(currentCoverPhoto);
+            }
+        }
+
+        // Remove cover photo
+        function removeCoverPhoto() {
+            const coverPhotoUpload = document.getElementById('coverPhotoUpload');
+            const uploadPlaceholder = document.getElementById('uploadPlaceholder');
+            
+            currentCoverPhoto = null;
+            coverPhotoUpload.style.backgroundImage = '';
+            coverPhotoUpload.classList.remove('has-image');
+            uploadPlaceholder.style.display = 'block';
+            
+            localStorage.removeItem('iap_cover_photo');
+        }
+
+        // Save Director's section
+        function saveDirectorSection() {
+            const directorContent = {
+                message: directorMessageQuill.root.innerHTML,
+                objectives: objectivesQuill.root.innerHTML,
+                priorities: prioritiesQuill.root.innerHTML,
+                timestamp: new Date().toISOString()
+            };
+            
+            localStorage.setItem('iap_director_content', JSON.stringify(directorContent));
+            
+            // Update status badge
+            updateSectionStatus('director', 'complete');
+            
+            showNotification('Director\'s section saved successfully!');
+        }
+
+        // Load saved content
+        function loadSavedContent() {
+            // Load cover photo
+            const savedPhoto = localStorage.getItem('iap_cover_photo');
+            if (savedPhoto) {
+                setCoverPhoto(savedPhoto);
+            }
+            
+            // Load director's content
+            const savedDirectorContent = localStorage.getItem('iap_director_content');
+            if (savedDirectorContent) {
+                const content = JSON.parse(savedDirectorContent);
+                directorMessageQuill.root.innerHTML = content.message || '';
+                objectivesQuill.root.innerHTML = content.objectives || '';
+                prioritiesQuill.root.innerHTML = content.priorities || '';
+                
+                if (content.message || content.objectives || content.priorities) {
+                    updateSectionStatus('director', 'complete');
+                }
+            }
+            
+            // Load operation data
+            const operationData = JSON.parse(localStorage.getItem('form5266_operation')) || {};
+            if (operationData.drNumber) {
+                document.getElementById('drNumber').value = operationData.drNumber;
+            }
+        }
+
+        // Save Safety section
+        function saveSafetySection() {
+            const safetyContent = {
+                safetyConcerns: safetyConcernsQuill.root.innerHTML,
+                weatherForecast: weatherForecastQuill.root.innerHTML,
+                securityInfo: securityInfoQuill.root.innerHTML,
+                medicalPlan: medicalPlanQuill.root.innerHTML,
+                timestamp: new Date().toISOString()
+            };
+            
+            localStorage.setItem('iap_safety_content', JSON.stringify(safetyContent));
+            updateSectionStatus('safety', 'complete');
+            showNotification('Safety section saved successfully!');
+        }
+
+        // Save External section
+        function saveExternalSection() {
+            const externalContent = {
+                eocStatus: eocStatusQuill.root.innerHTML,
+                partnerOrgs: partnerOrgsQuill.root.innerHTML,
+                externalMeetings: externalMeetingsQuill.root.innerHTML,
+                coordinationNotes: coordinationNotesQuill.root.innerHTML,
+                timestamp: new Date().toISOString()
+            };
+            
+            localStorage.setItem('iap_external_content', JSON.stringify(externalContent));
+            updateSectionStatus('external', 'complete');
+            showNotification('External Coordination section saved successfully!');
+        }
+
+        // Save Notes section
+        function saveNotesSection() {
+            const notesContent = {
+                specialInstructions: specialInstructionsQuill.root.innerHTML,
+                additionalNotes: additionalNotesQuill.root.innerHTML,
+                attachments: attachmentsQuill.root.innerHTML,
+                lessonsLearned: lessonsLearnedQuill.root.innerHTML,
+                timestamp: new Date().toISOString()
+            };
+            
+            localStorage.setItem('iap_notes_content', JSON.stringify(notesContent));
+            updateSectionStatus('notes', 'complete');
+            showNotification('Ancillary Notes section saved successfully!');
+        }
+
+        // Auto-save function
+        function autoSave() {
+            saveDirectorSection();
+            saveSafetySection();
+            saveExternalSection();
+            saveNotesSection();
+            console.log('Auto-saved at', new Date().toLocaleTimeString());
+        }
+
+        // Update section status
+        function updateSectionStatus(sectionId, status) {
+            const badge = document.getElementById('status-' + sectionId);
+            if (badge) {
+                badge.className = 'status-badge status-' + status;
+                badge.textContent = status.charAt(0).toUpperCase() + status.slice(1);
+            }
+        }
+
+        // Show notification
+        function showNotification(message, type = 'success') {
+            const notification = document.createElement('div');
+            notification.style.cssText = `
+                position: fixed;
+                top: 80px;
+                right: 20px;
+                background: ${type === 'error' ? '#f8d7da' : '#d1e7dd'};
+                color: ${type === 'error' ? '#721c24' : '#0f5132'};
+                padding: 1rem 1.5rem;
+                border-radius: 8px;
+                box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+                z-index: 3000;
+                animation: slideIn 0.3s ease;
+            `;
+            notification.textContent = message;
+            
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                notification.style.animation = 'slideOut 0.3s ease';
+                setTimeout(() => notification.remove(), 300);
+            }, 3000);
+        }
+
+        // Save IAP Draft
+        function saveIAPDraft() {
+            const iapData = {
+                coverPhoto: currentCoverPhoto,
+                iapNumber: document.getElementById('iapNumber').value,
+                drNumber: document.getElementById('drNumber').value,
+                incidentName: document.getElementById('incidentName').value,
+                periodStart: document.getElementById('periodStart').value,
+                periodEnd: document.getElementById('periodEnd').value,
+                directorMessage: directorMessageQuill.root.innerHTML,
+                objectives: objectivesQuill.root.innerHTML,
+                priorities: prioritiesQuill.root.innerHTML,
+                timestamp: new Date().toISOString()
+            };
+            
+            localStorage.setItem('form5266_iap_enhanced', JSON.stringify(iapData));
+            showNotification('IAP draft saved successfully!');
+        }
+
+        // Preview IAP
+        function previewIAP() {
+            // This would open a preview window with the formatted IAP
+            saveIAPDraft();
+            showNotification('Preview feature coming soon!');
+        }
+
+        // Add animation styles
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes slideIn {
+                from { transform: translateX(100%); opacity: 0; }
+                to { transform: translateX(0); opacity: 1; }
+            }
+            @keyframes slideOut {
+                from { transform: translateX(0); opacity: 1; }
+                to { transform: translateX(100%); opacity: 0; }
+            }
+        `;
+        document.head.appendChild(style);
+    </script>
+</body>
+</html>
