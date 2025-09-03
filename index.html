@@ -3,851 +3,1047 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Form 5266 Data Collection Tool - Web Version</title>
+    <title>Form 5266 v2 - Disaster Operations Control</title>
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&display=swap" rel="stylesheet">
     <style>
+        :root {
+            --red-cross-red: #ED1B2E;
+            --red-cross-dark: #B51E2B;
+            --red-cross-light: #FFF5F5;
+            --gray-dark: #2C3E50;
+            --gray-medium: #7F8C8D;
+            --gray-light: #ECF0F1;
+            --success-green: #27AE60;
+            --warning-yellow: #F39C12;
+        }
+
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
-        
+
         body {
-            font-family: Calibri, Arial, sans-serif;
-            font-size: 11pt;
-            background: #f0f0f0;
+            font-family: 'Open Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background-color: #F8F9FA;
+            color: var(--gray-dark);
+            line-height: 1.6;
         }
-        
-        .container {
+
+        /* Header */
+        .header {
+            background-color: white;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-content {
             max-width: 1400px;
             margin: 0 auto;
-            background: white;
-        }
-        
-        /* Header matching Red Cross style */
-        .header {
-            background: #ED1B2E;
-            color: white;
-            padding: 10px 20px;
+            padding: 1rem 2rem;
             display: flex;
             align-items: center;
             justify-content: space-between;
         }
-        
-        .header h1 {
-            font-size: 18pt;
-            font-weight: normal;
-        }
-        
-        .header .dr-number {
-            font-size: 14pt;
-            font-weight: bold;
-        }
-        
-        /* Tab navigation matching Excel tabs */
-        .tabs {
+
+        .logo-section {
             display: flex;
-            background: #f0f0f0;
-            border-bottom: 2px solid #ccc;
-            overflow-x: auto;
+            align-items: center;
+            gap: 1rem;
         }
-        
-        .tab {
-            padding: 8px 20px;
-            background: #e0e0e0;
-            border: 1px solid #ccc;
-            border-bottom: none;
-            cursor: pointer;
-            white-space: nowrap;
-            font-size: 10pt;
-            margin-right: 2px;
+
+        .red-cross-logo {
+            width: 40px;
+            height: 40px;
+            background-color: var(--red-cross-red);
+            position: relative;
+            border-radius: 4px;
         }
-        
-        .tab:hover {
-            background: #d0d0d0;
+
+        .red-cross-logo::before,
+        .red-cross-logo::after {
+            content: '';
+            position: absolute;
+            background-color: white;
         }
-        
-        .tab.active {
+
+        .red-cross-logo::before {
+            width: 24px;
+            height: 8px;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        .red-cross-logo::after {
+            width: 8px;
+            height: 24px;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        .header h1 {
+            font-size: 1.5rem;
+            color: var(--gray-dark);
+            font-weight: 600;
+        }
+
+        .status-badge {
+            background-color: var(--success-green);
+            color: white;
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.875rem;
+            font-weight: 600;
+        }
+
+        /* Navigation Tabs */
+        .nav-tabs {
+            background-color: white;
+            border-bottom: 2px solid var(--gray-light);
+            padding: 0 2rem;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .nav-tabs ul {
+            list-style: none;
+            display: flex;
+            gap: 2rem;
+        }
+
+        .nav-tabs li {
+            position: relative;
+        }
+
+        .nav-tabs a {
+            display: block;
+            padding: 1rem 0;
+            color: var(--gray-medium);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+
+        .nav-tabs a.active {
+            color: var(--red-cross-red);
+        }
+
+        .nav-tabs a.active::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background-color: var(--red-cross-red);
+        }
+
+        /* Main Content */
+        .main-container {
+            max-width: 1400px;
+            margin: 2rem auto;
+            padding: 0 2rem;
+        }
+
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        /* Cards */
+        .card {
             background: white;
-            font-weight: bold;
-            border-top: 2px solid #ED1B2E;
+            border-radius: 8px;
+            padding: 1.5rem;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.08);
+            transition: box-shadow 0.3s ease;
         }
-        
-        /* Content area */
-        .content {
-            padding: 20px;
-            min-height: 600px;
+
+        .card:hover {
+            box-shadow: 0 4px 8px rgba(0,0,0,0.12);
         }
-        
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid var(--gray-light);
+        }
+
+        .card-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--gray-dark);
+        }
+
+        .card-icon {
+            width: 40px;
+            height: 40px;
+            background-color: var(--red-cross-light);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--red-cross-red);
+            font-size: 1.25rem;
+        }
+
+        /* Form Elements */
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: var(--gray-dark);
+            font-size: 0.875rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 0.75rem;
+            border: 2px solid var(--gray-light);
+            border-radius: 6px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            font-family: inherit;
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--red-cross-red);
+            box-shadow: 0 0 0 3px rgba(237, 27, 46, 0.1);
+        }
+
+        select.form-control {
+            cursor: pointer;
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23333' d='M6 9L1 4h10z'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 0.75rem center;
+            padding-right: 2.5rem;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+        }
+
+        /* Multi-select counties */
+        .county-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: 0.5rem;
+            max-height: 200px;
+            overflow-y: auto;
+            padding: 0.5rem;
+            border: 2px solid var(--gray-light);
+            border-radius: 6px;
+            background-color: #FAFAFA;
+        }
+
+        .county-checkbox {
+            display: flex;
+            align-items: center;
+            padding: 0.25rem;
+        }
+
+        .county-checkbox input[type="checkbox"] {
+            margin-right: 0.5rem;
+            cursor: pointer;
+        }
+
+        .county-checkbox label {
+            cursor: pointer;
+            font-size: 0.875rem;
+            margin: 0;
+            font-weight: normal;
+            text-transform: none;
+            letter-spacing: normal;
+        }
+
+        /* Contact List */
+        .contact-list {
+            margin-top: 1rem;
+        }
+
+        .contact-item {
+            background-color: var(--gray-light);
+            padding: 1rem;
+            border-radius: 6px;
+            margin-bottom: 0.75rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            animation: slideIn 0.3s ease;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateX(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        .contact-info {
+            flex: 1;
+        }
+
+        .contact-name {
+            font-weight: 600;
+            color: var(--gray-dark);
+        }
+
+        .contact-role {
+            font-size: 0.875rem;
+            color: var(--red-cross-red);
+            margin-bottom: 0.25rem;
+        }
+
+        .contact-details {
+            font-size: 0.875rem;
+            color: var(--gray-medium);
+        }
+
+        /* Buttons */
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 6px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 1rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn-primary {
+            background-color: var(--red-cross-red);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background-color: var(--red-cross-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(237, 27, 46, 0.3);
+        }
+
+        .btn-secondary {
+            background-color: white;
+            color: var(--gray-dark);
+            border: 2px solid var(--gray-light);
+        }
+
+        .btn-secondary:hover {
+            background-color: var(--gray-light);
+        }
+
+        .btn-danger {
+            background-color: transparent;
+            color: var(--red-cross-red);
+            padding: 0.5rem;
+        }
+
+        .btn-danger:hover {
+            background-color: var(--red-cross-light);
+        }
+
+        .btn-group {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+
+        /* Statistics Dashboard */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: linear-gradient(135deg, var(--red-cross-red) 0%, var(--red-cross-dark) 100%);
+            color: white;
+            padding: 1.5rem;
+            border-radius: 8px;
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 0.25rem;
+        }
+
+        .stat-label {
+            font-size: 0.875rem;
+            opacity: 0.9;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        /* Alert Messages */
+        .alert {
+            padding: 1rem;
+            border-radius: 6px;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            animation: slideDown 0.3s ease;
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .alert-success {
+            background-color: #D4EDDA;
+            color: #155724;
+            border: 1px solid #C3E6CB;
+        }
+
+        .alert-info {
+            background-color: #D1ECF1;
+            color: #0C5460;
+            border: 1px solid #BEE5EB;
+        }
+
+        /* Loading Spinner */
+        .spinner {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(237, 27, 46, 0.3);
+            border-top-color: var(--red-cross-red);
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .dashboard-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .header-content {
+                padding: 1rem;
+            }
+
+            .nav-tabs ul {
+                overflow-x: auto;
+                padding-bottom: 0.5rem;
+            }
+        }
+
+        /* Tab Content */
         .tab-content {
             display: none;
         }
-        
+
         .tab-content.active {
             display: block;
         }
-        
-        /* Form styling to match Excel */
-        .form-header {
-            background: #f0f0f0;
-            padding: 10px;
-            margin-bottom: 15px;
-            border: 1px solid #ccc;
-        }
-        
-        .form-header h2 {
-            font-size: 14pt;
-            color: #333;
-        }
-        
-        .form-instructions {
-            background: #ffffcc;
-            padding: 10px;
-            margin-bottom: 15px;
-            border: 1px solid #e0e0e0;
-            font-size: 10pt;
-        }
-        
-        .data-table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-bottom: 20px;
-        }
-        
-        .data-table th {
-            background: #4472C4;
-            color: white;
-            padding: 8px;
-            text-align: left;
-            font-size: 10pt;
-            font-weight: normal;
-            border: 1px solid #385494;
-        }
-        
-        .data-table td {
-            padding: 6px;
-            border: 1px solid #d0d0d0;
-            background: white;
-        }
-        
-        .data-table tr:nth-child(even) td {
-            background: #f9f9f9;
-        }
-        
-        .data-table input[type="text"],
-        .data-table input[type="number"],
-        .data-table select {
-            width: 100%;
-            padding: 3px;
-            border: 1px solid #ccc;
-            font-size: 10pt;
-        }
-        
-        .data-table input[type="number"] {
-            text-align: right;
-        }
-        
-        /* Date columns */
-        .date-column {
-            background: #E7E6E6 !important;
-            font-weight: bold;
+
+        /* Empty State */
+        .empty-state {
             text-align: center;
-            min-width: 100px;
+            padding: 3rem;
+            color: var(--gray-medium);
         }
-        
-        /* County column */
-        .county-column {
-            background: #FFF2CC !important;
-            min-width: 150px;
-        }
-        
-        /* Totals row */
-        .totals-row td {
-            background: #D9E2F3 !important;
-            font-weight: bold;
-        }
-        
-        /* Button styling */
-        .btn {
-            padding: 8px 16px;
-            margin-right: 10px;
-            background: #4472C4;
-            color: white;
-            border: none;
-            cursor: pointer;
-            font-size: 11pt;
-        }
-        
-        .btn:hover {
-            background: #385494;
-        }
-        
-        .btn-save {
-            background: #70AD47;
-        }
-        
-        .btn-save:hover {
-            background: #5A8A37;
-        }
-        
-        .btn-generate {
-            background: #ED1B2E;
-        }
-        
-        .btn-generate:hover {
-            background: #C51A25;
-        }
-        
-        /* Status message */
-        .status {
-            padding: 10px;
-            margin: 10px 0;
-            border-radius: 4px;
-            display: none;
-        }
-        
-        .status.success {
-            background: #d4edda;
-            color: #155724;
-            border: 1px solid #c3e6cb;
-        }
-        
-        .status.error {
-            background: #f8d7da;
-            color: #721c24;
-            border: 1px solid #f5c6cb;
-        }
-        
-        /* Section dividers */
-        .section-divider {
-            margin: 30px 0;
-            padding: 10px;
-            background: #e0e0e0;
-            font-weight: bold;
-            font-size: 12pt;
-        }
-        
-        /* Help text */
-        .help-text {
-            font-size: 9pt;
-            color: #666;
-            font-style: italic;
-            margin-top: 3px;
+
+        .empty-state-icon {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+            opacity: 0.3;
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <!-- Header -->
-        <div class="header">
-            <h1>Form 5266 Data Collection Tool - STATISTICS</h1>
-            <div class="dr-number">
-                <label>DRO Number: </label>
-                <input type="text" id="droNumber" value="DR XXX-XX" style="padding: 2px 5px; font-size: 12pt;">
+    <!-- Header -->
+    <header class="header">
+        <div class="header-content">
+            <div class="logo-section">
+                <div class="red-cross-logo"></div>
+                <div>
+                    <h1>Form 5266 Digital Operations</h1>
+                    <p style="font-size: 0.875rem; color: var(--gray-medium);">Disaster Operations Control v2.0</p>
+                </div>
+            </div>
+            <div class="status-badge">
+                <span id="connectionStatus">● System Online</span>
             </div>
         </div>
-        
-        <!-- Tab Navigation -->
-        <div class="tabs">
-            <div class="tab active" onclick="showTab('start')">Start Here Statistics</div>
-            <div class="tab" onclick="showTab('sheltering')">Sheltering</div>
-            <div class="tab" onclick="showTab('feeding')">Feeding</div>
-            <div class="tab" onclick="showTab('mass-care')">Mass Care/DES</div>
-            <div class="tab" onclick="showTab('government')">Government</div>
-            <div class="tab" onclick="showTab('staff-wellness')">Staff Wellness</div>
-            <div class="tab" onclick="showTab('staffing')">Staffing</div>
-            <div class="tab" onclick="showTab('logistics')">Logistics</div>
-            <div class="tab" onclick="showTab('financials')">Financials</div>
-        </div>
-        
-        <!-- Content Area -->
-        <div class="content">
-            <!-- Status Message -->
-            <div id="statusMessage" class="status"></div>
-            
-            <!-- Start Here Tab -->
-            <div id="start" class="tab-content active">
-                <div class="form-header">
-                    <h2>Initial Setup and Configuration</h2>
-                </div>
-                
-                <div class="form-instructions">
-                    For assistance, call or message the DOCC at 202.303.5555 for urgent problems.<br>
-                    Non-urgent questions: informationplanning@redcross.org
-                </div>
-                
-                <table class="data-table">
-                    <tr>
-                        <td style="width: 300px;"><strong>Start Date of Disaster:</strong></td>
-                        <td><input type="date" id="startDate" value="2024-01-01"></td>
-                    </tr>
-                    <tr>
-                        <td><strong>DRO Number:</strong></td>
-                        <td><input type="text" id="droNumberMain" value="DR XXX-XX"></td>
-                    </tr>
-                    <tr>
-                        <td><strong>Operation Name:</strong></td>
-                        <td><input type="text" id="operationName" placeholder="e.g., Hurricane Response"></td>
-                    </tr>
-                    <tr>
-                        <td><strong>Region(s):</strong></td>
-                        <td>
-                            <label><input type="checkbox" name="region" value="Pacific"> Pacific Division</label><br>
-                            <label><input type="checkbox" name="region" value="Central"> Central Division</label><br>
-                            <label><input type="checkbox" name="region" value="Eastern"> Eastern Division</label>
-                        </td>
-                    </tr>
-                </table>
-                
-                <button class="btn btn-save" onclick="saveData()">Save Configuration</button>
+    </header>
+
+    <!-- Navigation Tabs -->
+    <nav class="nav-tabs">
+        <ul>
+            <li><a href="#start-here" class="tab-link active" data-tab="start-here">Start Here Statistics</a></li>
+            <li><a href="#feeding" class="tab-link" data-tab="feeding">Feeding</a></li>
+            <li><a href="#dashboard" class="tab-link" data-tab="dashboard">Live Dashboard</a></li>
+        </ul>
+    </nav>
+
+    <!-- Main Container -->
+    <main class="main-container">
+        <!-- Start Here Statistics Tab -->
+        <div id="start-here" class="tab-content active">
+            <div class="alert alert-info">
+                <span>📋</span>
+                <span>Complete this form to initialize your Disaster Relief Operation. All fields with asterisk (*) are required.</span>
             </div>
-            
-            <!-- Sheltering Tab -->
-            <div id="sheltering" class="tab-content">
-                <div class="form-header">
-                    <h2>Lines 1-5: Shelter Operations</h2>
-                </div>
-                
-                <div class="form-instructions">
-                    Line 1: Client Shelters - Number of open Red Cross-Managed and Partner-Managed client shelters<br>
-                    Line 2: Shelter Overnight Stays - Number of nights each individual stays overnight<br>
-                    Line 3: New Shelter Registrations - Number of new individuals who register at a shelter
-                </div>
-                
-                <table class="data-table">
-                    <thead>
-                        <tr>
-                            <th class="county-column">Shelter Name/County</th>
-                            <th>Capacity</th>
-                            <th class="date-column">To Date</th>
-                            <th class="date-column" id="date1">Date 1</th>
-                            <th class="date-column" id="date2">Date 2</th>
-                            <th class="date-column" id="date3">Date 3</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td><input type="text" placeholder="Shelter name"></td>
-                            <td><input type="number" min="0" placeholder="0"></td>
-                            <td><input type="number" min="0" value="0" readonly style="background: #f0f0f0;"></td>
-                            <td><input type="number" min="0" placeholder="0"></td>
-                            <td><input type="number" min="0" placeholder="0"></td>
-                            <td><input type="number" min="0" placeholder="0"></td>
-                        </tr>
-                        <tr>
-                            <td><input type="text" placeholder="Shelter name"></td>
-                            <td><input type="number" min="0" placeholder="0"></td>
-                            <td><input type="number" min="0" value="0" readonly style="background: #f0f0f0;"></td>
-                            <td><input type="number" min="0" placeholder="0"></td>
-                            <td><input type="number" min="0" placeholder="0"></td>
-                            <td><input type="number" min="0" placeholder="0"></td>
-                        </tr>
-                        <tr class="totals-row">
-                            <td><strong>TOTALS</strong></td>
-                            <td><strong id="capacityTotal">0</strong></td>
-                            <td><strong id="toDateTotal">0</strong></td>
-                            <td><strong id="date1Total">0</strong></td>
-                            <td><strong id="date2Total">0</strong></td>
-                            <td><strong id="date3Total">0</strong></td>
-                        </tr>
-                    </tbody>
-                </table>
-                
-                <button class="btn btn-save" onclick="saveData()">Save Shelter Data</button>
-            </div>
-            
-            <!-- Feeding Tab -->
-            <div id="feeding" class="tab-content">
-                <div class="form-header">
-                    <h2>Lines 9-11: Mass Care - Feeding</h2>
-                </div>
-                
-                <div class="form-instructions">
-                    Line 9: Meals Served - Number of meals provided by the Red Cross to clients, emergency responders, Red Cross workers, and partners<br>
-                    Line 10: Snacks Served - Estimated number of individual snacks served<br>
-                    Line 11: Shelf-Stable Meals - Number of shelf-stable meals provided to clients or partners
-                </div>
-                
-                <table class="data-table">
-                    <thead>
-                        <tr>
-                            <th class="county-column">Facility Name</th>
-                            <th>County</th>
-                            <th>Meal Type</th>
-                            <th class="date-column">To Date</th>
-                            <th class="date-column">Date 1</th>
-                            <th class="date-column">Date 2</th>
-                            <th class="date-column">Date 3</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td><input type="text" placeholder="Kitchen/Site name"></td>
-                            <td>
-                                <select>
-                                    <option value="">Select County</option>
-                                    <option value="DRO">DRO HQ</option>
-                                    <option value="County1">County 1</option>
-                                    <option value="County2">County 2</option>
+
+            <div class="dashboard-grid">
+                <!-- DR Information Card -->
+                <div class="card">
+                    <div class="card-header">
+                        <h2 class="card-title">Operation Information</h2>
+                        <div class="card-icon">🏛️</div>
+                    </div>
+                    <form id="drInfoForm">
+                        <div class="form-group">
+                            <label for="drNumber">DR Number *</label>
+                            <input type="text" class="form-control" id="drNumber" 
+                                   placeholder="e.g., DR-2024-FL-001" required
+                                   pattern="DR-\d{4}-[A-Z]{2}-\d{3}">
+                            <small style="color: var(--gray-medium); font-size: 0.75rem;">
+                                Format: DR-YYYY-ST-###
+                            </small>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="operationName">Operation Name *</label>
+                            <input type="text" class="form-control" id="operationName" 
+                                   placeholder="e.g., Hurricane Response - Florida Panhandle" required>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="startDate">Start Date *</label>
+                                <input type="date" class="form-control" id="startDate" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="region">Region *</label>
+                                <select class="form-control" id="region" required>
+                                    <option value="">Select Region</option>
+                                    <option value="Northeast">Northeast</option>
+                                    <option value="Southeast">Southeast</option>
+                                    <option value="Central">Central</option>
+                                    <option value="West">West</option>
+                                    <option value="Florida">Florida</option>
                                 </select>
-                            </td>
-                            <td>
-                                <select>
-                                    <option value="breakfast">Breakfast</option>
-                                    <option value="lunch">Lunch</option>
-                                    <option value="dinner">Dinner</option>
-                                    <option value="snacks">Snacks</option>
-                                </select>
-                            </td>
-                            <td><input type="number" min="0" value="0" readonly style="background: #f0f0f0;"></td>
-                            <td><input type="number" min="0" placeholder="0"></td>
-                            <td><input type="number" min="0" placeholder="0"></td>
-                            <td><input type="number" min="0" placeholder="0"></td>
-                        </tr>
-                        <tr>
-                            <td><input type="text" placeholder="Kitchen/Site name"></td>
-                            <td>
-                                <select>
-                                    <option value="">Select County</option>
-                                    <option value="DRO">DRO HQ</option>
-                                    <option value="County1">County 1</option>
-                                    <option value="County2">County 2</option>
-                                </select>
-                            </td>
-                            <td>
-                                <select>
-                                    <option value="breakfast">Breakfast</option>
-                                    <option value="lunch">Lunch</option>
-                                    <option value="dinner">Dinner</option>
-                                    <option value="snacks">Snacks</option>
-                                </select>
-                            </td>
-                            <td><input type="number" min="0" value="0" readonly style="background: #f0f0f0;"></td>
-                            <td><input type="number" min="0" placeholder="0"></td>
-                            <td><input type="number" min="0" placeholder="0"></td>
-                            <td><input type="number" min="0" placeholder="0"></td>
-                        </tr>
-                        <tr class="totals-row">
-                            <td colspan="3"><strong>TOTALS</strong></td>
-                            <td><strong>0</strong></td>
-                            <td><strong>0</strong></td>
-                            <td><strong>0</strong></td>
-                            <td><strong>0</strong></td>
-                        </tr>
-                    </tbody>
-                </table>
-                
-                <button class="btn btn-save" onclick="saveData()">Save Feeding Data</button>
-            </div>
-            
-            <!-- Mass Care/DES Tab -->
-            <div id="mass-care" class="tab-content">
-                <div class="form-header">
-                    <h2>Lines 19-23: Distribution of Emergency Supplies</h2>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Active Counties *</label>
+                            <div class="county-grid" id="countyGrid">
+                                <!-- Counties will be populated dynamically -->
+                            </div>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary">
+                            <span>💾</span> Save Operation Info
+                        </button>
+                    </form>
                 </div>
-                
-                <div class="form-instructions">
-                    Line 19: Clean-up Kits Distributed - Total number of clean-up kits issued from the DRO warehouse(s)<br>
-                    Line 22: Other DES Items Distributed - Combined number of items issued (tarps, shovels, masks, etc.)<br>
-                    Line 23: DES Households Served - Total number of households who were provided emergency supplies
-                </div>
-                
-                <table class="data-table">
-                    <thead>
-                        <tr>
-                            <th>Item Type</th>
-                            <th>Distribution Site</th>
-                            <th>County</th>
-                            <th class="date-column">To Date</th>
-                            <th class="date-column">Date 1</th>
-                            <th class="date-column">Date 2</th>
-                            <th class="date-column">Date 3</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>Clean-up Kits</td>
-                            <td><input type="text" placeholder="Site name"></td>
-                            <td>
-                                <select>
-                                    <option value="">Select County</option>
-                                    <option value="DRO">DRO Level</option>
-                                    <option value="County1">County 1</option>
-                                    <option value="County2">County 2</option>
-                                </select>
-                            </td>
-                            <td><input type="number" min="0" value="0" readonly style="background: #f0f0f0;"></td>
-                            <td><input type="number" min="0" placeholder="0"></td>
-                            <td><input type="number" min="0" placeholder="0"></td>
-                            <td><input type="number" min="0" placeholder="0"></td>
-                        </tr>
-                        <tr>
-                            <td>Tarps</td>
-                            <td><input type="text" placeholder="Site name"></td>
-                            <td>
-                                <select>
-                                    <option value="">Select County</option>
-                                    <option value="DRO">DRO Level</option>
-                                    <option value="County1">County 1</option>
-                                    <option value="County2">County 2</option>
-                                </select>
-                            </td>
-                            <td><input type="number" min="0" value="0" readonly style="background: #f0f0f0;"></td>
-                            <td><input type="number" min="0" placeholder="0"></td>
-                            <td><input type="number" min="0" placeholder="0"></td>
-                            <td><input type="number" min="0" placeholder="0"></td>
-                        </tr>
-                        <tr>
-                            <td>Households Served</td>
-                            <td><input type="text" placeholder="Site name"></td>
-                            <td>
-                                <select>
-                                    <option value="">Select County</option>
-                                    <option value="DRO">DRO Level</option>
-                                    <option value="County1">County 1</option>
-                                    <option value="County2">County 2</option>
-                                </select>
-                            </td>
-                            <td><input type="number" min="0" value="0" readonly style="background: #f0f0f0;"></td>
-                            <td><input type="number" min="0" placeholder="0"></td>
-                            <td><input type="number" min="0" placeholder="0"></td>
-                            <td><input type="number" min="0" placeholder="0"></td>
-                        </tr>
-                        <tr class="totals-row">
-                            <td colspan="3"><strong>TOTALS</strong></td>
-                            <td><strong>0</strong></td>
-                            <td><strong>0</strong></td>
-                            <td><strong>0</strong></td>
-                            <td><strong>0</strong></td>
-                        </tr>
-                    </tbody>
-                </table>
-                
-                <button class="btn btn-save" onclick="saveData()">Save DES Data</button>
-            </div>
-            
-            <!-- Government Tab -->
-            <div id="government" class="tab-content">
-                <div class="form-header">
-                    <h2>Line 26: Emergency Operation Centers (EOC) Supported by Red Cross</h2>
-                </div>
-                
-                <div class="form-instructions">
-                    For each county EOC, choose County from the dropdown list. For State Centers choose DRO.<br>
-                    Place an "X" under the date across from the county on each date that the EOC was supported on site or virtually by a Red Cross worker.
-                </div>
-                
-                <table class="data-table">
-                    <thead>
-                        <tr>
-                            <th class="county-column">EOC Location</th>
-                            <th>Type</th>
-                            <th class="date-column">To Date</th>
-                            <th class="date-column">Date 1</th>
-                            <th class="date-column">Date 2</th>
-                            <th class="date-column">Date 3</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>State EOC (SEOC)</td>
-                            <td>State</td>
-                            <td style="text-align: center;">
-                                <input type="checkbox" disabled checked>
-                            </td>
-                            <td style="text-align: center;">
-                                <input type="checkbox">
-                            </td>
-                            <td style="text-align: center;">
-                                <input type="checkbox">
-                            </td>
-                            <td style="text-align: center;">
-                                <input type="checkbox">
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <select>
-                                    <option value="">Select County</option>
-                                    <option value="County1">County 1</option>
-                                    <option value="County2">County 2</option>
-                                    <option value="County3">County 3</option>
-                                </select>
-                            </td>
-                            <td>County</td>
-                            <td style="text-align: center;">
-                                <input type="checkbox" disabled>
-                            </td>
-                            <td style="text-align: center;">
-                                <input type="checkbox">
-                            </td>
-                            <td style="text-align: center;">
-                                <input type="checkbox">
-                            </td>
-                            <td style="text-align: center;">
-                                <input type="checkbox">
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <select>
-                                    <option value="">Select County</option>
-                                    <option value="County1">County 1</option>
-                                    <option value="County2">County 2</option>
-                                    <option value="County3">County 3</option>
-                                </select>
-                            </td>
-                            <td>County</td>
-                            <td style="text-align: center;">
-                                <input type="checkbox" disabled>
-                            </td>
-                            <td style="text-align: center;">
-                                <input type="checkbox">
-                            </td>
-                            <td style="text-align: center;">
-                                <input type="checkbox">
-                            </td>
-                            <td style="text-align: center;">
-                                <input type="checkbox">
-                            </td>
-                        </tr>
-                        <tr class="totals-row">
-                            <td colspan="2"><strong>TOTAL EOCs Supported</strong></td>
-                            <td style="text-align: center;"><strong>0</strong></td>
-                            <td style="text-align: center;"><strong>0</strong></td>
-                            <td style="text-align: center;"><strong>0</strong></td>
-                            <td style="text-align: center;"><strong>0</strong></td>
-                        </tr>
-                    </tbody>
-                </table>
-                
-                <button class="btn btn-save" onclick="saveData()">Save Government Data</button>
-            </div>
-            
-            <!-- Staff Wellness Tab -->
-            <div id="staff-wellness" class="tab-content">
-                <div class="form-header">
-                    <h2>Lines 71-76: Staff Health and Wellness</h2>
-                </div>
-                
-                <div class="form-instructions">
-                    Line 71: Staff Ill - Red Cross employees and volunteers who have become ill while on the relief operation<br>
-                    Line 72: Staff Injured - Red Cross employees and volunteers who have been injured while on the relief operation<br>
-                    Line 73: Staff Hospitalized - Red Cross employees and volunteers who have been hospitalized
-                </div>
-                
-                <table class="data-table">
-                    <thead>
-                        <tr>
-                            <th>Category</th>
-                            <th>Chapter/Location</th>
-                            <th class="date-column">To Date</th>
-                            <th class="date-column">Date 1</th>
-                            <th class="date-column">Date 2</th>
-                            <th class="date-column">Date 3</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td><strong>Staff Ill</strong></td>
-                            <td>DRO</td>
-                            <td><input type="number" min="0" value="0" readonly style="background: #f0f0f0;"></td>
-                            <td>
-                                <input type="number" min="0" placeholder="Total" style="margin-bottom: 5px;"><br>
-                                <input type="number" min="0" placeholder="New" style="font-size: 9pt;">
-                                <span class="help-text">Not previously reported</span>
-                            </td>
-                            <td>
-                                <input type="number" min="0" placeholder="Total" style="margin-bottom: 5px;"><br>
-                                <input type="number" min="0" placeholder="New" style="font-size: 9pt;">
-                            </td>
-                            <td>
-                                <input type="number" min="0" placeholder="Total" style="margin-bottom: 5px;"><br>
-                                <input type="number" min="0" placeholder="New" style="font-size: 9pt;">
-                            </td>
-                        </tr>
-                        <tr>
-                            <td><strong>Staff Injured</strong></td>
-                            <td>DRO</td>
-                            <td><input type="number" min="0" value="0" readonly style="background: #f0f0f0;"></td>
-                            <td>
-                                <input type="number" min="0" placeholder="Total" style="margin-bottom: 5px;"><br>
-                                <input type="number" min="0" placeholder="New" style="font-size: 9pt;">
-                            </td>
-                            <td>
-                                <input type="number" min="0" placeholder="Total" style="margin-bottom: 5px;"><br>
-                                <input type="number" min="0" placeholder="New" style="font-size: 9pt;">
-                            </td>
-                            <td>
-                                <input type="number" min="0" placeholder="Total" style="margin-bottom: 5px;"><br>
-                                <input type="number" min="0" placeholder="New" style="font-size: 9pt;">
-                            </td>
-                        </tr>
-                        <tr>
-                            <td><strong>Staff Hospitalized</strong></td>
-                            <td>DRO</td>
-                            <td><input type="number" min="0" value="0" readonly style="background: #f0f0f0;"></td>
-                            <td><input type="number" min="0" placeholder="0"></td>
-                            <td><input type="number" min="0" placeholder="0"></td>
-                            <td><input type="number" min="0" placeholder="0"></td>
-                        </tr>
-                        <tr>
-                            <td><strong>Staff Released for Medical</strong></td>
-                            <td>DRO</td>
-                            <td><input type="number" min="0" value="0" readonly style="background: #f0f0f0;"></td>
-                            <td><input type="number" min="0" placeholder="0"></td>
-                            <td><input type="number" min="0" placeholder="0"></td>
-                            <td><input type="number" min="0" placeholder="0"></td>
-                        </tr>
-                    </tbody>
-                </table>
-                
-                <button class="btn btn-save" onclick="saveData()">Save Staff Wellness Data</button>
-            </div>
-            
-            <!-- Staffing Tab -->
-            <div id="staffing" class="tab-content">
-                <div class="form-header">
-                    <h2>Line 39: Non-T&M Temporary Agency Hires</h2>
-                </div>
-                
-                <div class="form-instructions">
-                    Enter the number of Temporary employees hired and paid through private temporary staffing agencies.
-                </div>
-                
-                <table class="data-table">
-                    <thead>
-                        <tr>
-                            <th>Category</th>
-                            <th class="date-column">To Date</th>
-                            <th class="date-column">Date 1</th>
-                            <th class="date-column">Date 2</th>
-                            <th class="date-column">Date 3</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td><strong>Temporary Agency Hires</strong></td>
-                            <td><input type="number" min="0" value="0" readonly style="background: #f0f0f0;"></td>
-                            <td>
-                                <input type="number" min="0" placeholder="Total" style="margin-bottom: 5px;"><br>
-                                <input type="number" min="0" placeholder="New" style="font-size: 9pt;">
-                                <span class="help-text">Not previously reported</span>
-                            </td>
-                            <td>
-                                <input type="number" min="0" placeholder="Total" style="margin-bottom: 5px;"><br>
-                                <input type="number" min="0" placeholder="New" style="font-size: 9pt;">
-                            </td>
-                            <td>
-                                <input type="number" min="0" placeholder="Total" style="margin-bottom: 5px;"><br>
-                                <input type="number" min="0" placeholder="New" style="font-size: 9pt;">
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-                
-                <button class="btn btn-save" onclick="saveData()">Save Staffing Data</button>
-            </div>
-            
-            <!-- Bottom Action Bar -->
-            <div style="margin-top: 40px; padding: 20px; background: #f0f0f0; border-top: 2px solid #ccc;">
-                <button class="btn btn-save" onclick="saveAllData()">Save All Data</button>
-                <button class="btn btn-generate" onclick="generateReport()">Generate 5266 Report</button>
-                <button class="btn" onclick="exportData()">Export to Excel</button>
-                
-                <div style="float: right; font-size: 10pt; color: #666;">
-                    Last saved: <span id="lastSaved">Never</span> | 
-                    Auto-save: <span style="color: green;">Enabled</span>
+
+                <!-- Contacts Card -->
+                <div class="card">
+                    <div class="card-header">
+                        <h2 class="card-title">Key Contacts</h2>
+                        <div class="card-icon">👥</div>
+                    </div>
+                    <form id="contactForm">
+                        <div class="form-group">
+                            <label for="contactRole">Role *</label>
+                            <select class="form-control" id="contactRole" required>
+                                <option value="">Select Role</option>
+                                <option value="DRO Director">DRO Director</option>
+                                <option value="Deputy Director">Deputy Director</option>
+                                <option value="Operations Chief">Operations Chief</option>
+                                <option value="Planning Chief">Planning Chief</option>
+                                <option value="Logistics Chief">Logistics Chief</option>
+                                <option value="Finance Chief">Finance Chief</option>
+                                <option value="Safety Officer">Safety Officer</option>
+                                <option value="Public Information Officer">Public Information Officer</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="contactName">Name *</label>
+                            <input type="text" class="form-control" id="contactName" 
+                                   placeholder="Full Name" required>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="contactPhone">Phone *</label>
+                                <input type="tel" class="form-control" id="contactPhone" 
+                                       placeholder="(555) 123-4567" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="contactEmail">Email *</label>
+                                <input type="email" class="form-control" id="contactEmail" 
+                                       placeholder="name@redcross.org" required>
+                            </div>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary">
+                            <span>➕</span> Add Contact
+                        </button>
+                    </form>
+
+                    <div class="contact-list" id="contactList">
+                        <!-- Contacts will be added here dynamically -->
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
-    
+
+        <!-- Feeding Tab -->
+        <div id="feeding" class="tab-content">
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-value" id="totalMeals">0</div>
+                    <div class="stat-label">Total Meals Served</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="totalSnacks">0</div>
+                    <div class="stat-label">Total Snacks Served</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="todayMeals">0</div>
+                    <div class="stat-label">Today's Meals</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="todaySnacks">0</div>
+                    <div class="stat-label">Today's Snacks</div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="card-title">Record Feeding Data</h2>
+                    <div class="card-icon">🍽️</div>
+                </div>
+                <form id="feedingForm">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="feedingDate">Date *</label>
+                            <input type="date" class="form-control" id="feedingDate" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="feedingLocation">Location/Facility *</label>
+                            <input type="text" class="form-control" id="feedingLocation" 
+                                   placeholder="e.g., Shelter #1 - Community Center" required>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="mealsServed">Meals Served (Line 9) *</label>
+                            <input type="number" class="form-control" id="mealsServed" 
+                                   min="0" placeholder="0" required>
+                            <small style="color: var(--gray-medium); font-size: 0.75rem;">
+                                Count of meals provided to clients, responders, and workers
+                            </small>
+                        </div>
+                        <div class="form-group">
+                            <label for="snacksServed">Snacks Served (Line 10) *</label>
+                            <input type="number" class="form-control" id="snacksServed" 
+                                   min="0" placeholder="0" required>
+                            <small style="color: var(--gray-medium); font-size: 0.75rem;">
+                                Individual snacks not served with meals
+                            </small>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="feedingNotes">Notes (Optional)</label>
+                        <textarea class="form-control" id="feedingNotes" rows="3" 
+                                  placeholder="Any additional information about this feeding operation"></textarea>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary">
+                        <span>📊</span> Submit Feeding Data
+                    </button>
+                </form>
+            </div>
+        </div>
+
+        <!-- Dashboard Tab -->
+        <div id="dashboard" class="tab-content">
+            <div class="alert alert-success">
+                <span>✅</span>
+                <span>Real-time dashboard showing current operation status. Data updates automatically as entered.</span>
+            </div>
+
+            <div class="stats-grid" id="dashboardStats">
+                <!-- Dashboard stats will be populated here -->
+            </div>
+
+            <div class="dashboard-grid">
+                <div class="card">
+                    <div class="card-header">
+                        <h2 class="card-title">Operation Overview</h2>
+                        <div class="card-icon">📊</div>
+                    </div>
+                    <div id="operationOverview">
+                        <div class="empty-state">
+                            <div class="empty-state-icon">📋</div>
+                            <p>No operation data yet. Complete the Start Here Statistics to begin.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <h2 class="card-title">Recent Activity</h2>
+                        <div class="card-icon">🕐</div>
+                    </div>
+                    <div id="activityLog">
+                        <div class="empty-state">
+                            <div class="empty-state-icon">📝</div>
+                            <p>Activity will appear here as data is entered.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
     <script>
-        // Tab switching functionality
-        function showTab(tabName) {
-            // Hide all tabs
-            const tabs = document.querySelectorAll('.tab-content');
-            tabs.forEach(tab => tab.classList.remove('active'));
-            
-            // Remove active class from all tab buttons
-            const tabButtons = document.querySelectorAll('.tab');
-            tabButtons.forEach(btn => btn.classList.remove('active'));
-            
-            // Show selected tab
-            document.getElementById(tabName).classList.add('active');
-            
-            // Activate the corresponding tab button
-            event.target.classList.add('active');
-        }
-        
-        // Calculate totals automatically
-        function calculateTotals() {
-            // This would calculate all the totals in real-time
-            const inputs = document.querySelectorAll('input[type="number"]:not([readonly])');
-            inputs.forEach(input => {
-                input.addEventListener('change', function() {
-                    updateTotals();
+        // Florida counties for demo
+        const floridaCounties = [
+            'Alachua', 'Baker', 'Bay', 'Bradford', 'Brevard', 'Broward', 'Calhoun', 'Charlotte',
+            'Citrus', 'Clay', 'Collier', 'Columbia', 'DeSoto', 'Dixie', 'Duval', 'Escambia',
+            'Flagler', 'Franklin', 'Gadsden', 'Gilchrist', 'Glades', 'Gulf', 'Hamilton', 'Hardee',
+            'Hendry', 'Hernando', 'Highlands', 'Hillsborough', 'Holmes', 'Indian River', 'Jackson',
+            'Jefferson', 'Lafayette', 'Lake', 'Lee', 'Leon', 'Levy', 'Liberty', 'Madison', 'Manatee',
+            'Marion', 'Martin', 'Miami-Dade', 'Monroe', 'Nassau', 'Okaloosa', 'Okeechobee', 'Orange',
+            'Osceola', 'Palm Beach', 'Pasco', 'Pinellas', 'Polk', 'Putnam', 'St. Johns', 'St. Lucie',
+            'Santa Rosa', 'Sarasota', 'Seminole', 'Sumter', 'Suwannee', 'Taylor', 'Union', 'Volusia',
+            'Wakulla', 'Walton', 'Washington'
+        ];
+
+        // Initialize data storage
+        let operationData = JSON.parse(localStorage.getItem('form5266_operation')) || {};
+        let contacts = JSON.parse(localStorage.getItem('form5266_contacts')) || [];
+        let feedingData = JSON.parse(localStorage.getItem('form5266_feeding')) || [];
+        let activityLog = JSON.parse(localStorage.getItem('form5266_activity')) || [];
+
+        // Tab switching
+        document.querySelectorAll('.tab-link').forEach(link => {
+            link.addEventListener('click', (e) => {
+                e.preventDefault();
+                const tabName = link.dataset.tab;
+                
+                // Update active link
+                document.querySelectorAll('.tab-link').forEach(l => l.classList.remove('active'));
+                link.classList.add('active');
+                
+                // Update active content
+                document.querySelectorAll('.tab-content').forEach(content => {
+                    content.classList.remove('active');
                 });
+                document.getElementById(tabName).classList.add('active');
+                
+                // Update dashboard when switching to it
+                if (tabName === 'dashboard') {
+                    updateDashboard();
+                }
             });
+        });
+
+        // Populate counties
+        function populateCounties() {
+            const countyGrid = document.getElementById('countyGrid');
+            countyGrid.innerHTML = floridaCounties.map(county => `
+                <div class="county-checkbox">
+                    <input type="checkbox" id="county_${county}" value="${county}">
+                    <label for="county_${county}">${county}</label>
+                </div>
+            `).join('');
         }
-        
-        function updateTotals() {
-            // Update the "To Date" columns and totals row
-            // This would sum up all the values as in the Excel spreadsheet
-            console.log('Updating totals...');
+
+        // Initialize counties on load
+        populateCounties();
+
+        // DR Info Form Handler
+        document.getElementById('drInfoForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const selectedCounties = [];
+            document.querySelectorAll('#countyGrid input:checked').forEach(cb => {
+                selectedCounties.push(cb.value);
+            });
+            
+            operationData = {
+                drNumber: document.getElementById('drNumber').value,
+                operationName: document.getElementById('operationName').value,
+                startDate: document.getElementById('startDate').value,
+                region: document.getElementById('region').value,
+                counties: selectedCounties,
+                timestamp: new Date().toISOString()
+            };
+            
+            localStorage.setItem('form5266_operation', JSON.stringify(operationData));
+            
+            logActivity('Operation Information Updated', `DR ${operationData.drNumber} initialized`);
+            
+            showAlert('Operation information saved successfully!', 'success');
+            updateDashboard();
+        });
+
+        // Contact Form Handler
+        document.getElementById('contactForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const contact = {
+                role: document.getElementById('contactRole').value,
+                name: document.getElementById('contactName').value,
+                phone: document.getElementById('contactPhone').value,
+                email: document.getElementById('contactEmail').value,
+                id: Date.now()
+            };
+            
+            contacts.push(contact);
+            localStorage.setItem('form5266_contacts', JSON.stringify(contacts));
+            
+            logActivity('Contact Added', `${contact.name} (${contact.role})`);
+            
+            displayContacts();
+            this.reset();
+            showAlert('Contact added successfully!', 'success');
+        });
+
+        // Display contacts
+        function displayContacts() {
+            const contactList = document.getElementById('contactList');
+            
+            if (contacts.length === 0) {
+                contactList.innerHTML = '<p style="text-align: center; color: var(--gray-medium);">No contacts added yet</p>';
+                return;
+            }
+            
+            contactList.innerHTML = contacts.map(contact => `
+                <div class="contact-item">
+                    <div class="contact-info">
+                        <div class="contact-role">${contact.role}</div>
+                        <div class="contact-name">${contact.name}</div>
+                        <div class="contact-details">
+                            📞 ${contact.phone} | ✉️ ${contact.email}
+                        </div>
+                    </div>
+                    <button class="btn btn-danger" onclick="removeContact(${contact.id})">
+                        🗑️
+                    </button>
+                </div>
+            `).join('');
         }
-        
-        // Save data function
-        function saveData() {
-            showStatus('Data saved successfully!', 'success');
-            document.getElementById('lastSaved').textContent = new Date().toLocaleString();
+
+        // Remove contact
+        function removeContact(id) {
+            contacts = contacts.filter(c => c.id !== id);
+            localStorage.setItem('form5266_contacts', JSON.stringify(contacts));
+            displayContacts();
+            showAlert('Contact removed', 'info');
         }
-        
-        function saveAllData() {
-            // Save all data from all tabs
-            showStatus('All data saved successfully!', 'success');
-            document.getElementById('lastSaved').textContent = new Date().toLocaleString();
+
+        // Feeding Form Handler
+        document.getElementById('feedingForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const feeding = {
+                date: document.getElementById('feedingDate').value,
+                location: document.getElementById('feedingLocation').value,
+                meals: parseInt(document.getElementById('mealsServed').value),
+                snacks: parseInt(document.getElementById('snacksServed').value),
+                notes: document.getElementById('feedingNotes').value,
+                timestamp: new Date().toISOString()
+            };
+            
+            feedingData.push(feeding);
+            localStorage.setItem('form5266_feeding', JSON.stringify(feedingData));
+            
+            logActivity('Feeding Data Added', 
+                `${feeding.meals} meals, ${feeding.snacks} snacks at ${feeding.location}`);
+            
+            updateFeedingStats();
+            this.reset();
+            showAlert('Feeding data recorded successfully!', 'success');
+        });
+
+        // Update feeding statistics
+        function updateFeedingStats() {
+            const totalMeals = feedingData.reduce((sum, f) => sum + f.meals, 0);
+            const totalSnacks = feedingData.reduce((sum, f) => sum + f.snacks, 0);
+            
+            const today = new Date().toISOString().split('T')[0];
+            const todayData = feedingData.filter(f => f.date === today);
+            const todayMeals = todayData.reduce((sum, f) => sum + f.meals, 0);
+            const todaySnacks = todayData.reduce((sum, f) => sum + f.snacks, 0);
+            
+            document.getElementById('totalMeals').textContent = totalMeals.toLocaleString();
+            document.getElementById('totalSnacks').textContent = totalSnacks.toLocaleString();
+            document.getElementById('todayMeals').textContent = todayMeals.toLocaleString();
+            document.getElementById('todaySnacks').textContent = todaySnacks.toLocaleString();
         }
-        
-        // Generate report function
-        function generateReport() {
-            showStatus('Generating 5266 report...', 'success');
-            // This would generate the Word document output
-            setTimeout(() => {
-                showStatus('Report generated successfully! Downloading...', 'success');
-            }, 2000);
+
+        // Update dashboard
+        function updateDashboard() {
+            // Update stats
+            const statsHtml = `
+                <div class="stat-card">
+                    <div class="stat-value">${operationData.drNumber || 'Not Set'}</div>
+                    <div class="stat-label">DR Number</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value">${operationData.counties ? operationData.counties.length : 0}</div>
+                    <div class="stat-label">Active Counties</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value">${contacts.length}</div>
+                    <div class="stat-label">Key Contacts</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value">${feedingData.reduce((sum, f) => sum + f.meals, 0).toLocaleString()}</div>
+                    <div class="stat-label">Total Meals</div>
+                </div>
+            `;
+            document.getElementById('dashboardStats').innerHTML = statsHtml;
+            
+            // Update operation overview
+            if (operationData.drNumber) {
+                const overviewHtml = `
+                    <div style="padding: 1rem;">
+                        <h3 style="color: var(--red-cross-red); margin-bottom: 1rem;">
+                            ${operationData.operationName || 'Unnamed Operation'}
+                        </h3>
+                        <div style="display: grid; gap: 0.75rem;">
+                            <div><strong>DR Number:</strong> ${operationData.drNumber}</div>
+                            <div><strong>Region:</strong> ${operationData.region || 'Not specified'}</div>
+                            <div><strong>Start Date:</strong> ${operationData.startDate || 'Not specified'}</div>
+                            <div><strong>Active Counties:</strong> ${operationData.counties ? operationData.counties.join(', ') : 'None selected'}</div>
+                        </div>
+                    </div>
+                `;
+                document.getElementById('operationOverview').innerHTML = overviewHtml;
+            }
+            
+            // Update activity log
+            if (activityLog.length > 0) {
+                const recentActivities = activityLog.slice(-5).reverse();
+                const activityHtml = recentActivities.map(activity => `
+                    <div style="padding: 0.75rem; border-left: 3px solid var(--red-cross-red); margin-bottom: 0.5rem; background-color: var(--gray-light);">
+                        <div style="font-weight: 600; color: var(--gray-dark);">${activity.action}</div>
+                        <div style="font-size: 0.875rem; color: var(--gray-medium);">${activity.details}</div>
+                        <div style="font-size: 0.75rem; color: var(--gray-medium); margin-top: 0.25rem;">
+                            ${new Date(activity.timestamp).toLocaleString()}
+                        </div>
+                    </div>
+                `).join('');
+                document.getElementById('activityLog').innerHTML = activityHtml;
+            }
         }
-        
-        // Export to Excel function
-        function exportData() {
-            showStatus('Exporting to Excel format...', 'success');
+
+        // Activity logger
+        function logActivity(action, details) {
+            activityLog.push({
+                action,
+                details,
+                timestamp: new Date().toISOString()
+            });
+            
+            // Keep only last 100 activities
+            if (activityLog.length > 100) {
+                activityLog = activityLog.slice(-100);
+            }
+            
+            localStorage.setItem('form5266_activity', JSON.stringify(activityLog));
         }
-        
-        // Show status message
-        function showStatus(message, type) {
-            const statusDiv = document.getElementById('statusMessage');
-            statusDiv.textContent = message;
-            statusDiv.className = 'status ' + type;
-            statusDiv.style.display = 'block';
+
+        // Show alert message
+        function showAlert(message, type = 'success') {
+            const alertClass = type === 'success' ? 'alert-success' : 'alert-info';
+            const icon = type === 'success' ? '✅' : '📋';
+            
+            const alertDiv = document.createElement('div');
+            alertDiv.className = `alert ${alertClass}`;
+            alertDiv.innerHTML = `<span>${icon}</span><span>${message}</span>`;
+            
+            const firstCard = document.querySelector('.card');
+            firstCard.parentNode.insertBefore(alertDiv, firstCard);
             
             setTimeout(() => {
-                statusDiv.style.display = 'none';
-            }, 5000);
+                alertDiv.remove();
+            }, 3000);
         }
-        
-        // Auto-save every 5 minutes
-        setInterval(() => {
-            saveAllData();
-        }, 300000);
-        
-        // Initialize
-        calculateTotals();
-        
-        // Set today's date in date columns
-        const today = new Date().toISOString().split('T')[0];
-        document.getElementById('date1').textContent = today;
-        document.getElementById('date2').textContent = new Date(Date.now() + 86400000).toISOString().split('T')[0];
-        document.getElementById('date3').textContent = new Date(Date.now() + 172800000).toISOString().split('T')[0];
+
+        // Load existing data on page load
+        window.addEventListener('load', function() {
+            displayContacts();
+            updateFeedingStats();
+            
+            // Restore form values if operation data exists
+            if (operationData.drNumber) {
+                document.getElementById('drNumber').value = operationData.drNumber || '';
+                document.getElementById('operationName').value = operationData.operationName || '';
+                document.getElementById('startDate').value = operationData.startDate || '';
+                document.getElementById('region').value = operationData.region || '';
+                
+                if (operationData.counties) {
+                    operationData.counties.forEach(county => {
+                        const checkbox = document.getElementById(`county_${county}`);
+                        if (checkbox) checkbox.checked = true;
+                    });
+                }
+            }
+            
+            // Set today's date as default for feeding form
+            document.getElementById('feedingDate').value = new Date().toISOString().split('T')[0];
+        });
     </script>
 </body>
 </html>
