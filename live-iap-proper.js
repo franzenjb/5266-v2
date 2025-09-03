@@ -2,10 +2,11 @@
 // This generates the ACTUAL IAP document structure, not a summary
 
 function generateProperLiveIAP() {
-    const operationData = JSON.parse(localStorage.getItem('form5266_operation')) || {};
-    const iapData = JSON.parse(localStorage.getItem('form5266_iap_current')) || {};
-    const feedingData = JSON.parse(localStorage.getItem('form5266_feeding')) || [];
-    const contacts = JSON.parse(localStorage.getItem('form5266_contacts')) || [];
+    // Use the unified data store
+    const operationData = window.DataStore ? DataStore.get('operation') : JSON.parse(localStorage.getItem('form5266_operation')) || {};
+    const iapData = window.DataStore ? DataStore.get('iap') : JSON.parse(localStorage.getItem('form5266_iap_current')) || {};
+    const feedingData = window.DataStore ? DataStore.get('feeding') : JSON.parse(localStorage.getItem('form5266_feeding')) || [];
+    const contacts = window.DataStore ? DataStore.get('contacts') : JSON.parse(localStorage.getItem('form5266_contacts')) || [];
     
     // Get current date/time for operational period
     const now = new Date();

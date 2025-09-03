@@ -949,6 +949,9 @@
 
     </main>
 
+    <!-- Unified Data System - MUST LOAD FIRST -->
+    <script src="unified-data-system.js"></script>
+    
     <!-- Include the Red Cross regions data -->
     <script src="redcross_data.js"></script>
     <!-- Unified US counties data (includes all states when available) -->
@@ -956,6 +959,8 @@
     
     <!-- Main application JavaScript -->
     <script src="main-app.js"></script>
+    <!-- Data Flow Integration - connects everything to unified DataStore -->
+    <script src="data-flow-integration.js"></script>
     
     <script>
         // All main logic is now in main-app.js
