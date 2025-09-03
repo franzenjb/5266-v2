@@ -239,6 +239,163 @@ We welcome contributions to improve the Form 5266 v2 system. Please follow these
 - GDPR and HIPAA compliance considerations
 - Audit logging for all data modifications
 
+## 🚀 Future Features & Enhancements
+
+### High Priority Features
+
+#### 1. National Weather Service Integration with AI
+- **Description**: Automatic NWS station selection based on selected regions/counties
+- **Features**:
+  - Pull data from multiple NWS stations for comprehensive coverage
+  - AI-amalgamated forecast combining multiple sources
+  - Automatic period selection matching IAP operational period
+  - Display active watches and warnings
+  - Plain language summary generation
+- **Target Section**: IAP Builder - Safety & Security (Section 10)
+
+#### 2. Dark Mode Toggle (Brad's Favorite ✅ COMPLETED)
+- Full application theming between light and dark modes
+- Applies to main app and IAP Builder
+- Saves user preference
+
+#### 3. Complete US Counties Database
+- **Current Issue**: Remove standalone Arizona/Florida scripts
+- **Solution**: Implement all 50 states + territories in unified database
+- Need GeoJSON boundary data for all 3,143 US counties
+- Include Puerto Rico, USVI, Guam, American Samoa, Northern Mariana Islands
+
+#### 4. Database Backend Implementation
+- **Current State**: Using localStorage (browser-only)
+- **Need**: Proper database collecting all information from:
+  - Start Here Statistics
+  - IAP Builder
+  - Service Lines
+- **Technology**: PostgreSQL or similar
+- **Benefits**: Multi-user access, data persistence, real-time sync
+
+### User Interface Improvements
+
+#### 1. Remove Red Statistics Boxes
+- Remove the large red boxes showing:
+  - Total Meals (Line 9)
+  - Total Snacks (Line 10) 
+  - Active Counties
+  - Active Chapters
+- Streamline the interface
+
+#### 2. Scrolling Live Updates (✅ COMPLETED)
+- Real-time updates showing all changes across the document
+- Visible log of system activity
+
+#### 3. Splash Screen
+- Professional loading screen while app initializes
+- Red Cross branding
+- Loading progress indicator
+
+#### 4. Editable Accordion Headers
+- Allow users to customize paragraph headers in accordions
+- Support for special notes and custom sections
+- Rich text editing for headers
+
+### Advanced Features
+
+#### 1. AI-Powered Search
+- **In-Application Search**: Find any data point quickly
+- **PDF Search**: Search within generated IAP PDFs
+- **Use Cases**:
+  - "Who is the DRO Director?"
+  - "What are the current shelters?"
+  - "Show me all feeding locations"
+- Natural language query support
+
+#### 2. PDF Export Capability
+- Export complete IAP to PDF format
+- Maintain formatting and images
+- Include all sections and data
+- Professional layout matching Red Cross standards
+
+#### 3. User Feedback System
+- Allow users to input changes or corrections
+- Review queue for IP (Incident Planning) team
+- Version tracking for changes
+- Approval workflow
+
+#### 4. Role-Based Access Control
+- Different access levels for different teams
+- Service-specific permissions (e.g., Feeding team only sees feeding)
+- Leadership override capabilities
+- Audit trail of who changed what
+
+#### 5. ArcGIS Integration
+- Import ArcGIS maps directly
+- Add and manage ArcGIS layers
+- Support for Red Cross operational layers
+- Real-time map updates
+
+#### 6. Organizational Chart Generator
+- Automatic org chart creation from contact data
+- Visual hierarchy display
+- Export to various formats
+- JavaScript/Python libraries options:
+  - OrgChart.js
+  - D3.js organizational charts
+  - Python: matplotlib, plotly
+  - Integration with roster data
+
+### Technical Improvements
+
+#### 1. Real-Time Collaboration
+- WebSocket implementation for live updates
+- Multiple users can work simultaneously
+- Conflict resolution for concurrent edits
+- Show who's currently editing what
+
+#### 2. Offline Mode
+- Service worker implementation
+- Work without internet connection
+- Sync when connection restored
+- Local data caching
+
+#### 3. Mobile Optimization
+- Fully responsive design
+- Touch-optimized interfaces
+- Mobile-specific workflows
+- Progressive Web App (PWA) capabilities
+
+#### 4. Data Import/Export
+- Import data from Excel spreadsheets
+- Export to multiple formats (Excel, CSV, JSON)
+- Bulk data operations
+- Data migration tools
+
+### Integration Requirements
+
+#### 1. Red Cross Systems Integration
+- Connect with existing Red Cross databases
+- SSO (Single Sign-On) with RC credentials
+- Integration with Volunteer Connection
+- National Shelter System sync
+
+#### 2. External Data Sources
+- FEMA data feeds
+- Emergency management systems
+- Social media monitoring
+- News feed integration
+
+### Performance & Scalability
+
+#### 1. Cloud Deployment
+- AWS or Azure hosting
+- Auto-scaling capabilities
+- Load balancing
+- CDN for static assets
+
+#### 2. Analytics & Reporting
+- Usage analytics
+- Performance metrics
+- Custom report generation
+- Data visualization dashboards
+
 ## 📞 Support & Contact
 
 - **Project Lead**: Jeff Franzen
