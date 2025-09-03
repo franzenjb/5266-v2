@@ -35,9 +35,11 @@
         .header {
             background-color: white;
             box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-            position: sticky;
+            position: fixed;
             top: 0;
-            z-index: 100;
+            left: 0;
+            right: 0;
+            z-index: 1000;
         }
 
         .header-content {
@@ -106,6 +108,14 @@
             background-color: white;
             border-bottom: 2px solid var(--gray-light);
             padding: 0 2rem;
+            position: fixed;
+            top: 80px;
+            left: 0;
+            right: 0;
+            z-index: 999;
+        }
+
+        .nav-tabs-inner {
             max-width: 1400px;
             margin: 0 auto;
         }
@@ -146,8 +156,8 @@
         /* Main Content */
         .main-container {
             max-width: 1400px;
-            margin: 2rem auto;
-            padding: 0 2rem;
+            margin: 0 auto;
+            padding: 160px 2rem 2rem 2rem;
         }
 
         .dashboard-grid {
@@ -603,11 +613,14 @@
 
     <!-- Navigation Tabs -->
     <nav class="nav-tabs">
-        <ul>
-            <li><a href="#start-here" class="tab-link active" data-tab="start-here">Start Here Statistics</a></li>
-            <li><a href="#feeding" class="tab-link" data-tab="feeding">Feeding</a></li>
-            <li><a href="#dashboard" class="tab-link" data-tab="dashboard">Live Dashboard</a></li>
-        </ul>
+        <div class="nav-tabs-inner">
+            <ul>
+                <li><a href="#start-here" class="tab-link active" data-tab="start-here">Start Here Statistics</a></li>
+                <li><a href="#feeding" class="tab-link" data-tab="feeding">Feeding</a></li>
+                <li><a href="#iap" class="tab-link" data-tab="iap">IAP</a></li>
+                <li><a href="#dashboard" class="tab-link" data-tab="dashboard">Live Dashboard</a></li>
+            </ul>
+        </div>
     </nav>
 
     <!-- Main Container -->
@@ -821,6 +834,118 @@
             </div>
         </div>
 
+        <!-- IAP Tab -->
+        <div id="iap" class="tab-content">
+            <div class="alert alert-info">
+                <span>📋</span>
+                <span>Create and manage Incident Action Plans with data from your operation.</span>
+            </div>
+
+            <div class="dashboard-grid">
+                <!-- IAP Creation Form -->
+                <div class="card">
+                    <div class="card-header">
+                        <h2 class="card-title">IAP Creation</h2>
+                        <div class="card-icon">📄</div>
+                    </div>
+                    <form id="iapForm">
+                        <div class="form-group">
+                            <label for="operationalPeriod">Operational Period *</label>
+                            <input type="text" class="form-control" id="operationalPeriod" 
+                                   placeholder="e.g., 01/01 0600 - 01/02 0600" required>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="iapNumber">IAP Number *</label>
+                                <input type="text" class="form-control" id="iapNumber" 
+                                       placeholder="e.g., IAP-001" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="approvalDate">Approval Date/Time *</label>
+                                <input type="datetime-local" class="form-control" id="approvalDate" required>
+                            </div>
+                        </div>
+
+                        <h3 style="color: var(--red-cross-red); margin: 1.5rem 0 1rem;">Leadership Positions</h3>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="droDirector">DRO Director</label>
+                                <input type="text" class="form-control" id="droDirector" placeholder="Name">
+                            </div>
+                            <div class="form-group">
+                                <label for="planningChief">Planning Chief</label>
+                                <input type="text" class="form-control" id="planningChief" placeholder="Name">
+                            </div>
+                        </div>
+
+                        <h3 style="color: var(--red-cross-red); margin: 1.5rem 0 1rem;">Sections</h3>
+                        
+                        <div class="form-group">
+                            <label for="geographies">Geographies</label>
+                            <textarea class="form-control" id="geographies" rows="2" 
+                                      placeholder="List affected geographies"></textarea>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="sheltering">Sheltering</label>
+                            <textarea class="form-control" id="sheltering" rows="2" 
+                                      placeholder="Sheltering operations summary"></textarea>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="feeding">Feeding</label>
+                            <textarea class="form-control" id="feeding" rows="2" 
+                                      placeholder="Feeding operations summary"></textarea>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="activities">Activities</label>
+                            <textarea class="form-control" id="activities" rows="3" 
+                                      placeholder="Key activities for this operational period"></textarea>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="workShifts">Work Shifts</label>
+                            <input type="text" class="form-control" id="workShifts" 
+                                   placeholder="e.g., Day: 0600-1800, Swing: 1800-0600">
+                        </div>
+
+                        <button type="submit" class="btn btn-primary" style="margin-right: 1rem;">
+                            <span>💾</span> Save IAP
+                        </button>
+                        <button type="button" class="btn btn-secondary" onclick="generateIAPReport()">
+                            <span>📄</span> Generate Report
+                        </button>
+                    </form>
+                </div>
+
+                <!-- IAP History/Preview -->
+                <div class="card">
+                    <div class="card-header">
+                        <h2 class="card-title">IAP History & Reports</h2>
+                        <div class="card-icon">📊</div>
+                    </div>
+                    <div id="iapHistory">
+                        <div class="empty-state">
+                            <div class="empty-state-icon">📝</div>
+                            <p>No IAPs created yet. Create your first IAP to see it here.</p>
+                        </div>
+                    </div>
+                    
+                    <div id="iapPreview" style="margin-top: 2rem; display: none;">
+                        <h3 style="color: var(--red-cross-red); margin-bottom: 1rem;">Current IAP Preview</h3>
+                        <div id="iapPreviewContent" style="background-color: #f8f9fa; padding: 1.5rem; border-radius: 8px; border: 1px solid var(--gray-light);">
+                            <!-- IAP preview will be rendered here -->
+                        </div>
+                        <button class="btn btn-primary" onclick="exportIAPToPDF()" style="margin-top: 1rem;">
+                            <span>📥</span> Export to PDF
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <!-- Dashboard Tab -->
         <div id="dashboard" class="tab-content">
             <div class="alert alert-success">
@@ -871,6 +996,7 @@
         let contacts = JSON.parse(localStorage.getItem('form5266_contacts')) || [];
         let feedingData = JSON.parse(localStorage.getItem('form5266_feeding')) || [];
         let activityLog = JSON.parse(localStorage.getItem('form5266_activity')) || [];
+        let iapData = JSON.parse(localStorage.getItem('form5266_iap')) || [];
         let currentRegionData = null;
 
         // Tab switching
@@ -1237,6 +1363,276 @@
             }, 3000);
         }
 
+        // IAP Form Handler
+        document.getElementById('iapForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const iap = {
+                iapNumber: document.getElementById('iapNumber').value,
+                operationalPeriod: document.getElementById('operationalPeriod').value,
+                approvalDate: document.getElementById('approvalDate').value,
+                droDirector: document.getElementById('droDirector').value,
+                planningChief: document.getElementById('planningChief').value,
+                geographies: document.getElementById('geographies').value,
+                sheltering: document.getElementById('sheltering').value,
+                feeding: document.getElementById('feeding').value,
+                activities: document.getElementById('activities').value,
+                workShifts: document.getElementById('workShifts').value,
+                timestamp: new Date().toISOString(),
+                operation: operationData
+            };
+            
+            iapData.push(iap);
+            localStorage.setItem('form5266_iap', JSON.stringify(iapData));
+            
+            logActivity('IAP Created', `IAP ${iap.iapNumber} for ${iap.operationalPeriod}`);
+            
+            displayIAPHistory();
+            showIAPPreview(iap);
+            showAlert('IAP saved successfully!', 'success');
+        });
+
+        // Display IAP History
+        function displayIAPHistory() {
+            const historyDiv = document.getElementById('iapHistory');
+            
+            if (iapData.length === 0) {
+                historyDiv.innerHTML = `
+                    <div class="empty-state">
+                        <div class="empty-state-icon">📝</div>
+                        <p>No IAPs created yet. Create your first IAP to see it here.</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            const historyHtml = iapData.slice(-5).reverse().map(iap => `
+                <div class="contact-item" style="cursor: pointer;" onclick="showIAPPreview(${JSON.stringify(iap).replace(/"/g, '&quot;')})">
+                    <div class="contact-info">
+                        <div class="contact-role">${iap.iapNumber}</div>
+                        <div class="contact-name">${iap.operationalPeriod}</div>
+                        <div class="contact-details">
+                            Created: ${new Date(iap.timestamp).toLocaleString()}
+                        </div>
+                    </div>
+                    <button class="btn btn-secondary" onclick="event.stopPropagation(); exportSpecificIAP(${JSON.stringify(iap).replace(/"/g, '&quot;')})">
+                        📥
+                    </button>
+                </div>
+            `).join('');
+            
+            historyDiv.innerHTML = historyHtml;
+        }
+
+        // Show IAP Preview
+        function showIAPPreview(iap) {
+            const previewDiv = document.getElementById('iapPreview');
+            const previewContent = document.getElementById('iapPreviewContent');
+            
+            previewDiv.style.display = 'block';
+            
+            // Get feeding statistics
+            const totalMeals = feedingData.reduce((sum, f) => sum + f.meals, 0);
+            const totalSnacks = feedingData.reduce((sum, f) => sum + f.snacks, 0);
+            
+            previewContent.innerHTML = `
+                <div style="text-align: center; margin-bottom: 2rem;">
+                    <div style="display: flex; align-items: center; justify-content: center; gap: 1rem; margin-bottom: 1rem;">
+                        <div style="width: 60px; height: 60px; background-color: var(--red-cross-red); position: relative; border-radius: 4px;">
+                            <div style="content: ''; position: absolute; background-color: white; width: 36px; height: 12px; top: 50%; left: 50%; transform: translate(-50%, -50%);"></div>
+                            <div style="content: ''; position: absolute; background-color: white; width: 12px; height: 36px; top: 50%; left: 50%; transform: translate(-50%, -50%);"></div>
+                        </div>
+                        <div>
+                            <h2 style="margin: 0; color: var(--red-cross-red);">American Red Cross</h2>
+                            <p style="margin: 0; color: var(--gray-medium);">Incident Action Plan</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div style="background-color: white; padding: 2rem; border-radius: 8px;">
+                    <table style="width: 100%; border-collapse: collapse;">
+                        <tr>
+                            <td style="padding: 0.75rem; border: 1px solid #ddd; background-color: #f5f5f5;"><strong>IAP Number:</strong></td>
+                            <td style="padding: 0.75rem; border: 1px solid #ddd;">${iap.iapNumber}</td>
+                            <td style="padding: 0.75rem; border: 1px solid #ddd; background-color: #f5f5f5;"><strong>Operation:</strong></td>
+                            <td style="padding: 0.75rem; border: 1px solid #ddd;">${iap.operation?.drNumber || 'N/A'}</td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 0.75rem; border: 1px solid #ddd; background-color: #f5f5f5;"><strong>Operational Period:</strong></td>
+                            <td style="padding: 0.75rem; border: 1px solid #ddd;" colspan="3">${iap.operationalPeriod}</td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 0.75rem; border: 1px solid #ddd; background-color: #f5f5f5;"><strong>Approval Date/Time:</strong></td>
+                            <td style="padding: 0.75rem; border: 1px solid #ddd;">${new Date(iap.approvalDate).toLocaleString()}</td>
+                            <td style="padding: 0.75rem; border: 1px solid #ddd; background-color: #f5f5f5;"><strong>Region:</strong></td>
+                            <td style="padding: 0.75rem; border: 1px solid #ddd;">${iap.operation?.region || 'N/A'}</td>
+                        </tr>
+                    </table>
+                    
+                    <h3 style="color: var(--red-cross-red); margin-top: 2rem; border-bottom: 2px solid var(--red-cross-red); padding-bottom: 0.5rem;">Leadership Positions</h3>
+                    <table style="width: 100%; border-collapse: collapse; margin-top: 1rem;">
+                        <tr>
+                            <td style="padding: 0.75rem; border: 1px solid #ddd; background-color: #f5f5f5; width: 30%;"><strong>Position</strong></td>
+                            <td style="padding: 0.75rem; border: 1px solid #ddd; background-color: #f5f5f5;"><strong>Name</strong></td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 0.75rem; border: 1px solid #ddd;">DRO Director</td>
+                            <td style="padding: 0.75rem; border: 1px solid #ddd;">${iap.droDirector || 'TBD'}</td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 0.75rem; border: 1px solid #ddd;">Planning Chief</td>
+                            <td style="padding: 0.75rem; border: 1px solid #ddd;">${iap.planningChief || 'TBD'}</td>
+                        </tr>
+                    </table>
+                    
+                    <h3 style="color: var(--red-cross-red); margin-top: 2rem; border-bottom: 2px solid var(--red-cross-red); padding-bottom: 0.5rem;">Geographies</h3>
+                    <div style="padding: 1rem; background-color: #f9f9f9; border-radius: 4px; margin-top: 1rem;">
+                        <p><strong>Affected Counties (${iap.operation?.counties?.length || 0}):</strong> ${iap.operation?.counties?.join(', ') || 'None specified'}</p>
+                        <p><strong>Active Chapters (${iap.operation?.chapters?.length || 0}):</strong> ${iap.operation?.chapters?.join(', ') || 'None specified'}</p>
+                        ${iap.geographies ? `<p><strong>Additional Notes:</strong> ${iap.geographies}</p>` : ''}
+                    </div>
+                    
+                    <h3 style="color: var(--red-cross-red); margin-top: 2rem; border-bottom: 2px solid var(--red-cross-red); padding-bottom: 0.5rem;">Sections</h3>
+                    
+                    <h4 style="color: var(--gray-dark); margin-top: 1.5rem;">Feeding</h4>
+                    <div style="padding: 1rem; background-color: #f9f9f9; border-radius: 4px;">
+                        <p><strong>Line 9 - Total Meals Served:</strong> ${totalMeals.toLocaleString()}</p>
+                        <p><strong>Line 10 - Total Snacks Served:</strong> ${totalSnacks.toLocaleString()}</p>
+                        ${iap.feeding ? `<p><strong>Notes:</strong> ${iap.feeding}</p>` : ''}
+                    </div>
+                    
+                    ${iap.sheltering ? `
+                    <h4 style="color: var(--gray-dark); margin-top: 1.5rem;">Sheltering</h4>
+                    <div style="padding: 1rem; background-color: #f9f9f9; border-radius: 4px;">
+                        <p>${iap.sheltering}</p>
+                    </div>
+                    ` : ''}
+                    
+                    ${iap.activities ? `
+                    <h4 style="color: var(--gray-dark); margin-top: 1.5rem;">Activities</h4>
+                    <div style="padding: 1rem; background-color: #f9f9f9; border-radius: 4px;">
+                        <p>${iap.activities}</p>
+                    </div>
+                    ` : ''}
+                    
+                    <h3 style="color: var(--red-cross-red); margin-top: 2rem; border-bottom: 2px solid var(--red-cross-red); padding-bottom: 0.5rem;">Work Shifts</h3>
+                    <div style="padding: 1rem; background-color: #f9f9f9; border-radius: 4px; margin-top: 1rem;">
+                        <p>${iap.workShifts || 'Standard shifts: Day 0600-1800, Night 1800-0600'}</p>
+                    </div>
+                </div>
+            `;
+            
+            // Store current IAP for PDF export
+            window.currentIAPForExport = iap;
+        }
+
+        // Generate IAP Report
+        function generateIAPReport() {
+            // Use the most recent IAP or create a new one from current data
+            const latestIAP = iapData[iapData.length - 1];
+            if (latestIAP) {
+                showIAPPreview(latestIAP);
+                document.getElementById('iapPreview').scrollIntoView({ behavior: 'smooth' });
+            } else {
+                showAlert('Please save an IAP first before generating a report.', 'info');
+            }
+        }
+
+        // Export IAP to PDF
+        function exportIAPToPDF() {
+            if (!window.currentIAPForExport) {
+                showAlert('No IAP available for export', 'info');
+                return;
+            }
+            
+            // Create a simple HTML page for printing
+            const printWindow = window.open('', '_blank');
+            const iap = window.currentIAPForExport;
+            const totalMeals = feedingData.reduce((sum, f) => sum + f.meals, 0);
+            const totalSnacks = feedingData.reduce((sum, f) => sum + f.snacks, 0);
+            
+            printWindow.document.write(`
+                <!DOCTYPE html>
+                <html>
+                <head>
+                    <title>IAP ${iap.iapNumber}</title>
+                    <style>
+                        body { font-family: Arial, sans-serif; margin: 20px; }
+                        h1, h2, h3 { color: #ED1B2E; }
+                        table { width: 100%; border-collapse: collapse; margin: 1rem 0; }
+                        td, th { padding: 8px; border: 1px solid #ddd; }
+                        th { background-color: #f5f5f5; }
+                        .section { margin: 20px 0; padding: 15px; background-color: #f9f9f9; }
+                        @media print { 
+                            body { margin: 0; }
+                            .no-print { display: none; }
+                        }
+                    </style>
+                </head>
+                <body>
+                    <h1 style="text-align: center; color: #ED1B2E;">American Red Cross - Incident Action Plan</h1>
+                    
+                    <table>
+                        <tr>
+                            <th>IAP Number</th><td>${iap.iapNumber}</td>
+                            <th>DR Number</th><td>${iap.operation?.drNumber || 'N/A'}</td>
+                        </tr>
+                        <tr>
+                            <th>Operational Period</th><td colspan="3">${iap.operationalPeriod}</td>
+                        </tr>
+                        <tr>
+                            <th>Approval Date/Time</th><td>${new Date(iap.approvalDate).toLocaleString()}</td>
+                            <th>Region</th><td>${iap.operation?.region || 'N/A'}</td>
+                        </tr>
+                    </table>
+                    
+                    <h2>Leadership</h2>
+                    <table>
+                        <tr><th>DRO Director</th><td>${iap.droDirector || 'TBD'}</td></tr>
+                        <tr><th>Planning Chief</th><td>${iap.planningChief || 'TBD'}</td></tr>
+                    </table>
+                    
+                    <h2>Geographies</h2>
+                    <div class="section">
+                        <p><strong>Counties (${iap.operation?.counties?.length || 0}):</strong> ${iap.operation?.counties?.join(', ') || 'None'}</p>
+                        <p><strong>Chapters (${iap.operation?.chapters?.length || 0}):</strong> ${iap.operation?.chapters?.join(', ') || 'None'}</p>
+                    </div>
+                    
+                    <h2>Operations</h2>
+                    <h3>Feeding</h3>
+                    <div class="section">
+                        <p><strong>Total Meals (Line 9):</strong> ${totalMeals.toLocaleString()}</p>
+                        <p><strong>Total Snacks (Line 10):</strong> ${totalSnacks.toLocaleString()}</p>
+                        ${iap.feeding ? `<p>${iap.feeding}</p>` : ''}
+                    </div>
+                    
+                    ${iap.sheltering ? `
+                    <h3>Sheltering</h3>
+                    <div class="section">${iap.sheltering}</div>
+                    ` : ''}
+                    
+                    ${iap.activities ? `
+                    <h3>Activities</h3>
+                    <div class="section">${iap.activities}</div>
+                    ` : ''}
+                    
+                    <h2>Work Shifts</h2>
+                    <div class="section">${iap.workShifts || 'Standard shifts: Day 0600-1800, Night 1800-0600'}</div>
+                    
+                    <button class="no-print" onclick="window.print()" style="padding: 10px 20px; background-color: #ED1B2E; color: white; border: none; border-radius: 4px; cursor: pointer; margin-top: 20px;">Print/Save as PDF</button>
+                </body>
+                </html>
+            `);
+            
+            printWindow.document.close();
+        }
+
+        // Export specific IAP
+        function exportSpecificIAP(iap) {
+            window.currentIAPForExport = iap;
+            exportIAPToPDF();
+        }
+
         // Load existing data on page load
         window.addEventListener('load', function() {
             // Populate regions dropdown
@@ -1244,6 +1640,9 @@
             
             // Display existing contacts
             displayContacts();
+            
+            // Display IAP history
+            displayIAPHistory();
             
             // Update feeding stats
             updateFeedingStats();
