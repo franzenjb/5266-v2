@@ -116,6 +116,10 @@ function initializeRegionHandler() {
             
             // Create county checkboxes
             const countyGrid = document.getElementById('countyGrid');
+            if (!countyGrid) {
+                console.error('countyGrid element not found');
+                return;
+            }
             countyGrid.innerHTML = '';
             
             if (currentRegionData.counties) {
@@ -366,51 +370,6 @@ window.deleteContact = function(index) {
     }
 };
 
-// Load sample data
-window.loadSampleData = function() {
-    if (confirm('This will add sample data to help you get started. Continue?')) {
-        // Sample operation data
-        operationData = {
-            drNumber: 'DR-540-25',
-            operationName: 'Hurricane Response - Florida',
-            startDate: new Date().toISOString().split('T')[0],
-            region: 'Florida',
-            droDirector: 'John Smith',
-            droDirectorPhone: '(555) 123-4567',
-            droDirectorEmail: 'john.smith@redcross.org',
-            deputyDirector: 'Jane Doe',
-            deputyDirectorPhone: '(555) 987-6543',
-            deputyDirectorEmail: 'jane.doe@redcross.org',
-            counties: ['Miami-Dade', 'Broward', 'Palm Beach'],
-            chapters: ['Southeast Florida']
-        };
-        
-        // Sample feeding data
-        feedingData = [
-            {
-                date: new Date().toISOString().split('T')[0],
-                location: 'Miami Convention Center',
-                meals: 1250,
-                snacks: 2500,
-                timestamp: new Date().toISOString()
-            },
-            {
-                date: new Date().toISOString().split('T')[0],
-                location: 'Broward Shelter Site A',
-                meals: 800,
-                snacks: 1600,
-                timestamp: new Date().toISOString()
-            }
-        ];
-        
-        // Save all data
-        localStorage.setItem('form5266_operation', JSON.stringify(operationData));
-        localStorage.setItem('form5266_feeding', JSON.stringify(feedingData));
-        
-        // Reload the page to show the data
-        location.reload();
-    }
-};
 
 // Initialize everything when DOM is ready
 document.addEventListener('DOMContentLoaded', function() {
