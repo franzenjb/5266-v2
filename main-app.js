@@ -98,11 +98,21 @@ function initializeRegionHandler() {
             currentRegionData = redCrossRegionsData[selectedRegion];
             
             // Display region info
-            document.getElementById('regionName').textContent = selectedRegion;
-            document.getElementById('countyCount').textContent = currentRegionData.countyCount || 0;
-            document.getElementById('chapterCount').textContent = currentRegionData.chapters ? currentRegionData.chapters.length : 0;
-            document.getElementById('selectedCountyCount').textContent = '0';
-            document.getElementById('regionInfo').classList.add('active');
+            if (document.getElementById('regionName')) {
+                document.getElementById('regionName').textContent = selectedRegion;
+            }
+            if (document.getElementById('countyCount')) {
+                document.getElementById('countyCount').textContent = currentRegionData.countyCount || 0;
+            }
+            if (document.getElementById('chapterCount')) {
+                document.getElementById('chapterCount').textContent = currentRegionData.chapters ? currentRegionData.chapters.length : 0;
+            }
+            if (document.getElementById('selectedCountyCount')) {
+                document.getElementById('selectedCountyCount').textContent = '0';
+            }
+            if (document.getElementById('regionInfo')) {
+                document.getElementById('regionInfo').classList.add('active');
+            }
             
             // Create county checkboxes
             const countyGrid = document.getElementById('countyGrid');
