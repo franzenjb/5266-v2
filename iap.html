@@ -28,6 +28,86 @@
             --warning-yellow: #F39C12;
             --info-blue: #3498DB;
         }
+        
+        /* Accordion Styles */
+        .accordion {
+            background-color: white;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.08);
+        }
+        
+        .accordion-header {
+            background-color: white;
+            border: none;
+            padding: 1.25rem 1.5rem;
+            width: 100%;
+            text-align: left;
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--gray-dark);
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.3s ease;
+            border-radius: 8px;
+        }
+        
+        .accordion-header:hover {
+            background-color: var(--red-cross-light);
+        }
+        
+        .accordion-header.active {
+            background-color: var(--red-cross-red);
+            color: white;
+            border-radius: 8px 8px 0 0;
+        }
+        
+        .accordion-icon {
+            transition: transform 0.3s ease;
+            font-size: 1.2rem;
+        }
+        
+        .accordion-header.active .accordion-icon {
+            transform: rotate(180deg);
+        }
+        
+        .accordion-content {
+            display: none;
+            padding: 1.5rem;
+            border-top: 2px solid var(--gray-light);
+            background-color: #FAFAFA;
+            border-radius: 0 0 8px 8px;
+        }
+        
+        .accordion-content.active {
+            display: block;
+        }
+        
+        .section-status {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            margin-left: 1rem;
+        }
+        
+        .status-complete {
+            background-color: var(--success-green);
+            color: white;
+        }
+        
+        .status-partial {
+            background-color: var(--warning-yellow);
+            color: white;
+        }
+        
+        .status-empty {
+            background-color: var(--gray-medium);
+            color: white;
+        }
 
         * {
             margin: 0;
@@ -391,29 +471,21 @@
         </div>
     </header>
 
-    <!-- Navigation Tabs -->
-    <nav class="nav-tabs">
-        <div class="nav-tabs-inner">
-            <ul>
-                <li><a href="#basic-info" class="tab-link active" data-tab="basic-info">Basic Info</a></li>
-                <li><a href="#leadership" class="tab-link" data-tab="leadership">Leadership</a></li>
-                <li><a href="#geographies" class="tab-link" data-tab="geographies">Geographies</a></li>
-                <li><a href="#sections" class="tab-link" data-tab="sections">Sections</a></li>
-                <li><a href="#activities" class="tab-link" data-tab="activities">Activities</a></li>
-                <li><a href="#work-shifts" class="tab-link" data-tab="work-shifts">Work Shifts</a></li>
-                <li><a href="#feeding" class="tab-link" data-tab="feeding">Feeding</a></li>
-                <li><a href="#sheltering" class="tab-link" data-tab="sheltering">Sheltering</a></li>
-                <li><a href="#edt-ichq" class="tab-link" data-tab="edt-ichq">EdT/IChQ</a></li>
-                <li><a href="#recovery" class="tab-link" data-tab="recovery">Recovery</a></li>
-                <li><a href="#preview" class="tab-link" data-tab="preview">Preview & Export</a></li>
-            </ul>
-        </div>
-    </nav>
 
     <!-- Main Container -->
-    <main class="main-container">
-        <!-- Basic Info Tab -->
-        <div id="basic-info" class="tab-content active">
+    <main class="main-container" style="padding-top: 100px;">
+        <div class="alert alert-info">
+            <span>📋</span>
+            <span>Build your Incident Action Plan section by section. Data from Service Lines and Start Here Statistics will auto-populate where applicable.</span>
+        </div>
+        
+        <!-- 1. Basic Information Accordion -->
+        <div class="accordion">
+            <button class="accordion-header active" onclick="toggleAccordion(this)">
+                <span>1. Basic Information & Operational Period</span>
+                <span class="accordion-icon">▼</span>
+            </button>
+            <div class="accordion-content active">
             <div class="card">
                 <div class="section-header">IAP Basic Information</div>
                 <form id="basicInfoForm">

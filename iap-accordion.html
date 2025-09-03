@@ -1,0 +1,1515 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IAP Builder - Form 5266 v2</title>
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Leaflet CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+          integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
+          crossorigin=""/>
+    
+    <!-- Leaflet JavaScript -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+            integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
+            crossorigin=""></script>
+    
+    <style>
+        :root {
+            --red-cross-red: #ED1B2E;
+            --red-cross-dark: #B51E2B;
+            --red-cross-light: #FFF5F5;
+            --gray-dark: #2C3E50;
+            --gray-medium: #7F8C8D;
+            --gray-light: #ECF0F1;
+            --success-green: #27AE60;
+            --warning-yellow: #F39C12;
+            --info-blue: #3498DB;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Open Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background-color: #F8F9FA;
+            color: var(--gray-dark);
+            line-height: 1.6;
+        }
+
+        /* Header */
+        .header {
+            background-color: white;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+        }
+
+        .header-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 1rem 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .logo-section {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .red-cross-logo {
+            width: 40px;
+            height: 40px;
+            background-color: var(--red-cross-red);
+            position: relative;
+            border-radius: 4px;
+        }
+
+        .red-cross-logo::before,
+        .red-cross-logo::after {
+            content: '';
+            position: absolute;
+            background-color: white;
+        }
+
+        .red-cross-logo::before {
+            width: 24px;
+            height: 8px;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        .red-cross-logo::after {
+            width: 8px;
+            height: 24px;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        /* Main Content */
+        .main-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 100px 2rem 2rem 2rem;
+        }
+
+        /* Accordion Styles */
+        .accordion {
+            background-color: white;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.08);
+        }
+        
+        .accordion-header {
+            background-color: white;
+            border: none;
+            padding: 1.25rem 1.5rem;
+            width: 100%;
+            text-align: left;
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--gray-dark);
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.3s ease;
+            border-radius: 8px;
+        }
+        
+        .accordion-header:hover {
+            background-color: var(--red-cross-light);
+        }
+        
+        .accordion-header.active {
+            background-color: var(--red-cross-red);
+            color: white;
+            border-radius: 8px 8px 0 0;
+        }
+        
+        .accordion-icon {
+            transition: transform 0.3s ease;
+            font-size: 1.2rem;
+        }
+        
+        .accordion-header.active .accordion-icon {
+            transform: rotate(180deg);
+        }
+        
+        .accordion-content {
+            display: none;
+            padding: 1.5rem;
+            background-color: white;
+            border-top: 2px solid var(--gray-light);
+            border-radius: 0 0 8px 8px;
+        }
+        
+        .accordion-content.active {
+            display: block;
+        }
+
+        /* Form Elements */
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: var(--gray-dark);
+            font-size: 0.875rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 0.75rem;
+            border: 2px solid var(--gray-light);
+            border-radius: 6px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            font-family: inherit;
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--red-cross-red);
+            box-shadow: 0 0 0 3px rgba(237, 27, 46, 0.1);
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+        }
+
+        .form-row-3 {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 1rem;
+        }
+
+        /* Buttons */
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 6px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 1rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn-primary {
+            background-color: var(--red-cross-red);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background-color: var(--red-cross-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(237, 27, 46, 0.3);
+        }
+
+        .btn-secondary {
+            background-color: white;
+            color: var(--gray-dark);
+            border: 2px solid var(--gray-light);
+        }
+
+        .btn-secondary:hover {
+            background-color: var(--gray-light);
+        }
+
+        /* Action Buttons */
+        .action-buttons {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            display: flex;
+            gap: 1rem;
+            z-index: 100;
+            background: white;
+            padding: 1rem;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+
+        /* Alert Messages */
+        .alert {
+            padding: 1rem;
+            border-radius: 6px;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .alert-info {
+            background-color: #D1ECF1;
+            color: #0C5460;
+            border: 1px solid #BEE5EB;
+        }
+
+        /* Table Styles */
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1rem;
+        }
+
+        .data-table th,
+        .data-table td {
+            padding: 0.75rem;
+            text-align: left;
+            border-bottom: 1px solid var(--gray-light);
+        }
+
+        .data-table th {
+            background-color: var(--red-cross-light);
+            color: var(--gray-dark);
+            font-weight: 600;
+            font-size: 0.875rem;
+            text-transform: uppercase;
+        }
+
+        /* Map Container */
+        .map-container {
+            height: 400px;
+            width: 100%;
+            border-radius: 8px;
+            overflow: hidden;
+            border: 2px solid var(--gray-light);
+            margin-top: 1rem;
+        }
+
+        /* Status Badge */
+        .status-badge {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            margin-left: 1rem;
+        }
+        
+        .status-complete {
+            background-color: var(--success-green);
+            color: white;
+        }
+        
+        .status-partial {
+            background-color: var(--warning-yellow);
+            color: white;
+        }
+        
+        .status-empty {
+            background-color: var(--gray-medium);
+            color: white;
+        }
+
+        /* Roster Table */
+        .roster-entry {
+            display: grid;
+            grid-template-columns: 2fr 2fr 1fr 1fr 1fr 0.5fr;
+            gap: 0.5rem;
+            margin-bottom: 0.5rem;
+            align-items: center;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .form-row,
+            .form-row-3 {
+                grid-template-columns: 1fr;
+            }
+            
+            .action-buttons {
+                bottom: 1rem;
+                right: 1rem;
+                left: 1rem;
+                flex-direction: column;
+            }
+            
+            .roster-entry {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="header-content">
+            <div class="logo-section">
+                <div class="red-cross-logo"></div>
+                <div>
+                    <h1>Incident Action Plan Builder</h1>
+                    <p style="font-size: 0.875rem; color: var(--gray-medium);">Form 5266 v2 - Comprehensive IAP</p>
+                </div>
+            </div>
+            <a href="index.html" class="btn btn-secondary">← Back to Main</a>
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <main class="main-container">
+        <div class="alert alert-info">
+            <span>📋</span>
+            <span>Complete each section to build your IAP. Sections marked with * are required. Data from Service Lines auto-populates where applicable.</span>
+        </div>
+
+        <!-- 1. Basic Information -->
+        <div class="accordion">
+            <button class="accordion-header active" onclick="toggleAccordion(this)">
+                <div>
+                    <span>1. Basic Information & Operational Period *</span>
+                    <span class="status-badge status-empty" id="status-basic">Empty</span>
+                </div>
+                <span class="accordion-icon">▼</span>
+            </button>
+            <div class="accordion-content active">
+                <form id="basicInfoForm">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="iapNumber">IAP Number *</label>
+                            <input type="text" class="form-control" id="iapNumber" placeholder="e.g., IAP-001" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="drNumber">DR Number *</label>
+                            <input type="text" class="form-control" id="drNumber" placeholder="Auto-filled from Start Here" readonly>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="incidentName">Incident Name/Type *</label>
+                        <input type="text" class="form-control" id="incidentName" placeholder="e.g., Hurricane Ian Response" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Operational Period *</label>
+                        <div class="form-row">
+                            <input type="datetime-local" class="form-control" id="periodStart" required>
+                            <input type="datetime-local" class="form-control" id="periodEnd" required>
+                        </div>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="approvalDate">Approval Date/Time *</label>
+                            <input type="datetime-local" class="form-control" id="approvalDate" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="preparedBy">Prepared By *</label>
+                            <input type="text" class="form-control" id="preparedBy" placeholder="Name/Position" required>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- 2. Director's Message -->
+        <div class="accordion">
+            <button class="accordion-header" onclick="toggleAccordion(this)">
+                <div>
+                    <span>2. Director's Message & Objectives</span>
+                    <span class="status-badge status-empty" id="status-director">Empty</span>
+                </div>
+                <span class="accordion-icon">▼</span>
+            </button>
+            <div class="accordion-content">
+                <form id="directorForm">
+                    <div class="form-group">
+                        <label for="directorMessage">Director's Message</label>
+                        <textarea class="form-control" id="directorMessage" rows="4" 
+                                  placeholder="Message from the DRO Director to all staff..."></textarea>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="primaryObjectives">Primary Objectives for This Period</label>
+                        <textarea class="form-control" id="primaryObjectives" rows="4" 
+                                  placeholder="List 3-5 primary objectives for this operational period..."></textarea>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="priorities">Operational Priorities</label>
+                        <textarea class="form-control" id="priorities" rows="3" 
+                                  placeholder="Life safety, incident stabilization, property conservation..."></textarea>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- 3. Command & General Staff -->
+        <div class="accordion">
+            <button class="accordion-header" onclick="toggleAccordion(this)">
+                <div>
+                    <span>3. Command & General Staff (ICS Structure) *</span>
+                    <span class="status-badge status-empty" id="status-command">Empty</span>
+                </div>
+                <span class="accordion-icon">▼</span>
+            </button>
+            <div class="accordion-content">
+                <form id="commandForm">
+                    <h4 style="color: var(--red-cross-red); margin-bottom: 1rem;">Command Staff</h4>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="droDirector">DRO Director *</label>
+                            <input type="text" class="form-control" id="droDirector" placeholder="Name">
+                        </div>
+                        <div class="form-group">
+                            <label for="deputyDirector">Deputy Director</label>
+                            <input type="text" class="form-control" id="deputyDirector" placeholder="Name">
+                        </div>
+                    </div>
+                    
+                    <div class="form-row-3">
+                        <div class="form-group">
+                            <label for="safetyOfficer">Safety Officer</label>
+                            <input type="text" class="form-control" id="safetyOfficer" placeholder="Name">
+                        </div>
+                        <div class="form-group">
+                            <label for="publicInfoOfficer">Public Information Officer</label>
+                            <input type="text" class="form-control" id="publicInfoOfficer" placeholder="Name">
+                        </div>
+                        <div class="form-group">
+                            <label for="liaisonOfficer">Liaison Officer</label>
+                            <input type="text" class="form-control" id="liaisonOfficer" placeholder="Name">
+                        </div>
+                    </div>
+                    
+                    <h4 style="color: var(--red-cross-red); margin: 1.5rem 0 1rem;">General Staff</h4>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="operationsChief">Operations Section Chief *</label>
+                            <input type="text" class="form-control" id="operationsChief" placeholder="Name">
+                        </div>
+                        <div class="form-group">
+                            <label for="planningChief">Planning Section Chief *</label>
+                            <input type="text" class="form-control" id="planningChief" placeholder="Name">
+                        </div>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="logisticsChief">Logistics Section Chief</label>
+                            <input type="text" class="form-control" id="logisticsChief" placeholder="Name">
+                        </div>
+                        <div class="form-group">
+                            <label for="financeChief">Finance/Admin Section Chief</label>
+                            <input type="text" class="form-control" id="financeChief" placeholder="Name">
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- 4. Geographic Area -->
+        <div class="accordion">
+            <button class="accordion-header" onclick="toggleAccordion(this)">
+                <div>
+                    <span>4. Geographic Area & Maps *</span>
+                    <span class="status-badge status-empty" id="status-geography">Auto-filled</span>
+                </div>
+                <span class="accordion-icon">▼</span>
+            </button>
+            <div class="accordion-content">
+                <div class="alert alert-info">
+                    <span>📍</span>
+                    <span>This data is automatically populated from Start Here Statistics.</span>
+                </div>
+                
+                <div class="form-group">
+                    <label>Region</label>
+                    <input type="text" class="form-control" id="regionDisplay" readonly>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Active Counties</label>
+                        <div id="countiesDisplay" style="padding: 1rem; background-color: #F8F9FA; border-radius: 6px; min-height: 60px;">
+                            <!-- Counties will be displayed here -->
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Associated Chapters</label>
+                        <div id="chaptersDisplay" style="padding: 1rem; background-color: #F8F9FA; border-radius: 6px; min-height: 60px;">
+                            <!-- Chapters will be displayed here -->
+                        </div>
+                    </div>
+                </div>
+                
+                <div id="geographyMap" class="map-container"></div>
+                
+                <div class="form-group" style="margin-top: 1rem;">
+                    <label for="geographyNotes">Geographic Considerations</label>
+                    <textarea class="form-control" id="geographyNotes" rows="3" 
+                              placeholder="Access issues, evacuation zones, restricted areas..."></textarea>
+                </div>
+            </div>
+        </div>
+
+        <!-- 5. Service Line Operations -->
+        <div class="accordion">
+            <button class="accordion-header" onclick="toggleAccordion(this)">
+                <div>
+                    <span>5. Service Line Operations Summary</span>
+                    <span class="status-badge status-partial" id="status-services">Auto-filled</span>
+                </div>
+                <span class="accordion-icon">▼</span>
+            </button>
+            <div class="accordion-content">
+                <div class="alert alert-info">
+                    <span>📊</span>
+                    <span>Data automatically populated from Service Lines entries.</span>
+                </div>
+                
+                <h4 style="color: var(--red-cross-red); margin-bottom: 1rem;">Feeding Operations</h4>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Total Meals Served (Line 9)</label>
+                        <input type="text" class="form-control" id="totalMealsDisplay" readonly>
+                    </div>
+                    <div class="form-group">
+                        <label>Total Snacks Served (Line 10)</label>
+                        <input type="text" class="form-control" id="totalSnacksDisplay" readonly>
+                    </div>
+                </div>
+                
+                <h4 style="color: var(--red-cross-red); margin: 1.5rem 0 1rem;">Sheltering Operations</h4>
+                <div class="form-group">
+                    <label for="shelteringSummary">Sheltering Summary</label>
+                    <textarea class="form-control" id="shelteringSummary" rows="3" 
+                              placeholder="Number of shelters, total capacity, current population..."></textarea>
+                </div>
+                
+                <h4 style="color: var(--red-cross-red); margin: 1.5rem 0 1rem;">Other Service Lines</h4>
+                <div class="form-group">
+                    <label for="otherServices">DES, Health Services, Mental Health, etc.</label>
+                    <textarea class="form-control" id="otherServices" rows="4" 
+                              placeholder="Summary of other active service lines..."></textarea>
+                </div>
+            </div>
+        </div>
+
+        <!-- 6. Personnel Roster -->
+        <div class="accordion">
+            <button class="accordion-header" onclick="toggleAccordion(this)">
+                <div>
+                    <span>6. Personnel Roster & Assignments</span>
+                    <span class="status-badge status-empty" id="status-roster">Empty</span>
+                </div>
+                <span class="accordion-icon">▼</span>
+            </button>
+            <div class="accordion-content">
+                <h4 style="color: var(--red-cross-red); margin-bottom: 1rem;">Staff Roster</h4>
+                <div id="rosterContainer">
+                    <div class="roster-entry">
+                        <input type="text" class="form-control" placeholder="Name">
+                        <input type="text" class="form-control" placeholder="Position/Role">
+                        <input type="text" class="form-control" placeholder="Phone">
+                        <input type="email" class="form-control" placeholder="Email">
+                        <select class="form-control">
+                            <option>Day</option>
+                            <option>Night</option>
+                            <option>Both</option>
+                        </select>
+                        <button type="button" class="btn btn-secondary" onclick="removeRosterEntry(this)">×</button>
+                    </div>
+                </div>
+                <button type="button" class="btn btn-secondary" onclick="addRosterEntry()" style="margin-top: 1rem;">
+                    <span>➕</span> Add Personnel
+                </button>
+                
+                <h4 style="color: var(--red-cross-red); margin: 2rem 0 1rem;">Staffing Summary</h4>
+                <div class="form-row-3">
+                    <div class="form-group">
+                        <label for="totalStaff">Total Staff</label>
+                        <input type="number" class="form-control" id="totalStaff" placeholder="0">
+                    </div>
+                    <div class="form-group">
+                        <label for="totalVolunteers">Total Volunteers</label>
+                        <input type="number" class="form-control" id="totalVolunteers" placeholder="0">
+                    </div>
+                    <div class="form-group">
+                        <label for="staffNeeded">Additional Needed</label>
+                        <input type="number" class="form-control" id="staffNeeded" placeholder="0">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 7. Task Assignments -->
+        <div class="accordion">
+            <button class="accordion-header" onclick="toggleAccordion(this)">
+                <div>
+                    <span>7. Task Assignments & Responsibilities</span>
+                    <span class="status-badge status-empty" id="status-tasks">Empty</span>
+                </div>
+                <span class="accordion-icon">▼</span>
+            </button>
+            <div class="accordion-content">
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Task</th>
+                            <th>Assigned To</th>
+                            <th>Due Time</th>
+                            <th>Priority</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody id="taskTableBody">
+                        <tr>
+                            <td><input type="text" class="form-control" placeholder="Task description"></td>
+                            <td><input type="text" class="form-control" placeholder="Person/Team"></td>
+                            <td><input type="time" class="form-control"></td>
+                            <td>
+                                <select class="form-control">
+                                    <option>High</option>
+                                    <option>Medium</option>
+                                    <option>Low</option>
+                                </select>
+                            </td>
+                            <td>
+                                <select class="form-control">
+                                    <option>Pending</option>
+                                    <option>In Progress</option>
+                                    <option>Complete</option>
+                                </select>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <button type="button" class="btn btn-secondary" onclick="addTaskRow()" style="margin-top: 1rem;">
+                    <span>➕</span> Add Task
+                </button>
+            </div>
+        </div>
+
+        <!-- 8. Work Shifts & Schedule -->
+        <div class="accordion">
+            <button class="accordion-header" onclick="toggleAccordion(this)">
+                <div>
+                    <span>8. Work Shifts & Briefing Schedule</span>
+                    <span class="status-badge status-empty" id="status-shifts">Empty</span>
+                </div>
+                <span class="accordion-icon">▼</span>
+            </button>
+            <div class="accordion-content">
+                <h4 style="color: var(--red-cross-red); margin-bottom: 1rem;">Shift Schedule</h4>
+                <div class="form-row-3">
+                    <div class="form-group">
+                        <label for="dayShift">Day Shift</label>
+                        <input type="text" class="form-control" id="dayShift" placeholder="e.g., 0600-1800">
+                    </div>
+                    <div class="form-group">
+                        <label for="swingShift">Swing Shift</label>
+                        <input type="text" class="form-control" id="swingShift" placeholder="e.g., 1200-0000">
+                    </div>
+                    <div class="form-group">
+                        <label for="nightShift">Night Shift</label>
+                        <input type="text" class="form-control" id="nightShift" placeholder="e.g., 1800-0600">
+                    </div>
+                </div>
+                
+                <h4 style="color: var(--red-cross-red); margin: 1.5rem 0 1rem;">Briefing Schedule</h4>
+                <div class="form-group">
+                    <label for="briefingSchedule">Daily Briefing Times</label>
+                    <textarea class="form-control" id="briefingSchedule" rows="3" 
+                              placeholder="0600 - Shift change briefing&#10;1200 - Operational update&#10;1800 - Shift change briefing"></textarea>
+                </div>
+                
+                <div class="form-group">
+                    <label for="shiftNotes">Shift Transition Notes</label>
+                    <textarea class="form-control" id="shiftNotes" rows="3" 
+                              placeholder="Important information for shift transitions..."></textarea>
+                </div>
+            </div>
+        </div>
+
+        <!-- 9. Resources & Logistics -->
+        <div class="accordion">
+            <button class="accordion-header" onclick="toggleAccordion(this)">
+                <div>
+                    <span>9. Resources & Logistics</span>
+                    <span class="status-badge status-empty" id="status-resources">Empty</span>
+                </div>
+                <span class="accordion-icon">▼</span>
+            </button>
+            <div class="accordion-content">
+                <h4 style="color: var(--red-cross-red); margin-bottom: 1rem;">Critical Resources</h4>
+                <div class="form-group">
+                    <label for="criticalResources">Resources Needed/Status</label>
+                    <textarea class="form-control" id="criticalResources" rows="4" 
+                              placeholder="ERVs, supplies, equipment status..."></textarea>
+                </div>
+                
+                <h4 style="color: var(--red-cross-red); margin: 1.5rem 0 1rem;">Facility Information</h4>
+                <div class="form-group">
+                    <label for="facilities">DRO HQ & Key Facilities</label>
+                    <textarea class="form-control" id="facilities" rows="4" 
+                              placeholder="HQ location, shelters, feeding sites, warehouses..."></textarea>
+                </div>
+                
+                <h4 style="color: var(--red-cross-red); margin: 1.5rem 0 1rem;">Communications</h4>
+                <div class="form-group">
+                    <label for="communications">Radio Frequencies & Call Signs</label>
+                    <textarea class="form-control" id="communications" rows="3" 
+                              placeholder="Primary/alternate frequencies, phone numbers..."></textarea>
+                </div>
+            </div>
+        </div>
+
+        <!-- 10. Safety & Security -->
+        <div class="accordion">
+            <button class="accordion-header" onclick="toggleAccordion(this)">
+                <div>
+                    <span>10. Safety & Security Information</span>
+                    <span class="status-badge status-empty" id="status-safety">Empty</span>
+                </div>
+                <span class="accordion-icon">▼</span>
+            </button>
+            <div class="accordion-content">
+                <div class="form-group">
+                    <label for="safetyConcerns">Safety Concerns & Hazards</label>
+                    <textarea class="form-control" id="safetyConcerns" rows="3" 
+                              placeholder="Known hazards, PPE requirements, restricted areas..."></textarea>
+                </div>
+                
+                <div class="form-group">
+                    <label for="weatherForecast">Weather Forecast</label>
+                    <textarea class="form-control" id="weatherForecast" rows="2" 
+                              placeholder="Weather conditions for operational period..."></textarea>
+                </div>
+                
+                <div class="form-group">
+                    <label for="securityInfo">Security Information</label>
+                    <textarea class="form-control" id="securityInfo" rows="3" 
+                              placeholder="Security procedures, curfews, restricted areas..."></textarea>
+                </div>
+                
+                <div class="form-group">
+                    <label for="medicalPlan">Medical Plan</label>
+                    <textarea class="form-control" id="medicalPlan" rows="3" 
+                              placeholder="Nearest hospitals, EMS procedures, medical support..."></textarea>
+                </div>
+            </div>
+        </div>
+
+        <!-- 11. External Coordination -->
+        <div class="accordion">
+            <button class="accordion-header" onclick="toggleAccordion(this)">
+                <div>
+                    <span>11. External Coordination & Partners</span>
+                    <span class="status-badge status-empty" id="status-external">Empty</span>
+                </div>
+                <span class="accordion-icon">▼</span>
+            </button>
+            <div class="accordion-content">
+                <div class="form-group">
+                    <label for="eocStatus">EOC Status & Coordination</label>
+                    <textarea class="form-control" id="eocStatus" rows="3" 
+                              placeholder="State/County EOCs, liaison assignments..."></textarea>
+                </div>
+                
+                <div class="form-group">
+                    <label for="partnerOrgs">Partner Organizations</label>
+                    <textarea class="form-control" id="partnerOrgs" rows="4" 
+                              placeholder="VOAD partners, government agencies, NGOs..."></textarea>
+                </div>
+                
+                <div class="form-group">
+                    <label for="externalMeetings">Meeting Schedule</label>
+                    <textarea class="form-control" id="externalMeetings" rows="3" 
+                              placeholder="EOC briefings, partner coordination meetings..."></textarea>
+                </div>
+            </div>
+        </div>
+
+        <!-- 12. Ancillary Notes -->
+        <div class="accordion">
+            <button class="accordion-header" onclick="toggleAccordion(this)">
+                <div>
+                    <span>12. Ancillary Notes & Additional Information</span>
+                    <span class="status-badge status-empty" id="status-notes">Optional</span>
+                </div>
+                <span class="accordion-icon">▼</span>
+            </button>
+            <div class="accordion-content">
+                <div class="form-group">
+                    <label for="specialInstructions">Special Instructions</label>
+                    <textarea class="form-control" id="specialInstructions" rows="3" 
+                              placeholder="Any special instructions for this operational period..."></textarea>
+                </div>
+                
+                <div class="form-group">
+                    <label for="additionalNotes">Additional Notes</label>
+                    <textarea class="form-control" id="additionalNotes" rows="4" 
+                              placeholder="Any other information relevant to this IAP..."></textarea>
+                </div>
+                
+                <div class="form-group">
+                    <label for="attachments">Attachments Referenced</label>
+                    <textarea class="form-control" id="attachments" rows="2" 
+                              placeholder="List any attached maps, org charts, resource lists..."></textarea>
+                </div>
+            </div>
+        </div>
+
+        <!-- 13. Preview & Export -->
+        <div class="accordion">
+            <button class="accordion-header" onclick="toggleAccordion(this)">
+                <div>
+                    <span>13. Preview & Export IAP</span>
+                </div>
+                <span class="accordion-icon">▼</span>
+            </button>
+            <div class="accordion-content">
+                <div class="alert alert-info">
+                    <span>👁️</span>
+                    <span>Review your complete IAP below before exporting.</span>
+                </div>
+                
+                <div style="display: flex; gap: 1rem; margin-bottom: 1.5rem;">
+                    <button class="btn btn-primary" onclick="generateIAPPreview()">
+                        <span>👁️</span> Generate Preview
+                    </button>
+                    <button class="btn btn-primary" onclick="exportIAPToPDF()">
+                        <span>📥</span> Export to PDF
+                    </button>
+                    <button class="btn btn-secondary" onclick="saveIAPDraft()">
+                        <span>💾</span> Save Draft
+                    </button>
+                </div>
+                
+                <div id="iapPreviewContent" style="background-color: white; padding: 2rem; border: 1px solid var(--gray-light); border-radius: 8px; min-height: 200px;">
+                    <!-- Preview will be generated here -->
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Action Buttons -->
+    <div class="action-buttons">
+        <button type="button" class="btn btn-secondary" onclick="saveIAPDraft()">
+            <span>💾</span> Save Draft
+        </button>
+        <button type="button" class="btn btn-primary" onclick="validateAndSave()">
+            <span>✓</span> Complete IAP
+        </button>
+    </div>
+
+    <!-- Include data files -->
+    <script src="redcross_data.js"></script>
+    <script src="florida_counties.js"></script>
+    <script src="az_nm_counties.js"></script>
+    <script src="enhanced_maps.js"></script>
+    
+    <script>
+        // Initialize data from localStorage
+        let operationData = JSON.parse(localStorage.getItem('form5266_operation')) || {};
+        let feedingData = JSON.parse(localStorage.getItem('form5266_feeding')) || [];
+        let shelteringData = JSON.parse(localStorage.getItem('form5266_sheltering')) || [];
+        let governmentData = JSON.parse(localStorage.getItem('form5266_government')) || [];
+        let iapData = JSON.parse(localStorage.getItem('form5266_iap_current')) || {};
+        let map = null;
+
+        // Toggle accordion
+        function toggleAccordion(header) {
+            // Close all other accordions first (optional - remove if you want multiple open)
+            document.querySelectorAll('.accordion-header').forEach(h => {
+                if (h !== header && h.classList.contains('active')) {
+                    h.classList.remove('active');
+                    h.nextElementSibling.classList.remove('active');
+                }
+            });
+            
+            header.classList.toggle('active');
+            const content = header.nextElementSibling;
+            content.classList.toggle('active');
+            
+            // Initialize map when geography section is opened
+            if (header.textContent.includes('Geographic') && header.classList.contains('active') && !map) {
+                setTimeout(() => initializeMap(), 100);
+            }
+        }
+
+        // Add roster entry
+        function addRosterEntry() {
+            const container = document.getElementById('rosterContainer');
+            const entry = document.createElement('div');
+            entry.className = 'roster-entry';
+            entry.innerHTML = `
+                <input type="text" class="form-control" placeholder="Name">
+                <input type="text" class="form-control" placeholder="Position/Role">
+                <input type="text" class="form-control" placeholder="Phone">
+                <input type="email" class="form-control" placeholder="Email">
+                <select class="form-control">
+                    <option>Day</option>
+                    <option>Night</option>
+                    <option>Both</option>
+                </select>
+                <button type="button" class="btn btn-secondary" onclick="removeRosterEntry(this)">×</button>
+            `;
+            container.appendChild(entry);
+        }
+
+        // Remove roster entry
+        function removeRosterEntry(btn) {
+            btn.parentElement.remove();
+        }
+
+        // Add task row
+        function addTaskRow() {
+            const tbody = document.getElementById('taskTableBody');
+            const row = document.createElement('tr');
+            row.innerHTML = `
+                <td><input type="text" class="form-control" placeholder="Task description"></td>
+                <td><input type="text" class="form-control" placeholder="Person/Team"></td>
+                <td><input type="time" class="form-control"></td>
+                <td>
+                    <select class="form-control">
+                        <option>High</option>
+                        <option>Medium</option>
+                        <option>Low</option>
+                    </select>
+                </td>
+                <td>
+                    <select class="form-control">
+                        <option>Pending</option>
+                        <option>In Progress</option>
+                        <option>Complete</option>
+                    </select>
+                </td>
+            `;
+            tbody.appendChild(row);
+        }
+
+        // Update section status
+        function updateSectionStatus(sectionId, status) {
+            const badge = document.getElementById('status-' + sectionId);
+            if (badge) {
+                badge.className = 'status-badge status-' + status;
+                badge.textContent = status.charAt(0).toUpperCase() + status.slice(1);
+            }
+        }
+
+        // Initialize map for geography section
+        function initializeMap() {
+            if (map) return; // Already initialized
+            
+            const selectedCounties = operationData.counties || [];
+            const region = operationData.region || '';
+            
+            // Determine which state to show based on region
+            let mapOptions = {};
+            if (region && region.toLowerCase().includes('arizona')) {
+                mapOptions = {
+                    center: MapConfig.defaults.arizonaNewMexico.center,
+                    zoom: MapConfig.defaults.arizonaNewMexico.zoom,
+                    tileProvider: 'cartodb'
+                };
+            } else {
+                mapOptions = {
+                    center: MapConfig.defaults.florida.center,
+                    zoom: MapConfig.defaults.florida.zoom,
+                    tileProvider: 'cartodb'
+                };
+            }
+            
+            map = MapUtils.initializeEnhancedMap('geographyMap', mapOptions);
+            
+            // Add appropriate counties layer
+            let geoData = floridaCounties;
+            if (region && region.toLowerCase().includes('arizona')) {
+                geoData = arizonaNewMexicoCounties;
+            }
+            
+            const choroplethLayer = MapUtils.createChoroplethLayer(geoData, selectedCounties);
+            choroplethLayer.addTo(map);
+            
+            // Add legend
+            MapUtils.addMapLegend(map);
+            
+            // Fit to selected counties if any
+            if (selectedCounties.length > 0) {
+                MapUtils.fitMapToBounds(map, choroplethLayer, selectedCounties);
+            }
+        }
+
+        // Load data on page load
+        window.addEventListener('load', function() {
+            // Populate from operation data
+            if (operationData.drNumber) {
+                document.getElementById('drNumber').value = operationData.drNumber;
+                updateSectionStatus('basic', 'partial');
+            }
+            
+            if (operationData.region) {
+                document.getElementById('regionDisplay').value = operationData.region;
+                updateSectionStatus('geography', 'partial');
+            }
+            
+            // Display counties and chapters
+            if (operationData.counties && operationData.counties.length > 0) {
+                const countiesDiv = document.getElementById('countiesDisplay');
+                countiesDiv.innerHTML = operationData.counties.map(county => 
+                    `<span style="display: inline-block; background-color: var(--red-cross-light); color: var(--red-cross-red); padding: 0.25rem 0.75rem; margin: 0.25rem; border-radius: 20px; font-size: 0.875rem;">${county}</span>`
+                ).join('');
+            }
+            
+            if (operationData.chapters && operationData.chapters.length > 0) {
+                const chaptersDiv = document.getElementById('chaptersDisplay');
+                chaptersDiv.innerHTML = operationData.chapters.map(chapter => 
+                    `<span style="display: inline-block; background-color: white; color: var(--gray-dark); padding: 0.25rem 0.75rem; margin: 0.25rem; border-radius: 20px; font-size: 0.875rem; border: 1px solid var(--red-cross-red);">${chapter}</span>`
+                ).join('');
+            }
+            
+            // Populate feeding data
+            const totalMeals = feedingData.reduce((sum, f) => sum + f.meals, 0);
+            const totalSnacks = feedingData.reduce((sum, f) => sum + f.snacks, 0);
+            document.getElementById('totalMealsDisplay').value = totalMeals.toLocaleString();
+            document.getElementById('totalSnacksDisplay').value = totalSnacks.toLocaleString();
+            
+            // Populate sheltering summary
+            if (shelteringData.length > 0) {
+                const totalShelters = shelteringData.length;
+                const totalCapacity = shelteringData.reduce((sum, s) => sum + (s.capacity || 0), 0);
+                const totalOccupancy = shelteringData.reduce((sum, s) => sum + (s.occupancy || 0), 0);
+                document.getElementById('shelteringSummary').value = `${totalShelters} shelters open, ${totalCapacity} total capacity, ${totalOccupancy} current occupancy`;
+                updateSectionStatus('services', 'partial');
+            }
+            
+            // Populate government coordination
+            if (governmentData.length > 0) {
+                const activeEOCs = governmentData.filter(g => g.eocActive).map(g => g.name);
+                if (activeEOCs.length > 0) {
+                    document.getElementById('eocStatus').value = `Active EOCs: ${activeEOCs.join(', ')}`;
+                    updateSectionStatus('external', 'partial');
+                }
+            }
+            
+            // Load saved IAP data if exists
+            if (iapData && Object.keys(iapData).length > 0) {
+                loadIAPData(iapData);
+            }
+            
+            // Monitor form changes to update status
+            document.querySelectorAll('input, textarea, select').forEach(element => {
+                element.addEventListener('change', updateFormStatus);
+                element.addEventListener('input', updateFormStatus);
+            });
+            
+            // Auto-save draft every 30 seconds
+            setInterval(() => {
+                const data = collectAllData();
+                localStorage.setItem('form5266_iap_current', JSON.stringify(data));
+            }, 30000);
+        });
+
+        // Update form status based on completion
+        function updateFormStatus() {
+            // Check basic info
+            const hasBasicInfo = document.getElementById('iapNumber').value && 
+                                document.getElementById('periodStart').value && 
+                                document.getElementById('periodEnd').value;
+            if (hasBasicInfo && document.getElementById('preparedBy').value) {
+                updateSectionStatus('basic', 'complete');
+            } else if (hasBasicInfo) {
+                updateSectionStatus('basic', 'partial');
+            }
+            
+            // Check director's message
+            const hasDirectorInfo = document.getElementById('directorMessage').value || 
+                                   document.getElementById('primaryObjectives').value;
+            if (hasDirectorInfo) {
+                updateSectionStatus('director', document.getElementById('directorMessage').value && 
+                                                 document.getElementById('primaryObjectives').value ? 'complete' : 'partial');
+            }
+            
+            // Check command staff
+            const hasCommandStaff = document.getElementById('droDirector').value && 
+                                  document.getElementById('operationsChief').value;
+            if (hasCommandStaff && document.getElementById('planningChief').value) {
+                updateSectionStatus('command', 'complete');
+            } else if (hasCommandStaff) {
+                updateSectionStatus('command', 'partial');
+            }
+            
+            // Check roster
+            const rosterEntries = document.querySelectorAll('#rosterContainer .roster-entry');
+            if (rosterEntries.length > 1) {
+                updateSectionStatus('roster', 'partial');
+            }
+            
+            // Check tasks
+            const taskRows = document.querySelectorAll('#taskTableBody tr');
+            if (taskRows.length > 1) {
+                updateSectionStatus('tasks', 'partial');
+            }
+            
+            // Check shifts
+            const hasShiftInfo = document.getElementById('dayShift').value || 
+                                document.getElementById('briefingSchedule').value;
+            if (hasShiftInfo) {
+                updateSectionStatus('shifts', 'partial');
+            }
+            
+            // Check resources
+            const hasResourceInfo = document.getElementById('criticalResources').value || 
+                                  document.getElementById('facilities').value;
+            if (hasResourceInfo) {
+                updateSectionStatus('resources', 'partial');
+            }
+            
+            // Check safety
+            const hasSafetyInfo = document.getElementById('safetyConcerns').value || 
+                                document.getElementById('weatherForecast').value;
+            if (hasSafetyInfo) {
+                updateSectionStatus('safety', 'partial');
+            }
+        }
+
+        // Save IAP Draft
+        function saveIAPDraft() {
+            const iapData = collectAllData();
+            localStorage.setItem('form5266_iap_current', JSON.stringify(iapData));
+            showAlert('IAP draft saved successfully!');
+        }
+
+        // Validate and save complete IAP
+        function validateAndSave() {
+            const iapData = collectAllData();
+            
+            // Basic validation
+            if (!iapData.iapNumber || !iapData.periodStart || !iapData.periodEnd) {
+                showAlert('Please complete required fields: IAP Number and Operational Period', 'error');
+                return;
+            }
+            
+            if (!iapData.droDirector) {
+                showAlert('Please specify DRO Director', 'error');
+                return;
+            }
+            
+            // Save to both current and history
+            localStorage.setItem('form5266_iap_current', JSON.stringify(iapData));
+            
+            // Add to IAP history
+            let iapHistory = JSON.parse(localStorage.getItem('form5266_iap')) || [];
+            iapHistory.push({...iapData, completedAt: new Date().toISOString()});
+            localStorage.setItem('form5266_iap', JSON.stringify(iapHistory));
+            
+            showAlert('IAP completed and saved!');
+        }
+
+        // Collect all data from forms
+        function collectAllData() {
+            return {
+                // Basic Info
+                iapNumber: document.getElementById('iapNumber').value,
+                drNumber: document.getElementById('drNumber').value,
+                incidentName: document.getElementById('incidentName').value,
+                periodStart: document.getElementById('periodStart').value,
+                periodEnd: document.getElementById('periodEnd').value,
+                approvalDate: document.getElementById('approvalDate').value,
+                preparedBy: document.getElementById('preparedBy').value,
+                
+                // Director's Message
+                directorMessage: document.getElementById('directorMessage').value,
+                primaryObjectives: document.getElementById('primaryObjectives').value,
+                priorities: document.getElementById('priorities').value,
+                
+                // Command Staff
+                droDirector: document.getElementById('droDirector').value,
+                deputyDirector: document.getElementById('deputyDirector').value,
+                safetyOfficer: document.getElementById('safetyOfficer').value,
+                publicInfoOfficer: document.getElementById('publicInfoOfficer').value,
+                liaisonOfficer: document.getElementById('liaisonOfficer').value,
+                operationsChief: document.getElementById('operationsChief').value,
+                planningChief: document.getElementById('planningChief').value,
+                logisticsChief: document.getElementById('logisticsChief').value,
+                financeChief: document.getElementById('financeChief').value,
+                
+                // Geography
+                region: operationData.region,
+                counties: operationData.counties,
+                chapters: operationData.chapters,
+                geographyNotes: document.getElementById('geographyNotes').value,
+                
+                // Service Lines
+                totalMeals: feedingData.reduce((sum, f) => sum + f.meals, 0),
+                totalSnacks: feedingData.reduce((sum, f) => sum + f.snacks, 0),
+                shelteringSummary: document.getElementById('shelteringSummary').value,
+                otherServices: document.getElementById('otherServices').value,
+                
+                // Shifts
+                dayShift: document.getElementById('dayShift').value,
+                swingShift: document.getElementById('swingShift').value,
+                nightShift: document.getElementById('nightShift').value,
+                briefingSchedule: document.getElementById('briefingSchedule').value,
+                shiftNotes: document.getElementById('shiftNotes').value,
+                
+                // Resources
+                criticalResources: document.getElementById('criticalResources').value,
+                facilities: document.getElementById('facilities').value,
+                communications: document.getElementById('communications').value,
+                
+                // Safety
+                safetyConcerns: document.getElementById('safetyConcerns').value,
+                weatherForecast: document.getElementById('weatherForecast').value,
+                securityInfo: document.getElementById('securityInfo').value,
+                medicalPlan: document.getElementById('medicalPlan').value,
+                
+                // External
+                eocStatus: document.getElementById('eocStatus').value,
+                partnerOrgs: document.getElementById('partnerOrgs').value,
+                externalMeetings: document.getElementById('externalMeetings').value,
+                
+                // Notes
+                specialInstructions: document.getElementById('specialInstructions').value,
+                additionalNotes: document.getElementById('additionalNotes').value,
+                attachments: document.getElementById('attachments').value,
+                
+                // Metadata
+                timestamp: new Date().toISOString()
+            };
+        }
+
+        // Load saved IAP data
+        function loadIAPData(data) {
+            // Basic Info
+            if (data.iapNumber) document.getElementById('iapNumber').value = data.iapNumber;
+            if (data.incidentName) document.getElementById('incidentName').value = data.incidentName;
+            if (data.periodStart) document.getElementById('periodStart').value = data.periodStart;
+            if (data.periodEnd) document.getElementById('periodEnd').value = data.periodEnd;
+            if (data.approvalDate) document.getElementById('approvalDate').value = data.approvalDate;
+            if (data.preparedBy) document.getElementById('preparedBy').value = data.preparedBy;
+            
+            // Director's Message
+            if (data.directorMessage) document.getElementById('directorMessage').value = data.directorMessage;
+            if (data.primaryObjectives) document.getElementById('primaryObjectives').value = data.primaryObjectives;
+            if (data.priorities) document.getElementById('priorities').value = data.priorities;
+            
+            // Command Staff
+            if (data.droDirector) document.getElementById('droDirector').value = data.droDirector;
+            if (data.deputyDirector) document.getElementById('deputyDirector').value = data.deputyDirector;
+            if (data.safetyOfficer) document.getElementById('safetyOfficer').value = data.safetyOfficer;
+            if (data.publicInfoOfficer) document.getElementById('publicInfoOfficer').value = data.publicInfoOfficer;
+            if (data.liaisonOfficer) document.getElementById('liaisonOfficer').value = data.liaisonOfficer;
+            if (data.operationsChief) document.getElementById('operationsChief').value = data.operationsChief;
+            if (data.planningChief) document.getElementById('planningChief').value = data.planningChief;
+            if (data.logisticsChief) document.getElementById('logisticsChief').value = data.logisticsChief;
+            if (data.financeChief) document.getElementById('financeChief').value = data.financeChief;
+            
+            // Other sections
+            if (data.dayShift) document.getElementById('dayShift').value = data.dayShift;
+            if (data.swingShift) document.getElementById('swingShift').value = data.swingShift;
+            if (data.nightShift) document.getElementById('nightShift').value = data.nightShift;
+            if (data.briefingSchedule) document.getElementById('briefingSchedule').value = data.briefingSchedule;
+            if (data.shiftNotes) document.getElementById('shiftNotes').value = data.shiftNotes;
+            
+            if (data.criticalResources) document.getElementById('criticalResources').value = data.criticalResources;
+            if (data.facilities) document.getElementById('facilities').value = data.facilities;
+            if (data.communications) document.getElementById('communications').value = data.communications;
+            
+            if (data.safetyConcerns) document.getElementById('safetyConcerns').value = data.safetyConcerns;
+            if (data.weatherForecast) document.getElementById('weatherForecast').value = data.weatherForecast;
+            if (data.securityInfo) document.getElementById('securityInfo').value = data.securityInfo;
+            if (data.medicalPlan) document.getElementById('medicalPlan').value = data.medicalPlan;
+            
+            if (data.partnerOrgs) document.getElementById('partnerOrgs').value = data.partnerOrgs;
+            if (data.externalMeetings) document.getElementById('externalMeetings').value = data.externalMeetings;
+            
+            if (data.specialInstructions) document.getElementById('specialInstructions').value = data.specialInstructions;
+            if (data.additionalNotes) document.getElementById('additionalNotes').value = data.additionalNotes;
+            if (data.attachments) document.getElementById('attachments').value = data.attachments;
+            
+            // Update all section statuses
+            updateFormStatus();
+        }
+
+        // Generate IAP Preview
+        function generateIAPPreview() {
+            const data = collectAllData();
+            const previewContent = document.getElementById('iapPreviewContent');
+            
+            // Generate comprehensive preview
+            let html = `
+                <div style="font-family: 'Open Sans', sans-serif;">
+                    <h2 style="text-align: center; color: var(--red-cross-red); margin-bottom: 0;">American Red Cross</h2>
+                    <h3 style="text-align: center; margin-top: 0.5rem;">Incident Action Plan</h3>
+                    <p style="text-align: center; color: var(--gray-medium); font-size: 0.9rem;">
+                        IAP ${data.iapNumber || 'DRAFT'} | DR ${data.drNumber || 'TBD'}<br>
+                        Operational Period: ${formatDateTime(data.periodStart)} to ${formatDateTime(data.periodEnd)}
+                    </p>
+                    
+                    <hr style="border: none; border-top: 2px solid var(--red-cross-red); margin: 2rem 0;">
+            `;
+            
+            // Director's Message
+            if (data.directorMessage) {
+                html += `
+                    <section style="margin-bottom: 2rem;">
+                        <h4 style="color: var(--red-cross-red);">DIRECTOR'S MESSAGE</h4>
+                        <p style="white-space: pre-wrap;">${data.directorMessage}</p>
+                    </section>
+                `;
+            }
+            
+            // Primary Objectives
+            if (data.primaryObjectives) {
+                html += `
+                    <section style="margin-bottom: 2rem;">
+                        <h4 style="color: var(--red-cross-red);">PRIMARY OBJECTIVES</h4>
+                        <p style="white-space: pre-wrap;">${data.primaryObjectives}</p>
+                    </section>
+                `;
+            }
+            
+            // Command Structure
+            html += `
+                <section style="margin-bottom: 2rem;">
+                    <h4 style="color: var(--red-cross-red);">COMMAND & GENERAL STAFF</h4>
+                    <table style="width: 100%; border-collapse: collapse;">
+                        <tr>
+                            <td style="padding: 0.5rem; border: 1px solid #ddd; font-weight: 600;">DRO Director:</td>
+                            <td style="padding: 0.5rem; border: 1px solid #ddd;">${data.droDirector || 'TBD'}</td>
+                            <td style="padding: 0.5rem; border: 1px solid #ddd; font-weight: 600;">Deputy Director:</td>
+                            <td style="padding: 0.5rem; border: 1px solid #ddd;">${data.deputyDirector || 'N/A'}</td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 0.5rem; border: 1px solid #ddd; font-weight: 600;">Operations Chief:</td>
+                            <td style="padding: 0.5rem; border: 1px solid #ddd;">${data.operationsChief || 'TBD'}</td>
+                            <td style="padding: 0.5rem; border: 1px solid #ddd; font-weight: 600;">Planning Chief:</td>
+                            <td style="padding: 0.5rem; border: 1px solid #ddd;">${data.planningChief || 'TBD'}</td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 0.5rem; border: 1px solid #ddd; font-weight: 600;">Safety Officer:</td>
+                            <td style="padding: 0.5rem; border: 1px solid #ddd;">${data.safetyOfficer || 'N/A'}</td>
+                            <td style="padding: 0.5rem; border: 1px solid #ddd; font-weight: 600;">PIO:</td>
+                            <td style="padding: 0.5rem; border: 1px solid #ddd;">${data.publicInfoOfficer || 'N/A'}</td>
+                        </tr>
+                    </table>
+                </section>
+            `;
+            
+            // Geographic Area
+            if (data.region || data.counties) {
+                html += `
+                    <section style="margin-bottom: 2rem;">
+                        <h4 style="color: var(--red-cross-red);">GEOGRAPHIC AREA</h4>
+                        <p><strong>Region:</strong> ${data.region || 'Not specified'}</p>
+                        <p><strong>Active Counties:</strong> ${data.counties ? data.counties.join(', ') : 'None specified'}</p>
+                    </section>
+                `;
+            }
+            
+            // Service Line Operations
+            html += `
+                <section style="margin-bottom: 2rem;">
+                    <h4 style="color: var(--red-cross-red);">SERVICE LINE OPERATIONS</h4>
+                    <p><strong>Feeding:</strong> ${data.totalMeals.toLocaleString()} meals, ${data.totalSnacks.toLocaleString()} snacks served</p>
+                    ${data.shelteringSummary ? `<p><strong>Sheltering:</strong> ${data.shelteringSummary}</p>` : ''}
+                    ${data.otherServices ? `<p><strong>Other Services:</strong> ${data.otherServices}</p>` : ''}
+                </section>
+            `;
+            
+            // Safety Information
+            if (data.safetyConcerns || data.weatherForecast) {
+                html += `
+                    <section style="margin-bottom: 2rem;">
+                        <h4 style="color: var(--red-cross-red);">SAFETY INFORMATION</h4>
+                        ${data.safetyConcerns ? `<p><strong>Safety Concerns:</strong> ${data.safetyConcerns}</p>` : ''}
+                        ${data.weatherForecast ? `<p><strong>Weather:</strong> ${data.weatherForecast}</p>` : ''}
+                    </section>
+                `;
+            }
+            
+            html += `
+                    <hr style="border: none; border-top: 1px solid #ddd; margin: 2rem 0;">
+                    <p style="text-align: center; color: var(--gray-medium); font-size: 0.875rem;">
+                        Prepared by: ${data.preparedBy || 'Unknown'} | 
+                        Generated: ${new Date().toLocaleString()}
+                    </p>
+                </div>
+            `;
+            
+            previewContent.innerHTML = html;
+        }
+        
+        // Helper function to format date/time
+        function formatDateTime(dateTimeStr) {
+            if (!dateTimeStr) return 'TBD';
+            const date = new Date(dateTimeStr);
+            return date.toLocaleDateString() + ' ' + date.toLocaleTimeString([], {hour: '2-digit', minute: '2-digit'});
+        }
+
+        // Export to PDF
+        function exportIAPToPDF() {
+            // Similar to existing PDF export functionality
+        }
+
+        // Show alert message
+        function showAlert(message, type = 'success') {
+            const alertDiv = document.createElement('div');
+            alertDiv.className = 'alert';
+            alertDiv.style.cssText = `
+                position: fixed;
+                top: 80px;
+                right: 20px;
+                background: ${type === 'error' ? '#f8d7da' : '#d1e7dd'};
+                color: ${type === 'error' ? '#721c24' : '#0f5132'};
+                padding: 1rem 1.5rem;
+                border-radius: 8px;
+                box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+                z-index: 2000;
+                animation: slideIn 0.3s ease;
+            `;
+            alertDiv.textContent = message;
+            
+            document.body.appendChild(alertDiv);
+            
+            setTimeout(() => {
+                alertDiv.style.animation = 'slideOut 0.3s ease';
+                setTimeout(() => alertDiv.remove(), 300);
+            }, 3000);
+        }
+        
+        // Add animation styles
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes slideIn {
+                from { transform: translateX(100%); opacity: 0; }
+                to { transform: translateX(0); opacity: 1; }
+            }
+            @keyframes slideOut {
+                from { transform: translateX(0); opacity: 1; }
+                to { transform: translateX(100%); opacity: 0; }
+            }
+        `;
+        document.head.appendChild(style);
+    </script>
+</body>
+</html>
