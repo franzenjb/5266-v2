@@ -1013,6 +1013,8 @@
     <!-- Include data files -->
     <script src="redcross_data.js"></script>
     <script src="florida_counties.js"></script>
+    <script src="az_nm_counties.js"></script>
+    <script src="enhanced_maps.js"></script>
     
     <script>
         // Initialize data from localStorage
@@ -1089,34 +1091,62 @@
         function initializeMap() {
             if (map) return;
             
-            map = L.map('geographyMap').setView([27.8, -82.5], 6);
+            // Determine which region we're working with
+            const region = operationData.region || '';
+            let geoData, mapCenter, mapZoom;
             
-            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-                attribution: '© OpenStreetMap contributors'
-            }).addTo(map);
+            if (region.toLowerCase().includes('arizona') || region.toLowerCase().includes('new mexico')) {
+                geoData = typeof arizonaNewMexicoCountiesGeoJSON !== 'undefined' ? arizonaNewMexicoCountiesGeoJSON : null;
+                mapCenter = MapUtils.MapConfig.defaults.arizonaNewMexico.center;
+                mapZoom = MapUtils.MapConfig.defaults.arizonaNewMexico.zoom;
+            } else {
+                geoData = typeof floridaCountiesGeoJSON !== 'undefined' ? floridaCountiesGeoJSON : null;
+                mapCenter = MapUtils.MapConfig.defaults.florida.center;
+                mapZoom = MapUtils.MapConfig.defaults.florida.zoom;
+            }
             
-            // Add Florida counties
-            if (typeof floridaCountiesGeoJSON !== 'undefined') {
+            // Initialize enhanced map with CartoDB tiles (clean, professional look)
+            map = MapUtils.initializeEnhancedMap('geographyMap', {
+                center: mapCenter,
+                zoom: mapZoom,
+                tileProvider: 'cartodb'  // Using CartoDB for clean, professional tiles
+            });
+            
+            // Add counties with choropleth
+            if (geoData) {
                 const selectedCounties = operationData.counties || [];
                 
-                L.geoJSON(floridaCountiesGeoJSON, {
-                    style: function(feature) {
-                        const isSelected = selectedCounties.some(county => 
-                            county.toLowerCase() === feature.properties.name.toLowerCase()
-                        );
-                        
-                        return {
-                            fillColor: isSelected ? '#ED1B2E' : '#ECF0F1',
-                            weight: 1,
-                            opacity: 1,
-                            color: '#7F8C8D',
-                            fillOpacity: isSelected ? 0.7 : 0.3
-                        };
-                    },
-                    onEachFeature: function(feature, layer) {
-                        layer.bindPopup(`<strong>${feature.properties.name} County</strong>`);
-                    }
-                }).addTo(map);
+                const choroplethLayer = MapUtils.createChoroplethLayer(geoData, selectedCounties, {
+                    propertyName: 'name',
+                    selectedColor: '#ED1B2E',
+                    defaultColor: '#ECF0F1',
+                    borderColor: '#7F8C8D',
+                    fillOpacity: 0.7
+                });
+                
+                choroplethLayer.addTo(map);
+                
+                // Add legend
+                MapUtils.addMapLegend(map);
+                
+                // Add data overlay with statistics
+                const feedingData = JSON.parse(localStorage.getItem('form5266_feeding')) || [];
+                const totalMeals = feedingData.reduce((sum, f) => sum + f.meals, 0);
+                const totalSnacks = feedingData.reduce((sum, f) => sum + f.snacks, 0);
+                
+                MapUtils.addDataOverlay(map, {
+                    activeCounties: selectedCounties.length,
+                    chapters: operationData.chapters ? operationData.chapters.length : 0,
+                    meals: totalMeals,
+                    snacks: totalSnacks
+                });
+                
+                // Fit map to selected counties if any
+                if (selectedCounties.length > 0) {
+                    setTimeout(() => {
+                        MapUtils.fitMapToBounds(map, choroplethLayer, selectedCounties);
+                    }, 500);
+                }
             }
         }
 
