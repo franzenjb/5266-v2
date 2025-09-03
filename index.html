@@ -5,6 +5,17 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Form 5266 v2 - Disaster Operations Control</title>
     <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Leaflet CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+          integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
+          crossorigin=""/>
+    
+    <!-- Leaflet JavaScript -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+            integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
+            crossorigin=""></script>
+    
     <style>
         :root {
             --red-cross-red: #ED1B2E;
@@ -592,6 +603,43 @@
         @keyframes spin {
             to { transform: rotate(360deg); }
         }
+        
+        /* Map Styles */
+        .map-container {
+            height: 400px;
+            width: 100%;
+            border-radius: 8px;
+            overflow: hidden;
+            border: 2px solid var(--gray-light);
+            margin-top: 1rem;
+        }
+        
+        .map-legend {
+            background: white;
+            padding: 10px;
+            border-radius: 4px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+        
+        .map-legend h4 {
+            margin: 0 0 5px 0;
+            color: var(--gray-dark);
+            font-size: 0.875rem;
+        }
+        
+        .legend-item {
+            display: flex;
+            align-items: center;
+            margin: 5px 0;
+            font-size: 0.75rem;
+        }
+        
+        .legend-color {
+            width: 20px;
+            height: 20px;
+            margin-right: 8px;
+            border: 1px solid #999;
+        }
     </style>
 </head>
 <body>
@@ -617,7 +665,7 @@
             <ul>
                 <li><a href="#start-here" class="tab-link active" data-tab="start-here">Start Here Statistics</a></li>
                 <li><a href="#feeding" class="tab-link" data-tab="feeding">Feeding</a></li>
-                <li><a href="#iap" class="tab-link" data-tab="iap">IAP</a></li>
+                <li><a href="iap.html" class="tab-link">IAP Builder →</a></li>
                 <li><a href="#dashboard" class="tab-link" data-tab="dashboard">Live Dashboard</a></li>
             </ul>
         </div>
@@ -761,6 +809,15 @@
                     </div>
                 </div>
             </div>
+            
+            <!-- Map Card -->
+            <div class="card" style="margin-top: 2rem;">
+                <div class="card-header">
+                    <h2 class="card-title">Selected Counties Map</h2>
+                    <div class="card-icon">🗺️</div>
+                </div>
+                <div id="startHereMap" class="map-container"></div>
+            </div>
         </div>
 
         <!-- Feeding Tab -->
@@ -834,118 +891,6 @@
             </div>
         </div>
 
-        <!-- IAP Tab -->
-        <div id="iap" class="tab-content">
-            <div class="alert alert-info">
-                <span>📋</span>
-                <span>Create and manage Incident Action Plans with data from your operation.</span>
-            </div>
-
-            <div class="dashboard-grid">
-                <!-- IAP Creation Form -->
-                <div class="card">
-                    <div class="card-header">
-                        <h2 class="card-title">IAP Creation</h2>
-                        <div class="card-icon">📄</div>
-                    </div>
-                    <form id="iapForm">
-                        <div class="form-group">
-                            <label for="operationalPeriod">Operational Period *</label>
-                            <input type="text" class="form-control" id="operationalPeriod" 
-                                   placeholder="e.g., 01/01 0600 - 01/02 0600" required>
-                        </div>
-
-                        <div class="form-row">
-                            <div class="form-group">
-                                <label for="iapNumber">IAP Number *</label>
-                                <input type="text" class="form-control" id="iapNumber" 
-                                       placeholder="e.g., IAP-001" required>
-                            </div>
-                            <div class="form-group">
-                                <label for="approvalDate">Approval Date/Time *</label>
-                                <input type="datetime-local" class="form-control" id="approvalDate" required>
-                            </div>
-                        </div>
-
-                        <h3 style="color: var(--red-cross-red); margin: 1.5rem 0 1rem;">Leadership Positions</h3>
-                        <div class="form-row">
-                            <div class="form-group">
-                                <label for="droDirector">DRO Director</label>
-                                <input type="text" class="form-control" id="droDirector" placeholder="Name">
-                            </div>
-                            <div class="form-group">
-                                <label for="planningChief">Planning Chief</label>
-                                <input type="text" class="form-control" id="planningChief" placeholder="Name">
-                            </div>
-                        </div>
-
-                        <h3 style="color: var(--red-cross-red); margin: 1.5rem 0 1rem;">Sections</h3>
-                        
-                        <div class="form-group">
-                            <label for="geographies">Geographies</label>
-                            <textarea class="form-control" id="geographies" rows="2" 
-                                      placeholder="List affected geographies"></textarea>
-                        </div>
-
-                        <div class="form-group">
-                            <label for="sheltering">Sheltering</label>
-                            <textarea class="form-control" id="sheltering" rows="2" 
-                                      placeholder="Sheltering operations summary"></textarea>
-                        </div>
-
-                        <div class="form-group">
-                            <label for="feeding">Feeding</label>
-                            <textarea class="form-control" id="feeding" rows="2" 
-                                      placeholder="Feeding operations summary"></textarea>
-                        </div>
-
-                        <div class="form-group">
-                            <label for="activities">Activities</label>
-                            <textarea class="form-control" id="activities" rows="3" 
-                                      placeholder="Key activities for this operational period"></textarea>
-                        </div>
-
-                        <div class="form-group">
-                            <label for="workShifts">Work Shifts</label>
-                            <input type="text" class="form-control" id="workShifts" 
-                                   placeholder="e.g., Day: 0600-1800, Swing: 1800-0600">
-                        </div>
-
-                        <button type="submit" class="btn btn-primary" style="margin-right: 1rem;">
-                            <span>💾</span> Save IAP
-                        </button>
-                        <button type="button" class="btn btn-secondary" onclick="generateIAPReport()">
-                            <span>📄</span> Generate Report
-                        </button>
-                    </form>
-                </div>
-
-                <!-- IAP History/Preview -->
-                <div class="card">
-                    <div class="card-header">
-                        <h2 class="card-title">IAP History & Reports</h2>
-                        <div class="card-icon">📊</div>
-                    </div>
-                    <div id="iapHistory">
-                        <div class="empty-state">
-                            <div class="empty-state-icon">📝</div>
-                            <p>No IAPs created yet. Create your first IAP to see it here.</p>
-                        </div>
-                    </div>
-                    
-                    <div id="iapPreview" style="margin-top: 2rem; display: none;">
-                        <h3 style="color: var(--red-cross-red); margin-bottom: 1rem;">Current IAP Preview</h3>
-                        <div id="iapPreviewContent" style="background-color: #f8f9fa; padding: 1.5rem; border-radius: 8px; border: 1px solid var(--gray-light);">
-                            <!-- IAP preview will be rendered here -->
-                        </div>
-                        <button class="btn btn-primary" onclick="exportIAPToPDF()" style="margin-top: 1rem;">
-                            <span>📥</span> Export to PDF
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </div>
-
         <!-- Dashboard Tab -->
         <div id="dashboard" class="tab-content">
             <div class="alert alert-success">
@@ -983,6 +928,15 @@
                         </div>
                     </div>
                 </div>
+            </div>
+            
+            <!-- Dashboard Map Card -->
+            <div class="card" style="margin-top: 2rem;">
+                <div class="card-header">
+                    <h2 class="card-title">Operation Area Map</h2>
+                    <div class="card-icon">🗺️</div>
+                </div>
+                <div id="dashboardMap" class="map-container"></div>
             </div>
         </div>
     </main>
@@ -1491,6 +1445,8 @@
                         <p><strong>Active Chapters (${iap.operation?.chapters?.length || 0}):</strong> ${iap.operation?.chapters?.join(', ') || 'None specified'}</p>
                         ${iap.geographies ? `<p><strong>Additional Notes:</strong> ${iap.geographies}</p>` : ''}
                     </div>
+                    
+                    <div id="iapMapContainer" class="map-container" style="margin-top: 1rem;"></div>
                     
                     <h3 style="color: var(--red-cross-red); margin-top: 2rem; border-bottom: 2px solid var(--red-cross-red); padding-bottom: 0.5rem;">Sections</h3>
                     
