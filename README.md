@@ -20,21 +20,50 @@ The existing Excel-based Form 5266 system faces significant limitations:
 - **Manual Data Entry**: Daily manual entry increases complexity and error potential
 - **End-of-day Batch Processing**: Delays crucial decision-making
 
+## 🏗️ Architectural Vision: Database-First Approach
+
+Moving away from the fragile spreadsheet paradigm, the new system adopts a **database-first architecture** that fundamentally transforms how disaster operations data is managed. This approach directly addresses every critical pain point of the current system:
+
+### Why Database-First Matters
+
+The current Excel-based 5266 tracks over **144 operational metrics** across various disciplines, generating critical Incident Action Plans. However, its spreadsheet foundation creates insurmountable limitations. Our database-driven approach provides:
+
+1. **Structural Integrity**: Unlike spreadsheets that break when users insert/delete rows, the database maintains a rigid, reliable structure while the application layer handles all user interactions safely.
+
+2. **Real-time Intelligence**: Data flows directly into the database as it's entered, enabling instant visibility across all departments - eliminating the crippling delay of end-of-day batch processing.
+
+3. **Automatic Validation**: The database enforces business rules and data integrity constraints automatically, preventing the data quality issues that plague the current system.
+
+4. **Distributed Resilience**: No more single point of failure. The database, application, and interface layers are separate, ensuring system continuity even if one component needs maintenance.
+
+5. **Simplified User Experience**: Users interact with a clear "Here's the information we need" interface, while the database handles all complex calculations, aggregations, and reporting automatically.
+
+### From Manual Complexity to Automated Intelligence
+
+The existing "Data Collection Tool (DCT)" has already seen updates to make calculations automatic, demonstrating recognized need for automation. Our approach takes this to its logical conclusion:
+
+- **Input**: Simple, guided forms that collect only necessary information
+- **Processing**: Database handles all calculations, relationships, and aggregations
+- **Output**: Real-time dashboards, on-demand reports, and automated IAP generation
+
+This isn't just an incremental improvement - it's a fundamental reimagining of how disaster operations data should flow.
+
 ## ✨ New System Features
 
 ### Core Capabilities
-- **Real-time Data Entry & Viewing**: Immediate operational insights
-- **Role-based Access Control**: Users see only relevant data
-- **Robust Data Validation**: Prevents errors, ensures data integrity
-- **Live Dashboards**: Dynamic visual summaries replace static reports
-- **Proper Database Architecture**: PostgreSQL backend for reliability
-- **On-Demand IAP Generation**: Streamlined Incident Action Plan creation
-- **Mobile-Responsive Design**: Enhanced field operations usability
+- **Real-time Data Entry & Viewing**: Immediate operational insights as data enters the database
+- **Role-based Access Control**: Database-level permissions ensure users only see relevant data
+- **Robust Data Validation**: Database constraints prevent errors at the source
+- **Live Dashboards**: Database views power dynamic, always-current visual summaries
+- **Proper Database Architecture**: PostgreSQL backend for reliability and scalability
+- **On-Demand IAP Generation**: Database-driven document creation in Word/PDF format
+- **Mobile-Responsive Design**: Interface adapts while database ensures consistency
 
 ### Technical Architecture
-- **Frontend**: React 18 with Next.js for dynamic, responsive UI
-- **Backend**: Node.js/Express API with real-time WebSocket support
-- **Database**: PostgreSQL for data persistence and integrity
+- **Frontend**: React 18 with Next.js - Clear, intuitive data entry interface
+- **Backend**: Node.js/Express API - Thin layer orchestrating database operations
+- **Database**: PostgreSQL - The system's brain, handling all logic and calculations
+- **Real-time Updates**: WebSocket connections for instant data propagation
 - **Deployment**: Docker containerization with CI/CD pipeline
 - **Monitoring**: Real-time performance and error tracking
 
