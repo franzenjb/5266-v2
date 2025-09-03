@@ -427,19 +427,40 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Restore form values if operation data exists
     if (operationData.drNumber) {
-        document.getElementById('drNumber').value = operationData.drNumber || '';
-        document.getElementById('operationName').value = operationData.operationName || '';
-        document.getElementById('startDate').value = operationData.startDate || '';
-        document.getElementById('region').value = operationData.region || '';
-        document.getElementById('droDirector').value = operationData.droDirector || '';
-        document.getElementById('droDirectorPhone').value = operationData.droDirectorPhone || '';
-        document.getElementById('droDirectorEmail').value = operationData.droDirectorEmail || '';
-        document.getElementById('deputyDirector').value = operationData.deputyDirector || '';
-        document.getElementById('deputyDirectorPhone').value = operationData.deputyDirectorPhone || '';
-        document.getElementById('deputyDirectorEmail').value = operationData.deputyDirectorEmail || '';
+        // Only set values if elements exist
+        if (document.getElementById('drNumber')) {
+            document.getElementById('drNumber').value = operationData.drNumber || '';
+        }
+        if (document.getElementById('operationName')) {
+            document.getElementById('operationName').value = operationData.operationName || '';
+        }
+        if (document.getElementById('startDate')) {
+            document.getElementById('startDate').value = operationData.startDate || '';
+        }
+        if (document.getElementById('region')) {
+            document.getElementById('region').value = operationData.region || '';
+        }
+        if (document.getElementById('droDirector')) {
+            document.getElementById('droDirector').value = operationData.droDirector || '';
+        }
+        if (document.getElementById('droDirectorPhone')) {
+            document.getElementById('droDirectorPhone').value = operationData.droDirectorPhone || '';
+        }
+        if (document.getElementById('droDirectorEmail')) {
+            document.getElementById('droDirectorEmail').value = operationData.droDirectorEmail || '';
+        }
+        if (document.getElementById('deputyDirector')) {
+            document.getElementById('deputyDirector').value = operationData.deputyDirector || '';
+        }
+        if (document.getElementById('deputyDirectorPhone')) {
+            document.getElementById('deputyDirectorPhone').value = operationData.deputyDirectorPhone || '';
+        }
+        if (document.getElementById('deputyDirectorEmail')) {
+            document.getElementById('deputyDirectorEmail').value = operationData.deputyDirectorEmail || '';
+        }
         
         // Trigger region change to load counties
-        if (operationData.region) {
+        if (operationData.region && document.getElementById('region')) {
             document.getElementById('region').dispatchEvent(new Event('change'));
             
             // After counties load, check the selected ones
