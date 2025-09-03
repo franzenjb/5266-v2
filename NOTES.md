@@ -39,6 +39,36 @@
 - Consider system preference detection: `prefers-color-scheme`
 - Maps: Switch to dark tile providers (CartoDB Dark Matter)
 
+## Data Requirements
+
+### County Boundary Data Needed
+**Priority: HIGH**  
+**Current Status:** Only Florida and Arizona/New Mexico counties have full GeoJSON boundary data
+
+**Need to acquire GeoJSON boundary data for:**
+- All 3,143 US counties across 50 states
+- District of Columbia
+- US Territories:
+  - Puerto Rico (78 municipalities)
+  - US Virgin Islands (3 islands)
+  - Guam (19 villages)
+  - American Samoa (5 districts)
+  - Northern Mariana Islands (4 municipalities)
+
+**Potential Sources:**
+1. US Census Bureau TIGER/Line Shapefiles
+2. Natural Earth Data
+3. OpenStreetMap Nominatim
+4. USGS National Map
+5. Data.gov datasets
+
+**Implementation Notes:**
+- Files should be in GeoJSON format
+- Should include county FIPS codes for matching
+- Consider CDN hosting for performance
+- May need to simplify geometries for web performance
+- Current fallback: Shows markers instead of boundaries
+
 ## Other Enhancement Ideas
 
 ### Future Considerations

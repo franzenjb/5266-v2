@@ -9,7 +9,7 @@ function initializeStartHereMap() {
     const mapContainer = document.getElementById('startHereMap');
     if (!mapContainer || startHereMap) return;
     
-    // Check if enhanced_maps.js is loaded
+    // Check if required libraries are loaded
     if (typeof MapUtils === 'undefined') {
         console.error('MapUtils not loaded for Start Here map');
         setTimeout(() => initializeStartHereMap(), 500);
@@ -18,23 +18,26 @@ function initializeStartHereMap() {
     
     const region = document.getElementById('region').value || '';
     
-    // Initialize map with appropriate settings
+    // Use National Map System if available
+    if (typeof NationalMapSystem !== 'undefined' && region) {
+        startHereMap = NationalMapSystem.initializeRegionalMap('startHereMap', region);
+        if (startHereMap) {
+            console.log(`Start Here map initialized for ${region}`);
+            updateStartHereMap();
+            return;
+        }
+    }
+    
+    // Fallback to default initialization
     let mapOptions = {
-        center: MapConfig.defaults.florida.center,
-        zoom: MapConfig.defaults.florida.zoom,
+        center: [39.5, -98.5], // US center
+        zoom: 4,
         tileProvider: 'cartodb'
     };
     
-    if (region && region.toLowerCase().includes('arizona')) {
-        mapOptions.center = MapConfig.defaults.arizonaNewMexico.center;
-        mapOptions.zoom = MapConfig.defaults.arizonaNewMexico.zoom;
-    }
-    
     try {
         startHereMap = MapUtils.initializeEnhancedMap('startHereMap', mapOptions);
-        console.log('Start Here map initialized');
-        
-        // Add initial county layer
+        console.log('Start Here map initialized with default view');
         updateStartHereMap();
     } catch (error) {
         console.error('Error initializing Start Here map:', error);

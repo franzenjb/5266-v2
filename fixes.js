@@ -43,20 +43,25 @@ function initializeLiveIAPMap() {
     const selectedCounties = operationData.counties || [];
     const region = operationData.region || '';
     
-    // Initialize map with appropriate settings
-    let mapOptions = {
-        center: MapConfig.defaults.florida.center,
-        zoom: MapConfig.defaults.florida.zoom,
-        tileProvider: 'cartodb'
-    };
-    
-    if (region && region.toLowerCase().includes('arizona')) {
-        mapOptions.center = MapConfig.defaults.arizonaNewMexico.center;
-        mapOptions.zoom = MapConfig.defaults.arizonaNewMexico.zoom;
-    }
-    
+    // Use National Map System if available
     try {
-        liveIAPMap = MapUtils.initializeEnhancedMap('liveIAPMap', mapOptions);
+        if (typeof NationalMapSystem !== 'undefined' && region) {
+            liveIAPMap = NationalMapSystem.initializeRegionalMap('liveIAPMap', region);
+            if (liveIAPMap) {
+                console.log(`Live IAP map initialized for ${region}`);
+            }
+        } else {
+            // Fallback to default settings
+            let mapOptions = {
+                center: [39.5, -98.5], // US center
+                zoom: 4,
+                tileProvider: 'cartodb'
+            };
+            
+            liveIAPMap = MapUtils.initializeEnhancedMap('liveIAPMap', mapOptions);
+        }
+        
+        if (!liveIAPMap) return;
         
         // Add county layers if available
         if (typeof floridaCounties !== 'undefined' || typeof arizonaNewMexicoCounties !== 'undefined') {
