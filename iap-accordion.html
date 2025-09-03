@@ -926,6 +926,9 @@
     <script src="az_nm_counties.js"></script>
     <script src="enhanced_maps.js"></script>
     
+    <!-- Include fixes -->
+    <script src="fixes.js"></script>
+    
     <script>
         // Initialize data from localStorage
         let operationData = JSON.parse(localStorage.getItem('form5266_operation')) || {};
@@ -1060,6 +1063,10 @@
 
         // Load data on page load
         window.addEventListener('load', function() {
+            // Fix accordion functionality
+            if (typeof fixAccordions === 'function') {
+                fixAccordions();
+            }
             // Populate from operation data
             if (operationData.drNumber) {
                 document.getElementById('drNumber').value = operationData.drNumber;
