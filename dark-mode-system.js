@@ -35,7 +35,7 @@
             /* Dark mode toggle button */
             .dark-mode-toggle {
                 position: fixed;
-                top: 1rem;
+                top: 4.5rem;
                 right: 2rem;
                 z-index: 10000;
                 background: var(--gray-light);
