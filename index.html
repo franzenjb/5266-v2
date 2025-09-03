@@ -1103,6 +1103,11 @@
             const selectedCheckboxes = document.querySelectorAll('#countyGrid input:checked');
             document.getElementById('selectedCountyCount').textContent = selectedCheckboxes.length;
             
+            // Update the Start Here map when counties are selected
+            if (typeof updateStartHereMap === 'function') {
+                updateStartHereMap();
+            }
+            
             if (selectedCheckboxes.length > 0 && currentRegionData) {
                 // Get unique chapters for selected counties
                 const selectedChapters = new Set();
@@ -1469,5 +1474,6 @@
     <!-- Include additional scripts -->
     <script src="enhanced_maps.js"></script>
     <script src="fixes.js"></script>
+    <script src="start-here-map-fix.js"></script>
 </body>
 </html>
