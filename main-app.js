@@ -303,8 +303,14 @@ function updateFeedingStats() {
 
 // Update Live IAP
 function updateLiveIAP() {
-    // This is now handled by live-iap-document.js
-    if (typeof generateLiveIAPDocument === 'function') {
+    // Use the proper IAP document generator
+    if (typeof generateProperLiveIAP === 'function') {
+        const container = document.getElementById('iapDocumentContainer');
+        if (container) {
+            container.innerHTML = generateProperLiveIAP();
+        }
+    } else if (typeof generateLiveIAPDocument === 'function') {
+        // Fallback to old generator if new one not loaded
         const container = document.getElementById('iapDocumentContainer');
         if (container) {
             container.innerHTML = generateLiveIAPDocument();
